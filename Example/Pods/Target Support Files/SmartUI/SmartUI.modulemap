@@ -1,0 +1,6 @@
+framework module SmartUI {
+  umbrella header "SmartUI-umbrella.h"
+
+  export *
+  module * { export * }
+}
