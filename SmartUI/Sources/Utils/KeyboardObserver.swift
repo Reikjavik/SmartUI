@@ -20,31 +20,33 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import UIKit
+import Foundation
 
-internal struct BindToKeyboard: Modifier {
+public final class KeyboardHeightObserver: NSObject {
 
-    let extraOffset: CGFloat
+    private var onWillShow: ActionWith<CGFloat> = .empty
+    private var onWillHide: Action = .empty
 
-    func modify(_ view: UIView) -> UIView {
-        (view as? KeyboardBindable)?.bindToKeyboard(extraOffset: self.extraOffset)
-        return view
+    public override init() {
+        super.init()
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShowNotification), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHideNotification), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
-}
 
-internal protocol KeyboardBindable: UIScrollView {
-    var observer: KeyboardHeightObserver { get }
-}
+    public func onWillShow(_ action: ActionWith<CGFloat>) {
+        self.onWillShow = action
+    }
 
-internal extension UIScrollView {
+    public func onWillHide(_ action: Action) {
+        self.onWillHide = action
+    }
 
-    func bindToKeyboard(extraOffset: CGFloat) {
-        let defaultInsets = self.contentInset
-        (self as? KeyboardBindable)?.observer.onWillShow(.init({ [weak self] height in
-            self?.contentInset.bottom = height + extraOffset
-        }))
-        (self as? KeyboardBindable)?.observer.onWillHide(.init({ [weak self] in
-            self?.contentInset = defaultInsets
-        }))
+    @objc func keyboardWillShowNotification(notification: Notification) {
+        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
+        self.onWillShow.execute(keyboardSize.height)
+    }
+
+    @objc func keyboardWillHideNotification(notification: Notification) {
+        self.onWillHide.execute()
     }
 }

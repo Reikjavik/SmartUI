@@ -39,8 +39,7 @@ public class TextEditor: Control {
 
 internal class TextEditorView: UITextView, UITextViewDelegate, KeyboardBindable {
 
-    internal var extraOffset: CGFloat = 0.0
-    internal var defaultInsets: UIEdgeInsets = .zero
+    internal var observer = KeyboardHeightObserver()
 
     private let title: String?
     private let textBinding: Binding<String>
@@ -139,6 +138,14 @@ public extension TextEditor {
             guard let textView = view as? UITextView else { return view }
             textView.keyboardType = type
             return textView
+        })
+    }
+
+    func returnKeyType(_ type: UIReturnKeyType) -> Self {
+        return self.add(modifier: CustomModifier { view -> UIView in
+            let textField = view as? UITextView
+            textField?.returnKeyType = type
+            return view
         })
     }
 

@@ -81,8 +81,7 @@ public class ScrollView: View {
 }
 
 class BindableScrollView: UIScrollView, KeyboardBindable {
-    var extraOffset: CGFloat = 0
-    var defaultInsets: UIEdgeInsets = .zero
+    var observer = KeyboardHeightObserver()
 }
 
 extension BindableScrollView: Delegateable {

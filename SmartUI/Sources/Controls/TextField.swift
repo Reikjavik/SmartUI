@@ -177,6 +177,14 @@ public extension TextField {
         })
     }
 
+    func returnKeyType(_ type: UIReturnKeyType) -> Self {
+        return self.add(modifier: CustomModifier { view -> UIView in
+            let textField = view as? UITextField
+            textField?.returnKeyType = type
+            return view
+        })
+    }
+
     func placeholderColor(_ color: Color) -> Self {
         return self.add(modifier: PlaceholderColor(color: color))
     }

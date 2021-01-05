@@ -25,11 +25,11 @@ import UIKit
 public class List: View {
 
     private let selection: ActionWith<IndexPath>?
-    private let viewsBinding: Binding<[View]>
+    private let sectionsBinding: Binding<[Section]>
 
     public init<Item>(_ data: Binding<[Item]>, selection: ActionWith<Item>? = nil, rowContent: @escaping (Item) -> View) {
         self.selection = selection?.map { data.value[$0.row] }
-        self.viewsBinding = data.map { $0.map(rowContent) }
+        self.sectionsBinding = data.map { items in [Section(rows: { items.map(rowContent) })] }
         super.init()
     }
 
@@ -39,29 +39,52 @@ public class List: View {
 
     public init(selection: ActionWith<IndexPath>? = nil, rows: () -> [View]) {
         self.selection = selection
-        self.viewsBinding = .constant(rows())
+        self.sectionsBinding = .constant([Section(rows: rows)])
         super.init()
     }
 
+    public init(selection: ActionWith<IndexPath>? = nil, sections: Binding<[Section]>) {
+        self.selection = selection
+        self.sectionsBinding = sections
+        super.init()
+    }
+
+    public convenience init(selection: ActionWith<IndexPath>? = nil, sections: () -> [Section]) {
+        self.init(selection: selection, sections: .constant(sections()))
+    }
+
     override var toUIView: UIView {
-        return ListTableView(views: self.viewsBinding, selection: self.selection)
+        let style = self.modifiers.compactMap { $0 as? ListStyleModifier }.last
+        return ListTableView(sections: self.sectionsBinding, selection: self.selection, style: style?.style.style ?? .plain)
     }
 
     override func addChild(child: View, to selfView: UIView) {}
 }
 
+public class Section {
+
+    let header: View?
+    let rows: [View]
+    let footer: View?
+
+    public init(header: View? = nil, footer: View? = nil, rows: () -> [View]) {
+        self.header = header
+        self.footer = footer
+        self.rows = rows()
+    }
+}
+
 internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataSource, KeyboardBindable {
 
-    var extraOffset: CGFloat = 0.0
-    var defaultInsets: UIEdgeInsets = .zero
-    let views: Binding<[View]>
+    var observer = KeyboardHeightObserver()
+    let sections: Binding<[Section]>
     let selection: ActionWith<IndexPath>
     weak var customDelegate: UIScrollViewDelegate?
 
-    init(views: Binding<[View]>, selection: ActionWith<IndexPath>?) {
-        self.views = views
+    init(sections: Binding<[Section]>, selection: ActionWith<IndexPath>?, style: UITableView.Style) {
+        self.sections = sections
         self.selection = selection ?? .empty
-        super.init(frame: .zero, style: .plain)
+        super.init(frame: .zero, style: style)
         self.backgroundColor = .clear
         self.tableFooterView = UIView()
         self.delegate = self
@@ -78,7 +101,7 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
         height.priority = .defaultLow
         height.isActive = true
 
-        self.views.bind(ActionWith<[View]> { [weak self] _ in
+        self.sections.bind(ActionWith<[Section]> { [weak self] _ in
             self?.reloadData()
         })
     }
@@ -87,15 +110,19 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
         fatalError("init(coder:) has not been implemented")
     }
 
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return self.sections.value.count
+    }
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.views.value.count
+        return self.sections.value[section].rows.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
         cell.backgroundColor = .clear
         cell.contentView.backgroundColor = .clear
-        cell.contentView.addSubview(self.views.value[indexPath.row].display(), insets: .zero)
+        cell.contentView.addSubview(self.sections.value[indexPath.section].rows[indexPath.row].display(), insets: .zero)
         return cell
     }
 
@@ -105,8 +132,24 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let view = self.views.value[indexPath.row]
+        let view = self.sections.value[indexPath.section].rows[indexPath.row]
         return view is Divider ? Divider.height : UITableView.automaticDimension
+    }
+
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return self.sections.value[section].header?.display()
+    }
+
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return self.sections.value[section].footer?.display()
+    }
+
+    func tableView(_ tableView:  UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return self.sections.value[section].header?.display().systemLayoutSizeFitting(tableView.bounds.size).height ?? 0.0
+    }
+
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return self.sections.value[section].footer?.display().systemLayoutSizeFitting(tableView.bounds.size).height ?? 0.0
     }
 }
 
@@ -205,5 +248,9 @@ public extension List {
 
     func delegate(_ delegate: UIScrollViewDelegate) -> Self {
         return self.add(modifier: Delegate(delegate: delegate))
+    }
+
+    func listStyle(_ style: ListStyle) -> Self {
+        return self.add(modifier: ListStyleModifier(style: style))
     }
 }
