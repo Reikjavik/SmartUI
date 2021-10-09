@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright (c) 2020 Igor Tiukavkin.
+// Copyright (c) 2021 Igor Tiukavkin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,27 +20,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import UIKit
+import Foundation
 
-internal struct ScrollEnabled: Modifier {
+extension Optional {
 
-    let isScrollEnabled: Binding<Bool>
-
-    func modify(_ view: UIView) -> UIView {
-
-        if let textView = view as? TextEditorView {
-            textView.heightConstraint?.isActive = false
+    public func valueOr(_ defaultValue: Wrapped) -> Wrapped {
+        switch self {
+        case .some(let value):
+            return value
+        case .none:
+            return defaultValue
         }
+    }
 
-        if let scrollView = view as? UIScrollView {
-            self.isScrollEnabled.bind(ActionWith<Bool>({ [weak scrollView] (enabled) in
-                scrollView?.isScrollEnabled = enabled
-            }))
-            self.isScrollEnabled.value.map {
-                scrollView.isScrollEnabled = $0
-            }
+    public func with<T>(_ other: T?) -> (Wrapped, T)? {
+        switch (self, other) {
+        case (.some(let value1), .some(let value2)):
+            return (value1, value2)
+        default:
+            return nil
         }
-
-        return view
     }
 }

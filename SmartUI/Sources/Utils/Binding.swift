@@ -24,15 +24,16 @@ import Foundation
 
 public class Binding<Value> {
 
-    private(set) public var value: Value
+    private(set) public var value: Value?
     private var bindings: [ActionWith<Value>] = []
+    private var debugName: String? = nil
 
-    public init(value: Value) {
-        self.value = value
+    deinit {
+        self.debugName.map { $0.isEmpty ? print("Deinit") : print($0 + ": Deinit" ) }
     }
 
-    public static func constant<Value>(_ value: Value) -> Binding<Value> {
-        return Binding<Value>(value: value)
+    public init(value: Value? = nil) {
+        self.value = value
     }
     
     public static func create<Value>(_ value: Value) -> Binding<Value> {
@@ -40,48 +41,84 @@ public class Binding<Value> {
     }
 
     public func update(_ value: Value) {
+        self.debugName.map {
+            $0.isEmpty ?
+            print("Update, new value: \(String(describing: value))") :
+            print($0 + ": Update, new value: \(String(describing: value))")
+        }
         self.value = value
         self.bindings.forEach { $0.execute(value) }
     }
 
-    public func bind(_ onChange: ActionWith<Value>, getInitial: Bool = false) {
+    public func bind(_ onChange: ActionWith<Value>) {
+        self.debugName.map { $0.isEmpty ? print("Subscibed") : print($0 + ": Subscibed") }
         self.bindings.append(onChange)
-        guard getInitial else { return }
-        onChange.execute(self.value)
     }
 
     public func map<C>(_ block: @escaping (Value) -> (C)) -> Binding<C> {
-        let newBinding = Binding<C>(value: block(self.value))
+        let newBinding = Binding<C>(value: self.value.map(block))
         self.bind(ActionWith<Value> { value in
             newBinding.update(block(value))
         })
         return newBinding
     }
 
+    public func compactMap<C>(_ block: @escaping (Value) -> (C?)) -> Binding<C> {
+        let newBinding = Binding<C>(value: self.value.flatMap(block))
+        self.bind(ActionWith<Value> { value in
+            block(value).map { newBinding.update($0) }
+        })
+        return newBinding
+    }
+
     public func mapToVoid() -> Binding<Void> {
-        return self.map({ _ in })
+        return self.map { _ in }
     }
 
     public func combine(_ another: Binding<Value>) -> Binding<(Value, Value)> {
-        let newBinding = Binding<(Value, Value)>(value: (self.value, another.value))
+        let newBinding = Binding<(Value, Value)>(value: self.value.with(another.value))
         self.bind(ActionWith<Value> { [weak another] value in
-            guard let another = another else { return }
-            newBinding.update((value, another.value))
+            guard let anotherValue = another?.value else { return }
+            newBinding.update((value, anotherValue))
         })
         another.bind(ActionWith<Value> { [weak self] value in
-            guard let self = self else { return }
-            newBinding.update((self.value, value))
+            guard let selfValue = self?.value else { return }
+            newBinding.update((selfValue, value))
         })
         return newBinding
     }
 
     public static func merge(_ bindings: Binding<Value>...) -> Binding<Value> {
-        let newBinding = Binding<Value>(value: bindings.first!.value)
+        let newBinding = Binding<Value>()
         bindings.forEach { binding in
             binding.bind(ActionWith<Value> { value in
                 newBinding.update(value)
             })
         }
         return newBinding
+    }
+
+    public func filter(_ block: @escaping (Value) -> Bool) -> Binding<Value> {
+        let newBinding = Binding(value: self.value.flatMap { block($0) ? $0 : nil })
+        self.bind(ActionWith<Value> {
+            block($0) ? newBinding.update($0) : ()
+        })
+        return newBinding
+    }
+
+    public func debug(_ name: String = "") -> Binding<Value> {
+        self.debugName = name
+        return self
+    }
+}
+
+extension Binding where Value == Void {
+
+    public func update() {
+        self.update(())
+    }
+
+    public static func create() -> Binding<Void> {
+        return self.create(())
     }
 }

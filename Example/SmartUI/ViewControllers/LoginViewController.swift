@@ -11,9 +11,11 @@ import SmartUI
 
 class LoginViewController: UIViewController {
     
-    let username: Binding<String> = .constant("")
-    let password: Binding<String> = .constant("")
-    lazy var notValid = self.username.combine(self.password).map { $0.0.isEmpty || $0.1.isEmpty }
+    let username: Binding<String> = .create("")
+    let password: Binding<String> = .create("")
+
+    lazy var notValid = self.username.combine(self.password)
+        .map { $0.0.isEmpty || $0.1.isEmpty }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,7 +66,11 @@ class LoginViewController: UIViewController {
     private func showAlert() {
         let vc = UIAlertController(
             title: "Success",
-            message: "\nYou are signed in.\n\nusername: \(self.username.value)\npassword: \(self.password.value)",
+            message: """
+                You are signed in.
+                username: \(self.username.value.valueOr(""))
+                password: \(self.password.value.valueOr(""))
+            """,
             preferredStyle: .alert
         )
         vc.addAction(.init(title: "OK", style: .cancel, handler: nil))

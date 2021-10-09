@@ -28,7 +28,7 @@ public class Toggle: Control {
     private let label: View
 
     public convenience init(_ title: String? = nil, isOn: Bool) {
-        self.init(title, isOn: .constant(isOn))
+        self.init(title, isOn: .create(isOn))
     }
 
     public convenience init(_ title: String? = nil, isOn: Binding<Bool>) {
@@ -36,7 +36,7 @@ public class Toggle: Control {
     }
 
     public convenience init(isOn: Bool, label: View) {
-        self.init(isOn: .constant(isOn), label: label)
+        self.init(isOn: .create(isOn), label: label)
     }
 
     public init(isOn: Binding<Bool>, label: View) {
@@ -77,7 +77,7 @@ internal class SwitchView: UISwitch {
     }
 
     private func setup() {
-        self.isOn = self.isOnBinding.value
+        self.isOn = self.isOnBinding.value ?? true
         self.addTarget(self, action: #selector(self.valueChanged), for: .valueChanged)
         self.setContentHuggingPriority(.defaultLow, for: .horizontal)
         self.setContentHuggingPriority(.defaultLow, for: .vertical)

@@ -94,7 +94,7 @@ extension BindableScrollView: Delegateable {
 public extension ScrollView {
 
     func scrollEnabled(_ enabled: Bool) -> Self {
-        return self.add(modifier: ScrollEnabled(isScrollEnabled: .constant(enabled)))
+        return self.add(modifier: ScrollEnabled(isScrollEnabled: .create(enabled)))
     }
 
     func scrollEnabled(_ enabled: Binding<Bool>) -> Self {

@@ -47,7 +47,7 @@ class HorizontalScrollGallery: UIViewController {
     
     private var galleryView: View {
         ScrollView(.horizontal, showsIndicators: false) { [unowned self] in
-            HStack(alignment: .fill) {
+            HStack(alignment: .fill, spacing: 0.0) {
                 self.emojis.map { emoji in
                     ZStack {[
                         RoundedRectangle(cornerRadius: 12)

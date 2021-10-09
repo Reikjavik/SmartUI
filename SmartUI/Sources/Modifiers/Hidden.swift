@@ -29,7 +29,10 @@ internal struct Hidden: Modifier {
     func modify(_ view: UIView) -> UIView {
         self.isHidden.bind(ActionWith<Bool> { [weak view] hidden in
             view?.isHidden = hidden
-        }, getInitial: true)
+        })
+        self.isHidden.value.map {
+            view.isHidden = $0
+        }
         return view
     }
 }

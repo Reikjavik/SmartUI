@@ -28,18 +28,18 @@ public class List: View {
     private let sectionsBinding: Binding<[Section]>
 
     public init<Item>(_ data: Binding<[Item]>, selection: ActionWith<Item>? = nil, rowContent: @escaping (Item) -> View) {
-        self.selection = selection?.map { data.value[$0.row] }
+        self.selection = selection?.compactMap { data.value?[$0.row] }
         self.sectionsBinding = data.map { items in [Section(rows: { items.map(rowContent) })] }
         super.init()
     }
 
     public convenience init<Item>(_ data: [Item], selection: ActionWith<Item>? = nil, rowContent: @escaping (Item) -> View) {
-        self.init(.constant(data), selection: selection, rowContent: rowContent)
+        self.init(.create(data), selection: selection, rowContent: rowContent)
     }
 
     public init(selection: ActionWith<IndexPath>? = nil, rows: () -> [View]) {
         self.selection = selection
-        self.sectionsBinding = .constant([Section(rows: rows)])
+        self.sectionsBinding = .create([Section(rows: rows)])
         super.init()
     }
 
@@ -50,7 +50,7 @@ public class List: View {
     }
 
     public convenience init(selection: ActionWith<IndexPath>? = nil, sections: () -> [Section]) {
-        self.init(selection: selection, sections: .constant(sections()))
+        self.init(selection: selection, sections: .create(sections()))
     }
 
     override var toUIView: UIView {
@@ -111,18 +111,20 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return self.sections.value.count
+        return self.sections.value?.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.sections.value[section].rows.count
+        return self.sections.value?[section].rows.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
         cell.backgroundColor = .clear
         cell.contentView.backgroundColor = .clear
-        cell.contentView.addSubview(self.sections.value[indexPath.section].rows[indexPath.row].display(), insets: .zero)
+        (self.sections.value?[indexPath.section].rows[indexPath.row].display()).map {
+            cell.contentView.addSubview($0, insets: .zero)
+        }
         return cell
     }
 
@@ -132,24 +134,24 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let view = self.sections.value[indexPath.section].rows[indexPath.row]
+        let view = self.sections.value?[indexPath.section].rows[indexPath.row]
         return view is Divider ? Divider.height : UITableView.automaticDimension
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return self.sections.value[section].header?.display()
+        return self.sections.value?[section].header?.display()
     }
 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return self.sections.value[section].footer?.display()
+        return self.sections.value?[section].footer?.display()
     }
 
     func tableView(_ tableView:  UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return self.sections.value[section].header?.display().systemLayoutSizeFitting(tableView.bounds.size).height ?? 0.0
+        return self.sections.value?[section].header?.display().systemLayoutSizeFitting(tableView.bounds.size).height ?? 0.0
     }
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return self.sections.value[section].footer?.display().systemLayoutSizeFitting(tableView.bounds.size).height ?? 0.0
+        return self.sections.value?[section].footer?.display().systemLayoutSizeFitting(tableView.bounds.size).height ?? 0.0
     }
 }
 
@@ -214,7 +216,7 @@ public extension List {
     }
 
     func scrollEnabled(_ enabled: Bool) -> Self {
-        return self.add(modifier: ScrollEnabled(isScrollEnabled: .constant(enabled)))
+        return self.add(modifier: ScrollEnabled(isScrollEnabled: .create(enabled)))
     }
 
     func scrollEnabled(_ enabled: Binding<Bool>) -> Self {

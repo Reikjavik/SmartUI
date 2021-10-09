@@ -27,7 +27,7 @@ internal struct Disabled: Modifier {
     let disabled: Binding<Bool>
 
     func modify(_ view: UIView) -> UIView {
-        self.disabled.bind(ActionWith<Bool> { [weak view] disabled in
+        let handleDisabled: (Bool) -> Void = { [weak view] disabled in
             if let control = view as? UIControl {
                 control.isEnabled = !disabled
             } else if let stackView = view as? UIStackView,
@@ -38,7 +38,9 @@ internal struct Disabled: Modifier {
             } else {
                 view?.isUserInteractionEnabled = !disabled
             }
-        }, getInitial: true)
+        }
+        self.disabled.bind(ActionWith(handleDisabled))
+        self.disabled.value.map(handleDisabled)
         return view
     }
 }

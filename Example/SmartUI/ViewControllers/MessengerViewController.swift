@@ -11,7 +11,7 @@ import SmartUI
 
 class MessengerViewController: UIViewController {
 
-    let messages: Binding<[Message]> = .constant([
+    let messages: Binding<[Message]> = .create([
         .init(type: .incoming, from: "John", content: .text("Hello, how can I help you?"), date: Date()),
         .init(type: .outcoming, from: "Me", content: .text("I am interested in buying a house and need some information"), date: Date()),
         .init(type: .outcoming, from: "Me", content: .image(#imageLiteral(resourceName: "house")), date: Date()),
@@ -21,7 +21,7 @@ class MessengerViewController: UIViewController {
         .init(type: .outcoming, from: "Me", content: .text("I need a medium-sized house with at least 4 bedrooms and 2 bathrooms."), date: Date())
     ])
 
-    let text: Binding<String> = .constant("")
+    let text: Binding<String> = .create("")
     var scrollToBottom: Action = .empty
 
     let incomingMessageBgColor = Color(UIColor(red: 10/255, green: 128/255, blue: 245/255, alpha: 1.0))
@@ -94,7 +94,9 @@ class MessengerViewController: UIViewController {
     private func createInputView() -> UIView {
         let onSend = Action { [unowned self] in
             guard !self.text.value.isEmpty else { return }
-            let messages = self.messages.value + [.init(type: .outcoming, from: "Me", content: .text(self.text.value), date: Date())]
+            let messages = self.messages.value.valueOr([]) + [
+                .init(type: .outcoming, from: "Me", content: .text(self.text.value.valueOr("")), date: Date())
+            ]
             self.messages.update(messages)
             self.text.update("")
             self.scrollToBottom.execute(delay: 0.1)
@@ -106,7 +108,7 @@ class MessengerViewController: UIViewController {
             VStack {[
                 Divider(),
                 HStack(spacing: 8.0) {[
-                    TextField("Message", text: self.text, onCommit: onSend.combine(endEditing))
+                    TextField("Message", text: self.text, onCommit: onSend.merge(endEditing))
                         .placeholderColor(.lightGray)
                         .returnKeyType(.done)
                         .foregroundColor(.black)

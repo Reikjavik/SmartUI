@@ -29,7 +29,10 @@ internal struct Alpha: Modifier {
     func modify(_ view: UIView) -> UIView {
         self.alpha.bind(ActionWith<CGFloat> { value in
             view.alpha = max(0.0, min(value, 1.0))
-        }, getInitial: true)
+        })
+        if let alpha = self.alpha.value {
+            view.alpha = max(0.0, min(alpha, 1.0))
+        }
         return view
     }
 }

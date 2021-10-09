@@ -92,7 +92,7 @@ public extension View {
     }
 
     func alpha(_ alpha: CGFloat) -> Self {
-        return self.alpha(.constant(alpha))
+        return self.alpha(.create(alpha))
     }
 
     func alpha(_ alpha: Binding<CGFloat>) -> Self {
@@ -104,7 +104,7 @@ public extension View {
     }
 
     func hidden(_ hidden: Bool = true) -> Self {
-        return self.hidden(.constant(hidden))
+        return self.hidden(.create(hidden))
     }
 
     func hidden(_ hidden: Binding<Bool>) -> Self {

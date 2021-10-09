@@ -48,7 +48,7 @@ public struct ActionWith<T> {
         }
     }
 
-    public func flatMap<C>(_ block: @escaping (C) -> (T?)) -> ActionWith<C> {
+    public func compactMap<C>(_ block: @escaping (C) -> (T?)) -> ActionWith<C> {
         return ActionWith<C> { value in
             block(value).map { self.execute($0) }
         }
@@ -78,7 +78,14 @@ public extension ActionWith {
         }
     }
 
-    func combine(_ action: Self?) -> Self {
+    func merge(_ action: Self?) -> Self {
         return Self.merge(self, action)
+    }
+
+    func combine<U>(_ another: ActionWith<U>) -> ActionWith<(T, U)> {
+        return .init {
+            self.execute($0)
+            another.execute($1)
+        }
     }
 }

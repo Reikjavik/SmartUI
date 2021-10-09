@@ -22,6 +22,12 @@ class EditableProductsList: UIViewController {
     let info: Binding<String> = .create("")
     let price: Binding<String> = .create("")
 
+    lazy var checkButtonTrigger = Binding.merge(self.name, self.info, self.price).mapToVoid()
+    lazy var buttonDisabled = self.checkButtonTrigger.map { [weak self] _ -> Bool in
+        guard let self = self else { return true }
+        return self.name.value.isEmpty || self.info.value.isEmpty || self.price.value.isEmpty
+    }
+
     private let grayBackground: Color = Color.gray.opacity(0.1)
 
     override func viewDidLoad() {
@@ -31,6 +37,8 @@ class EditableProductsList: UIViewController {
         ContainerView { [unowned self] in
             self.prosuctsList
         }.layout(in: view)
+
+        self.checkButtonTrigger.update()
     }
 
     private var prosuctsList: View {
@@ -47,7 +55,7 @@ class EditableProductsList: UIViewController {
     }
 
     private var addProductForm: View {
-        VStack(spacing: 8.0) { [unowned self] in [
+        return VStack(spacing: 8.0) { [unowned self] in [
             Text("Add new product")
                 .font(Font.system(size: 16))
                 .padding(8),
@@ -70,9 +78,7 @@ class EditableProductsList: UIViewController {
                 .cornerRadius(4.0),
             Button("Add", action: Action { [weak self] in
                 self?.addProduct()
-            }).disabled(Binding.merge(self.name, self.info, self.price).map { _ -> Bool in
-                self.info.value.isEmpty || self.name.value.isEmpty || self.price.value.isEmpty
-            })
+            }).disabled(self.buttonDisabled)
         ]}.padding(8.0)
     }
 
@@ -81,12 +87,12 @@ class EditableProductsList: UIViewController {
 
         // Update datasource
         let emojis = ["🥑", "🥨", "🧀", "🍳", "🍕", "🥘", "🍟"]
-        var datasource = self.datasource.value
+        var datasource = self.datasource.value ?? []
         let product = Product(
             emojiIcon: emojis.randomElement()!,
-            title: self.name.value,
-            description: self.info.value,
-            price: Double(self.price.value) ?? 0.0
+            title: self.name.value ?? "",
+            description: self.info.value ?? "",
+            price: Double(self.price.value ?? "") ?? 0.0
         )
         datasource.append(.product(product))
 

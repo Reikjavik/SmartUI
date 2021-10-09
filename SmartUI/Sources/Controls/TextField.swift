@@ -113,7 +113,8 @@ internal class TextFieldView: UITextField, UITextFieldDelegate {
     private func setup() {
         self.value.bind(ActionWith<String> { [weak self] text in
             self?.text = text
-        }, getInitial: true)
+        })
+        self.text = self.value.value
         self.borderStyle = .none
         self.delegate = self
         self.addTarget(self, action: #selector(self.didChangeText(textField:)), for: .editingChanged)

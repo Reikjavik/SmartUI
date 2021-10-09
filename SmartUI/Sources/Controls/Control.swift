@@ -33,6 +33,6 @@ public extension Control {
     }
 
     func disabled(_ disabled: Bool) -> Self {
-        return self.add(modifier: Disabled(disabled: .constant(disabled)))
+        return self.add(modifier: Disabled(disabled: .create(disabled)))
     }
 }
