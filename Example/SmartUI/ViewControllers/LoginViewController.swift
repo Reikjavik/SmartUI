@@ -59,7 +59,7 @@ class LoginViewController: UIViewController {
                     .disabled(self.notValid),
                 ]}.padding(16)
             }
-            .bindToKeyboard()
+            .bindToKeyboard(extraOffset: 16.0)
         }.layout(in: view)
     }
     

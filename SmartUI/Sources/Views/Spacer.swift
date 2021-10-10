@@ -40,13 +40,7 @@ public class Spacer: View {
         return view
     }
 
-    override func add(to parent: UIView) -> UIView {
-        let view = super.add(to: parent)
-        self.view(view: view, didMoveTo: parent)
-        return view
-    }
-
-    func view(view: UIView, didMoveTo parent: UIView) {
+    override func view(view: UIView, didMoveTo parent: UIView) {
 
         let isVertical = (parent as? UIStackView)?.axis == .vertical
         let constant = { $0 == .infinity ? UIView.maxConstraintConstantValue : $0 }

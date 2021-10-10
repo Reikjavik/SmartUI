@@ -28,45 +28,41 @@ public class View {
     private(set) internal var children: [View]
     private(set) internal var modifiers: [Modifier]
 
+    internal var sourceView = UIView()
+
     internal init(parent: View? = nil, children: [View] = [], modifiers: [Modifier] = []) {
         self.parent = parent
         self.children = children
         self.modifiers = modifiers
     }
 
-    internal var toUIView: UIView { UIView() }
-
-    @discardableResult
-    internal func add(to parent: UIView) -> UIView {
-        let view = self.display()
-        if let stackView = parent as? StackView {
-            stackView.addArrangedSubview(view)
-        } else {
-            view.layout(in: parent, alignment: .center)
-        }
-        return view
-    }
-
-    internal func addChild(child: View, to selfView: UIView) {
-        child.add(to: selfView)
-    }
-
     internal func display() -> UIView {
-        let initialView = self.toUIView
-        let view = self.applyModifiers(on: initialView)
-        self.addChildren(to: initialView)
+        self.sourceView = self.toUIView
+        let view = self.applyModifiers()
+        self.children.forEach { self.addChild(child: $0) }
         return view
     }
 
-    internal func applyModifiers(on view: UIView) -> UIView {
-        var view = view
+    private func applyModifiers() -> UIView {
+        var view = self.sourceView
         self.modifiers.forEach { view = $0.modify(view) }
         return view
     }
 
-    internal func addChildren(to view: UIView) {
-        self.children.forEach { self.addChild(child: $0, to: view) }
+    internal func addChild(child: View) {
+        let childView = child.display()
+        if let stackView = self.sourceView as? StackView {
+            stackView.addArrangedSubview(childView)
+        } else {
+            childView.layout(in: self.sourceView, alignment: .center)
+        }
+        child.view(view: childView, didMoveTo: self.sourceView)
     }
+
+    // MARK: Override in subclass
+
+    internal var toUIView: UIView { UIView() }
+    internal func view(view: UIView, didMoveTo parent: UIView) {}
 }
 
 public protocol Modifier {

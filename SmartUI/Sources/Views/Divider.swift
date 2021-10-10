@@ -36,13 +36,7 @@ public class Divider: View {
         return view
     }
 
-    override func add(to parent: UIView) -> UIView {
-        let view = super.add(to: parent)
-        self.view(view: view, didMoveTo: parent)
-        return view
-    }
-
-    func view(view: UIView, didMoveTo parent: UIView) {
+    override func view(view: UIView, didMoveTo parent: UIView) {
 
         let constraint: NSLayoutConstraint
         let size: NSLayoutConstraint

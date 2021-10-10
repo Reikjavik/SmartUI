@@ -35,13 +35,13 @@ class EditableProductsList: UIViewController {
         view.backgroundColor = .white
 
         ContainerView { [unowned self] in
-            self.prosuctsList
+            self.productsList
         }.layout(in: view)
 
         self.checkButtonTrigger.update()
     }
 
-    private var prosuctsList: View {
+    private var productsList: View {
         List(self.datasource) { [unowned self] datasource in
             switch datasource {
             case .form:
@@ -56,9 +56,6 @@ class EditableProductsList: UIViewController {
 
     private var addProductForm: View {
         return VStack(spacing: 8.0) { [unowned self] in [
-            Text("Add new product")
-                .font(Font.system(size: 16))
-                .padding(8),
             TextField("Title", text: self.name)
                 .font(Font.system(size: 16))
                 .padding(8)

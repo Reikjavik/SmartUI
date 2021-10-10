@@ -58,7 +58,7 @@ public class List: View {
         return ListTableView(sections: self.sectionsBinding, selection: self.selection, style: style?.style.style ?? .plain)
     }
 
-    override func addChild(child: View, to selfView: UIView) {}
+    override func addChild(child: View) {}
 }
 
 public class Section {
@@ -92,6 +92,10 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
         self.rowHeight = UITableView.automaticDimension
         self.allowsMultipleSelection = false
         self.allowsSelection = selection != nil
+
+        if #available(iOS 15.0, *) {
+            self.sectionHeaderTopPadding = 0
+        }
 
         let width = self.widthAnchor.constraint(equalToConstant: UIView.maxConstraintConstantValue)
         width.priority = .defaultLow
@@ -147,11 +151,19 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
     }
 
     func tableView(_ tableView:  UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return self.sections.value?[section].header?.display().systemLayoutSizeFitting(tableView.bounds.size).height ?? 0.0
+        if self.sections.value?[section].header != nil {
+            return UITableView.automaticDimension
+        } else {
+            return CGFloat.leastNormalMagnitude
+        }
     }
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return self.sections.value?[section].footer?.display().systemLayoutSizeFitting(tableView.bounds.size).height ?? 0.0
+        if self.sections.value?[section].footer != nil {
+            return UITableView.automaticDimension
+        } else {
+            return CGFloat.leastNormalMagnitude
+        }
     }
 }
 

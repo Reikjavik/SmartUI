@@ -80,12 +80,14 @@ class MessengerViewController: UIViewController {
             }
             bottom?.constant = -height + safeAreaBotttom
             UIView.animate(withDuration: 0.3) {
+                guard self?.view.window != nil else { return }
                 self?.view.layoutIfNeeded()
             }
         }))
         self.keyboardObserver.onWillHide(Action({ [weak self, weak bottom] height in
             bottom?.constant = 0.0
             UIView.animate(withDuration: 0.3) {
+                guard self?.view.window != nil else { return }
                 self?.view.layoutIfNeeded()
             }
         }))
@@ -105,7 +107,7 @@ class MessengerViewController: UIViewController {
             self.view.endEditing(true)
         }
         return ContainerView { [unowned self] in
-            VStack {[
+            VStack(spacing: 0.0) {[
                 Divider(),
                 HStack(spacing: 8.0) {[
                     TextField("Message", text: self.text, onCommit: onSend.merge(endEditing))

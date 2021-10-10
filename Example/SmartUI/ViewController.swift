@@ -21,6 +21,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.title = "Example"
+
         let rows = self.targets.map {
             Text($0.1)
                 .foregroundColor(Color.blue)

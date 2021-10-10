@@ -13,7 +13,7 @@ The main idea behind is to provide a possibility of easy transition from SmartUI
 
 ## Usage
 
-To get SwiftUI like behaviour it's recommended to use **ContainerView** for layouting.
+In order to get SwiftUI like behaviour it's recommended to use **ContainerView** for layouting. **ContainerView** is just a simple UIView and can be used anywhere in UIKit views hierarchy. It is also possible to replace only a part of UIKit views with SmartUI views, because SmatUI views will be converted to UIKit views with NSLayoutConstraints during the layout cycle. 
 ```swift
 import UIKit
 import SmartUI
@@ -22,15 +22,46 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        ContainerView {
-            Text("Hello, world!")
-        }.layout(in: self.view)
+        ContainerView { [unowned self] in
+            ScrollView {
+                VStack {[
+                    Text("?")
+                        .font(Font.system(size: 60, weight: .bold))
+                        .foregroundColor(.white)
+                        .frame(width: 100, height: 100)
+                        .background(Color.blue.opacity(0.4))
+                        .clipShape(Circle())
+                        .padding([.top, .bottom], 40),
+                    Text("Sign In")
+                        .font(Font.system(size: 24, weight: .semibold))
+                        .foregroundColor(accentColor)
+                        .padding(.bottom, 20),
+                    TextField("Username", text: self.username)
+                        .foregroundColor(.black)
+                        .padding(16)
+                        .background(grayBackground)
+                        .cornerRadius(6.0)
+                        .padding(.bottom, 20),
+                    SecureField("Password", text: self.password)
+                        .foregroundColor(.black)
+                        .padding(16)
+                        .background(grayBackground)
+                        .cornerRadius(6.0)
+                        .padding(.bottom, 20)
+                    ,
+                    Button("Continue", action: { [unowned self] in
+                        self.view.endEditing(true)
+                        self.handleSignIn()
+                    })
+                    .font(Font.system(size: 20))
+                    .disabled(self.notValid),
+                ]}.padding(16)
+            }
+            .bindToKeyboard(extraOffset: 16.0)
+        }.layout(in: view)
     }
 }
 ```
-There's also a possibility to use **WrapperView** instead of **ContainerView**. In this case SmartUI views will **fill** the parent.
-Both **ContainerView** and **WrapperView** are UIViews and can be layouted with constraints.
-
 In opposite it is also available to provide a custom UIView to SmartUI layout. It can be easy implemented with **CustomView**.
 ```swift
 ContainerView { [unowned self] in

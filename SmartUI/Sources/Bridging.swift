@@ -24,28 +24,14 @@ import UIKit
 
 internal class Container: View {
 
-    private let fill: Bool
-
-    internal init(view: View, fill: Bool) {
-        self.fill = fill
+    internal init(view: View) {
         super.init(children: [view])
-    }
-
-    override internal func add(to parent: UIView) -> UIView {
-        let child = self.display()
-        if self.fill {
-            parent.addSubview(child, insets: .zero)
-        } else {
-            child.layout(in: parent, alignment: .center)
-        }
-        return child
     }
 }
 
 public class ContainerView: UIView {
 
     private let content: () -> View
-    internal var fill: Bool { false }
 
     public init(_ content: @escaping () -> View) {
         self.content = content
@@ -60,21 +46,8 @@ public class ContainerView: UIView {
     public func redraw() {
         self.removeAllSubviews()
         let view = self.content()
-        let container = Container(view: view, fill: self.fill)
+        let container = Container(view: view)
         self.addSubview(container.display(), insets: .zero)
-    }
-}
-
-public class WrapperView: ContainerView {
-
-    override internal var fill: Bool { true }
-    
-    public override init(_ content: @escaping () -> View) {
-        super.init(content)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }
 

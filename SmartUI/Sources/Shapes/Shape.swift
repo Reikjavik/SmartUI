@@ -24,10 +24,8 @@ import UIKit
 
 public class Shape: View {
 
-    override func add(to parent: UIView) -> UIView {
-        let view = super.add(to: parent)
+    override func view(view: UIView, didMoveTo parent: UIView) {
         (view as? ShapeView)?.setupShapeConstraints()
-        return view
     }
 }
 
