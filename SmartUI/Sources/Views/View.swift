@@ -28,11 +28,11 @@ public extension View {
         return self.add(modifier: Background(view: view))
     }
 
-    func padding(_ edges: Edge.Set = .all, _ length: CGFloat) -> View {
+    func padding(_ edges: Edge.Set = .all, _ length: CGFloat = UIView.defaultSpacing) -> View {
         return self.add(modifier: Padding(edges: edges, length: length))
     }
 
-    func padding(_ length: CGFloat) -> View {
+    func padding(_ length: CGFloat = UIView.defaultSpacing) -> View {
         return self.add(modifier: Padding(edges: .all, length: length))
     }
 

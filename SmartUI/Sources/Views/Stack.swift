@@ -43,7 +43,7 @@ public class Stack<Alignment>: View {
 
 public class HStack: Stack<VerticalAlignment> {
 
-    public init(alignment: VerticalAlignment = .center, spacing: CGFloat = 0, content: () -> [View]) {
+    public init(alignment: VerticalAlignment = .center, spacing: CGFloat = UIView.defaultSpacing, content: () -> [View]) {
         super.init(children: content())
         self.alignment = alignment
         self.spacing = spacing
@@ -59,7 +59,7 @@ public class HStack: Stack<VerticalAlignment> {
 
 public class VStack: Stack<HorizontalAlignment> {
 
-    public init(alignment: HorizontalAlignment = .center, spacing: CGFloat = 0, content: () -> [View]) {
+    public init(alignment: HorizontalAlignment = .center, spacing: CGFloat = UIView.defaultSpacing, content: () -> [View]) {
         super.init(children: content())
         self.alignment = alignment
         self.spacing = spacing

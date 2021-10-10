@@ -22,29 +22,25 @@
 
 import UIKit
 
-internal struct BindToKeyboard: Modifier {
+internal struct ListStyleModifier: Modifier {
 
-    let extraOffset: CGFloat
+    let style: ListStyle
 
     func modify(_ view: UIView) -> UIView {
-        (view as? KeyboardBindable)?.bindToKeyboard(extraOffset: self.extraOffset)
         return view
     }
 }
 
-internal protocol KeyboardBindable: UIScrollView {
-    var observer: KeyboardHeightObserver { get }
+public protocol ListStyle {
+    var style: UITableView.Style { get }
 }
 
-internal extension UIScrollView {
+public struct PlainListStyle: ListStyle {
+    public let style: UITableView.Style = .plain
+    public init() {}
+}
 
-    func bindToKeyboard(extraOffset: CGFloat) {
-        let defaultInsets = self.contentInset
-        (self as? KeyboardBindable)?.observer.onWillShow(.init({ [weak self] height in
-            self?.contentInset.bottom = height + extraOffset
-        }))
-        (self as? KeyboardBindable)?.observer.onWillHide(.init({ [weak self] in
-            self?.contentInset = defaultInsets
-        }))
-    }
+public struct GroupedListStyle: ListStyle {
+    public let style: UITableView.Style = .grouped
+    public init() {}
 }

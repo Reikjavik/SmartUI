@@ -32,8 +32,14 @@ public struct ActionWith<T> {
         self.block = block
     }
 
-    public func execute(_ value: T) {
-        self.block(value)
+    public func execute(_ value: T, delay: TimeInterval = 0.0) {
+        if delay > 0.0 {
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                self.block(value)
+            }
+        } else {
+            self.block(value)
+        }
     }
 
     public func map<C>(_ block: @escaping (C) -> (T)) -> ActionWith<C> {
@@ -55,8 +61,8 @@ public extension Action {
         return self.map({ _ in })
     }
 
-    func execute() {
-        self.execute(())
+    func execute(delay: TimeInterval = 0.0) {
+        self.execute((), delay: delay)
     }
 }
 
@@ -66,13 +72,13 @@ public extension ActionWith {
         return ActionWith { _ in }
     }
 
-    static func merge(_ handlers: Self?...) -> Self {
+    static func merge(_ actions: Self?...) -> Self {
         return Self { value in
-            handlers.forEach { $0?.execute(value) }
+            actions.forEach { $0?.execute(value) }
         }
     }
 
-    func combine(_ handler: Self?) -> Self {
-        return Self.merge(self, handler)
+    func combine(_ action: Self?) -> Self {
+        return Self.merge(self, action)
     }
 }

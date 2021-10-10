@@ -28,16 +28,29 @@ public extension UIView {
         return max(UIScreen.main.bounds.width, UIScreen.main.bounds.height)
     }
 
-    func addSubview(_ view: UIView, insets: UIEdgeInsets, priority: UILayoutPriority = .required) {
-        view.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(view)
-        [view.topAnchor.constraint(equalTo: self.topAnchor, constant: insets.top),
-        view.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -insets.bottom),
-        view.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: insets.left),
-        view.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -insets.right)].forEach {
-            $0.priority = priority
-            $0.isActive = true
+    static var defaultSpacing: CGFloat {
+        return 8.0
+    }
+
+    func pin(_ edges: Edge.Set = .all, on superview: UIView, insets: UIEdgeInsets = .zero, priority: UILayoutPriority = .required) {
+        self.translatesAutoresizingMaskIntoConstraints = false
+        superview.addSubview(self)
+        if edges.contains(.top) {
+            self.topAnchor.constraint(equalTo: superview.topAnchor, constant: insets.top).isActive = true
         }
+        if edges.contains(.bottom) {
+            self.bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -insets.bottom).isActive = true
+        }
+        if edges.contains(.leading) {
+            self.leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: insets.left).isActive = true
+        }
+        if edges.contains(.trailing) {
+            self.trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: -insets.right).isActive = true
+        }
+    }
+
+    func addSubview(_ view: UIView, insets: UIEdgeInsets, priority: UILayoutPriority = .required) {
+        view.pin(on: self, insets: insets, priority: priority)
     }
 
     func layout(in container: UIView, alignment: Alignment = .center, insets: UIEdgeInsets = .zero) {
