@@ -49,6 +49,16 @@ public class ContainerView: UIView {
         let container = Container(view: view)
         self.addSubview(container.display(), insets: .zero)
     }
+
+    @discardableResult
+    public func redraw(on binding: AnyBinding) -> ContainerView {
+        binding.onChange { [weak self] in
+            DispatchQueue.main.async {
+                self?.redraw()
+            }
+        }
+        return self
+    }
 }
 
 public class CustomView: View {

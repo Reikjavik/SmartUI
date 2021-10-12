@@ -22,7 +22,7 @@
 
 import Foundation
 
-public class Binding<Value> {
+public class Binding<Value>: AnyBinding {
 
     private(set) public var value: Value?
     private var bindings: [ActionWith<Value>] = []
@@ -53,6 +53,11 @@ public class Binding<Value> {
     public func bind(_ onChange: ActionWith<Value>) {
         self.debugName.map { $0.isEmpty ? print("Subscibed") : print($0 + ": Subscibed") }
         self.bindings.append(onChange)
+    }
+
+    public func bind(_ onChange: @escaping (Value) -> Void) {
+        self.debugName.map { $0.isEmpty ? print("Subscibed") : print($0 + ": Subscibed") }
+        self.bindings.append(ActionWith(onChange))
     }
 
     public func map<C>(_ block: @escaping (Value) -> (C)) -> Binding<C> {
@@ -109,6 +114,21 @@ public class Binding<Value> {
     public func debug(_ name: String = "") -> Binding<Value> {
         self.debugName = name
         return self
+    }
+}
+
+public protocol AnyBinding {
+    func mapToVoid() -> Binding<Void>
+}
+
+extension AnyBinding {
+
+    func onChange(_ onChange: Action) {
+        self.mapToVoid().bind(onChange)
+    }
+
+    func onChange(_ onChange: @escaping () -> Void) {
+        self.mapToVoid().bind(onChange)
     }
 }
 
