@@ -1,5 +1,5 @@
 PODS:
-  - SmartUI (0.2.0)
+  - SmartUI (0.3.1)
 
 DEPENDENCIES:
   - SmartUI (from `../`)
@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  SmartUI: e433bad73743cc881e1d7f1345834bbb98cb4cd5
+  SmartUI: 236a37e7f1e9ca5021d165d78208d6eec1ead505
 
 PODFILE CHECKSUM: fbe5c3a36e569ff169c15f2692d53f3390dc7521
 

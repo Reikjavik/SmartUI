@@ -86,7 +86,9 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
         self.selection = selection ?? .empty
         super.init(frame: .zero, style: style)
         self.backgroundColor = .clear
-        self.tableFooterView = UIView()
+        let headerFooterView = UIView(frame: .init(x: 0, y: 0, width: 0, height: CGFloat.leastNormalMagnitude))
+        self.tableHeaderView = headerFooterView
+        self.tableFooterView = headerFooterView
         self.delegate = self
         self.dataSource = self
         self.rowHeight = UITableView.automaticDimension
