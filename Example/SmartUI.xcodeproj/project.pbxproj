@@ -70,6 +70,14 @@
 			path = Utils;
 			sourceTree = "<group>";
 		};
+		2B08FDAD2719B7BC00D6BC95 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				3ADA47A2257D5E6D00A78FCD /* ProductView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		2BB87DF92709AAF3003A2382 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -85,16 +93,9 @@
 				3ADA47A9257D5F0B00A78FCD /* HorizontalScrollGallery.swift */,
 				3ADA47AC257D5F3E00A78FCD /* LoginViewController.swift */,
 				3ADA47AF257D5F6600A78FCD /* MessengerViewController.swift */,
+				607FACD71AFB9204008FA782 /* ViewController.swift */,
 			);
 			path = ViewControllers;
-			sourceTree = "<group>";
-		};
-		3ADA47A1257D5E2800A78FCD /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				3ADA47A2257D5E6D00A78FCD /* ProductView.swift */,
-			);
-			name = Views;
 			sourceTree = "<group>";
 		};
 		607FACC71AFB9204008FA782 = {
@@ -122,10 +123,9 @@
 			children = (
 				2B08FDA02719A15100D6BC95 /* Utils */,
 				2BB87DF92709AAF3003A2382 /* Extensions */,
-				3ADA47A1257D5E2800A78FCD /* Views */,
+				2B08FDAD2719B7BC00D6BC95 /* Views */,
 				3ADA479F257D595300A78FCD /* ViewControllers */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
-				607FACD71AFB9204008FA782 /* ViewController.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
