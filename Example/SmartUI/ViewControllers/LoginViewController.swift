@@ -68,8 +68,8 @@ class LoginViewController: UIViewController {
             title: "Success",
             message: """
                 You are signed in.
-                username: \(self.username.value.valueOr(""))
-                password: \(self.password.value.valueOr(""))
+                username: \(self.username.value ?? "")
+                password: \(self.password.value ?? "")
             """,
             preferredStyle: .alert
         )

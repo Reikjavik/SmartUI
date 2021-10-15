@@ -22,7 +22,7 @@ class MessengerViewController: UIViewController {
     ])
 
     let text: Binding<String> = .create("")
-    var scrollToBottom: Action = .empty
+    var scrollToBottom: (() -> Void)?
 
     let incomingMessageBgColor = Color(UIColor(red: 10/255, green: 128/255, blue: 245/255, alpha: 1.0))
     let outcomingMessageBgColor = Color(UIColor(red: 216/255, green: 223/255, blue: 230/255, alpha: 1.0))
@@ -33,24 +33,25 @@ class MessengerViewController: UIViewController {
 
         view.backgroundColor = .white
         let container = ContainerView { [unowned self] in
-            List(self.messages) { message in
-                switch message.type {
-                case .incoming:
-                    return self.incomingMessage(message)
-                case .outcoming:
-                    return self.outcomingMessage(message)
-                }
-            }
-            .separatorStyle(.none)
-            .bindToKeyboard()
-            .customModifier { [weak self] view -> UIView in
-                self?.scrollToBottom = Action { [weak view] in
-                    guard let scrollView = view as? UIScrollView else { return }
+            ScrollViewReader { scrollView in
+
+                self.scrollToBottom = { [weak scrollView] in
+                    guard let scrollView = scrollView else { return }
                     let bottom = scrollView.contentSize.height - scrollView.bounds.height + scrollView.contentInset.bottom
                     let bottomOffset = CGPoint(x: 0, y: bottom)
                     scrollView.setContentOffset(bottomOffset, animated: true)
                 }
-                return view
+
+                return List(self.messages) { message in
+                    switch message.type {
+                    case .incoming:
+                        return self.incomingMessage(message)
+                    case .outcoming:
+                        return self.outcomingMessage(message)
+                    }
+                }
+                .separatorStyle(.none)
+                .bindToKeyboard()
             }
         }
         container.pin([.top, .leading, .trailing], on: view)
@@ -72,8 +73,8 @@ class MessengerViewController: UIViewController {
             bottom = inputView.bottomAnchor.constraint(equalTo: self.bottomLayoutGuide.bottomAnchor)
         }
         bottom.isActive = true
-        self.keyboardObserver.onWillShow(ActionWith<CGFloat>({ [weak self, weak bottom] height in
-            self?.scrollToBottom.execute(delay: 0.1)
+        self.keyboardObserver.onWillShow { [weak self, weak bottom] height in
+            self?.scrollToBottom(delay: 0.1)
             var safeAreaBotttom: CGFloat = 0.0
             if #available(iOS 11.0, *) {
                 safeAreaBotttom = self?.view.safeAreaInsets.bottom ?? 0.0
@@ -83,43 +84,52 @@ class MessengerViewController: UIViewController {
                 guard self?.view.window != nil else { return }
                 self?.view.layoutIfNeeded()
             }
-        }))
-        self.keyboardObserver.onWillHide(Action({ [weak self, weak bottom] height in
+        }
+        self.keyboardObserver.onWillHide { [weak self, weak bottom] in
             bottom?.constant = 0.0
             UIView.animate(withDuration: 0.3) {
                 guard self?.view.window != nil else { return }
                 self?.view.layoutIfNeeded()
             }
-        }))
+        }
+    }
+
+    private func scrollToBottom(delay: TimeInterval) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+            self?.scrollToBottom?()
+        }
     }
 
     private func createInputView() -> UIView {
-        let onSend = Action { [unowned self] in
+        let onSend = { [unowned self] in
             guard !self.text.value.isEmpty else { return }
-            let messages = self.messages.value.valueOr([]) + [
-                .init(type: .outcoming, from: "Me", content: .text(self.text.value.valueOr("")), date: Date())
+            let messages = (self.messages.value ?? []) + [
+                .init(type: .outcoming, from: "Me", content: .text(self.text.value ?? ""), date: Date())
             ]
             self.messages.update(messages)
             self.text.update("")
-            self.scrollToBottom.execute(delay: 0.1)
+            self.scrollToBottom(delay: 0.1)
         }
-        let endEditing = Action { [unowned self] in
+        let endEditing: () -> Void = { [unowned self] in
             self.view.endEditing(true)
         }
         return ContainerView { [unowned self] in
             VStack(spacing: 0.0) {[
                 Divider(),
                 HStack(spacing: 8.0) {[
-                    TextField("Message", text: self.text, onCommit: onSend.merge(endEditing))
-                        .placeholderColor(.lightGray)
-                        .returnKeyType(.done)
-                        .foregroundColor(.black)
-                        .padding(8.0)
-                        .background(Color.lightGray.opacity(0.2))
-                        .cornerRadius(8.0),
+                    TextField("Message", text: self.text, onCommit: {
+                        onSend()
+                        endEditing()
+                    })
+                    .placeholderColor(.lightGray)
+                    .returnKeyType(.done)
+                    .foregroundColor(.black)
+                    .padding(8.0)
+                    .background(Color.lightGray.opacity(0.2))
+                    .cornerRadius(8.0),
                     Button("Send", action: onSend)
-                        .disabled(self.text.map { $0.isEmpty })
-                        .contentCompressionResistance(.required)
+                    .disabled(self.text.map { $0.isEmpty })
+                    .contentCompressionResistance(.required)
                 ]}
                 .padding([.leading, .trailing], 16.0)
                 .padding([.top, .bottom], 8.0)

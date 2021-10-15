@@ -29,6 +29,7 @@ class EditableProductsList: UIViewController {
     }
 
     private let grayBackground: Color = Color.gray.opacity(0.1)
+    private var tableView: UITableView?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,20 +39,27 @@ class EditableProductsList: UIViewController {
             self.productsList
         }.layout(in: view)
 
+        self.info.mapToVoid().bind { [weak self] in
+            self?.tableView?.beginUpdates()
+            self?.tableView?.endUpdates()
+        }
+
         self.checkButtonTrigger.update()
     }
 
     private var productsList: View {
-        List(self.datasource) { [unowned self] datasource in
-            switch datasource {
-            case .form:
-                return self.addProductForm
-            case .product(let product):
-                return ProductRow.create(product: product)
+        TableViewReader { [unowned self] tableView in
+            self.tableView = tableView
+            return List(self.datasource) { [unowned self] datasource in
+                switch datasource {
+                case .form:
+                    return self.addProductForm
+                case .product(let product):
+                    return ProductRow.create(product: product)
+                }
             }
-        }.beginEndUpdates { [weak self] action in
-            self?.info.bind(action.adapt())
-        }.separatorInset(UIEdgeInsets(left: 10))
+            .separatorInset(UIEdgeInsets(top: 0.0, left: 10.0, bottom: 0.0, right: 0.0))
+        }
     }
 
     private var addProductForm: View {
@@ -73,7 +81,7 @@ class EditableProductsList: UIViewController {
                 .padding(8)
                 .background(self.grayBackground)
                 .cornerRadius(4.0),
-            Button("Add", action: Action { [weak self] in
+            Button("Add", action: { [weak self] in
                 self?.addProduct()
             }).disabled(self.buttonDisabled)
         ]}.padding(8.0)

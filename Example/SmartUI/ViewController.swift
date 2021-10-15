@@ -30,7 +30,7 @@ class ViewController: UIViewController {
                 .padding(16)
         }
 
-        let navigationAction = ActionWith<IndexPath> { [weak self] indexPath in
+        let navigationAction: (IndexPath) -> Void = { [weak self] indexPath in
             guard let vc = self?.targets[indexPath.row].0.init() else { return }
             self?.navigationController?.pushViewController(vc, animated: true)
         }

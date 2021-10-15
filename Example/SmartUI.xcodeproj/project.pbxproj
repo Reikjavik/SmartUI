@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2B08FDA42719A1A600D6BC95 /* Distinct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B08FDA32719A1A600D6BC95 /* Distinct.swift */; };
 		2BB87DFB2709AB0D003A2382 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB87DFA2709AB0D003A2382 /* String+Extensions.swift */; };
 		3ADA479C257D591500A78FCD /* EditableProductsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADA479B257D591500A78FCD /* EditableProductsList.swift */; };
 		3ADA47A3257D5E6D00A78FCD /* ProductView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADA47A2257D5E6D00A78FCD /* ProductView.swift */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2B08FDA32719A1A600D6BC95 /* Distinct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Distinct.swift; sourceTree = "<group>"; };
 		2BB87DFA2709AB0D003A2382 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		3438D7CDEFC1EE8C7C5CA670 /* Pods-SmartUI_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartUI_Example.release.xcconfig"; path = "Target Support Files/Pods-SmartUI_Example/Pods-SmartUI_Example.release.xcconfig"; sourceTree = "<group>"; };
 		3ADA479B257D591500A78FCD /* EditableProductsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableProductsList.swift; sourceTree = "<group>"; };
@@ -60,6 +62,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2B08FDA02719A15100D6BC95 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				2B08FDA32719A1A600D6BC95 /* Distinct.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
 		2BB87DF92709AAF3003A2382 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -110,6 +120,7 @@
 		607FACD21AFB9204008FA782 /* Example for SmartUI */ = {
 			isa = PBXGroup;
 			children = (
+				2B08FDA02719A15100D6BC95 /* Utils */,
 				2BB87DF92709AAF3003A2382 /* Extensions */,
 				3ADA47A1257D5E2800A78FCD /* Views */,
 				3ADA479F257D595300A78FCD /* ViewControllers */,
@@ -298,6 +309,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3ADA47AD257D5F3E00A78FCD /* LoginViewController.swift in Sources */,
+				2B08FDA42719A1A600D6BC95 /* Distinct.swift in Sources */,
 				3ADA47B0257D5F6600A78FCD /* MessengerViewController.swift in Sources */,
 				3ADA47AA257D5F0B00A78FCD /* HorizontalScrollGallery.swift in Sources */,
 				3ADA47A3257D5E6D00A78FCD /* ProductView.swift in Sources */,
