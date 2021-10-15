@@ -22,9 +22,9 @@
 
 import Foundation
 
-extension Optional {
+internal extension Optional {
 
-    public func valueOr(_ defaultValue: Wrapped) -> Wrapped {
+    func valueOr(_ defaultValue: Wrapped) -> Wrapped {
         switch self {
         case .some(let value):
             return value
@@ -33,7 +33,7 @@ extension Optional {
         }
     }
 
-    public func with<T>(_ other: T?) -> (Wrapped, T)? {
+    func with<T>(_ other: T?) -> (Wrapped, T)? {
         switch (self, other) {
         case (.some(let value1), .some(let value2)):
             return (value1, value2)

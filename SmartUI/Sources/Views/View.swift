@@ -77,11 +77,7 @@ public extension View {
     }
 
     func onTapGesture(count: Int = 1, perform action: @escaping () -> Void) -> Self {
-        return self.onTapGesture(count: count, perform: Action(action))
-    }
-
-    func onTapGesture(count: Int = 1, perform action: Action) -> Self {
-        return self.add(modifier: TapGesture(count: count, action: action))
+        return self.add(modifier: TapGesture(count: count, action: Action(action)))
     }
 
     func tintColor(_ color: Color) -> Self {

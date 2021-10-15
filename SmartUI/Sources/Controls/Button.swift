@@ -35,22 +35,8 @@ public class Button: Control {
         super.init()
     }
 
-    public init(_ title: String, action: Action) {
-        self.action = action
-        self.title = title
-        self.label = nil
-        super.init()
-    }
-
     public init(action: @escaping () -> Void, label: View) {
         self.action = Action(action)
-        self.title = nil
-        self.label = label
-        super.init()
-    }
-
-    public init(action: Action, label: View) {
-        self.action = action
         self.title = nil
         self.label = label
         super.init()

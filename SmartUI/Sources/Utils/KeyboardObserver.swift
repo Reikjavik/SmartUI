@@ -33,12 +33,12 @@ public final class KeyboardHeightObserver: NSObject {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHideNotification), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
 
-    public func onWillShow(_ action: ActionWith<CGFloat>) {
-        self.onWillShow = action
+    public func onWillShow(_ action: @escaping (CGFloat) -> Void) {
+        self.onWillShow = .init(action)
     }
 
-    public func onWillHide(_ action: Action) {
-        self.onWillHide = action
+    public func onWillHide(_ action: @escaping () -> Void) {
+        self.onWillHide = .init(action)
     }
 
     @objc func keyboardWillShowNotification(notification: Notification) {

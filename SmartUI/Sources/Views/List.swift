@@ -27,29 +27,32 @@ public class List: View {
     private let selection: ActionWith<IndexPath>?
     private let sectionsBinding: Binding<[Section]>
 
-    public init<Item>(_ data: Binding<[Item]>, selection: ActionWith<Item>? = nil, rowContent: @escaping (Item) -> View) {
-        self.selection = selection?.compactMap { data.value?[$0.row] }
+    public init<Item>(_ data: Binding<[Item]>, selection: ((Item) -> Void)? = nil, rowContent: @escaping (Item) -> View) {
+        let selectionAction = ActionWith<Item>(selection)
+        self.selection = selectionAction?.compactMap { data.value?[$0.row] }
         self.sectionsBinding = data.map { items in [Section(rows: { items.map(rowContent) })] }
         super.init()
     }
 
-    public convenience init<Item>(_ data: [Item], selection: ActionWith<Item>? = nil, rowContent: @escaping (Item) -> View) {
+    public convenience init<Item>(_ data: [Item], selection: ((Item) -> Void)? = nil, rowContent: @escaping (Item) -> View) {
         self.init(.create(data), selection: selection, rowContent: rowContent)
     }
 
-    public init(selection: ActionWith<IndexPath>? = nil, rows: () -> [View]) {
-        self.selection = selection
+    public init(selection: ((IndexPath) -> Void)? = nil, rows: () -> [View]) {
+        let selectionAction = ActionWith<IndexPath>(selection)
+        self.selection = selectionAction
         self.sectionsBinding = .create([Section(rows: rows)])
         super.init()
     }
 
-    public init(selection: ActionWith<IndexPath>? = nil, sections: Binding<[Section]>) {
-        self.selection = selection
+    public init(selection: ((IndexPath) -> Void)? = nil, sections: Binding<[Section]>) {
+        let selectionAction = ActionWith<IndexPath>(selection)
+        self.selection = selectionAction
         self.sectionsBinding = sections
         super.init()
     }
 
-    public convenience init(selection: ActionWith<IndexPath>? = nil, sections: () -> [Section]) {
+    public convenience init(selection: ((IndexPath) -> Void)? = nil, sections: () -> [Section]) {
         self.init(selection: selection, sections: .create(sections()))
     }
 
@@ -239,27 +242,6 @@ public extension List {
 
     func bindToKeyboard(extraOffset: CGFloat = 0.0) -> Self {
         return self.add(modifier: BindToKeyboard(extraOffset: extraOffset))
-    }
-
-    func beginEndUpdates(_ createAction: @escaping (Action) -> ()) -> Self {
-        let modifier = ActionCreator(action: ActionWith<UITableView> { view in
-            let action = Action { [weak view] in
-                view?.beginUpdates()
-                view?.endUpdates()
-            }
-            createAction(action)
-        })
-        return self.add(modifier: modifier)
-    }
-
-    func reloadData(_ createAction: @escaping (Action) -> ()) -> Self {
-        let modifier = ActionCreator(action: ActionWith<UITableView> { view in
-            let action = Action { [weak view] in
-                view?.reloadData()
-            }
-            createAction(action)
-        })
-        return self.add(modifier: modifier)
     }
 
     func delegate(_ delegate: UIScrollViewDelegate) -> Self {

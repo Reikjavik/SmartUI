@@ -50,7 +50,7 @@ public class Binding<Value>: AnyBinding {
         self.bindings.forEach { $0.execute(value) }
     }
 
-    public func bind(_ onChange: ActionWith<Value>) {
+    internal func bind(_ onChange: ActionWith<Value>) {
         self.debugName.map { $0.isEmpty ? print("Subscibed") : print($0 + ": Subscibed") }
         self.bindings.append(onChange)
     }

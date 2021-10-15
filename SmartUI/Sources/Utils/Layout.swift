@@ -22,17 +22,17 @@
 
 import UIKit
 
-public extension UIView {
+extension UIView {
 
-    internal static var maxConstraintConstantValue: CGFloat {
+    static var maxConstraintConstantValue: CGFloat {
         return max(UIScreen.main.bounds.width, UIScreen.main.bounds.height)
     }
 
-    static var defaultSpacing: CGFloat {
+    public static var defaultSpacing: CGFloat {
         return 8.0
     }
 
-    func pin(_ edges: Edge.Set = .all, on superview: UIView, insets: UIEdgeInsets = .zero, priority: UILayoutPriority = .required) {
+    public func pin(_ edges: Edge.Set = .all, on superview: UIView, insets: UIEdgeInsets = .zero, priority: UILayoutPriority = .required) {
         self.translatesAutoresizingMaskIntoConstraints = false
         superview.addSubview(self)
         if edges.contains(.top) {
@@ -49,11 +49,11 @@ public extension UIView {
         }
     }
 
-    func addSubview(_ view: UIView, insets: UIEdgeInsets, priority: UILayoutPriority = .required) {
+    public func addSubview(_ view: UIView, insets: UIEdgeInsets, priority: UILayoutPriority = .required) {
         view.pin(on: self, insets: insets, priority: priority)
     }
 
-    func layout(in container: UIView, alignment: Alignment = .center, insets: UIEdgeInsets = .zero) {
+    public func layout(in container: UIView, alignment: Alignment = .center, insets: UIEdgeInsets = .zero) {
         self.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(self)
         switch alignment {
@@ -111,7 +111,14 @@ public extension UIView {
         }
     }
 
-    func removeAllSubviews() {
-        self.subviews.forEach { $0.removeFromSuperview() }
+    public func removeAllSubviews() {
+        if let stackView = self as? UIStackView {
+            stackView.arrangedSubviews.forEach {
+                stackView.removeArrangedSubview($0)
+                $0.removeFromSuperview()
+            }
+        } else {
+            self.subviews.forEach { $0.removeFromSuperview() }
+        }
     }
 }

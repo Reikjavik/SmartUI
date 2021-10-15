@@ -24,7 +24,7 @@ import UIKit
 
 private var actionAssociationKey = "extension.Action.actionAssociationKey"
 
-public extension UIButton {
+internal extension UIButton {
 
     private var action: Action? {
         get { objc_getAssociatedObject(self, &actionAssociationKey) as? Action }
@@ -42,7 +42,7 @@ public extension UIButton {
     }
 }
 
-public extension UIGestureRecognizer {
+internal extension UIGestureRecognizer {
 
     private var action: Action? {
         get { objc_getAssociatedObject(self, &actionAssociationKey) as? Action }

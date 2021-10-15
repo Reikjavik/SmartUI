@@ -22,17 +22,25 @@
 
 import Foundation
 
-public typealias Action = ActionWith<Void>
+internal typealias Action = ActionWith<Void>
 
-public struct ActionWith<T> {
+internal struct ActionWith<T> {
 
     private let block: (T) -> Void
 
-    public init(_ block: @escaping (T) -> Void) {
+    internal init?(_ block: ((T) -> Void)?) {
+        if let block = block {
+            self.block = block
+        } else {
+            return nil
+        }
+    }
+
+    internal init(_ block: @escaping (T) -> Void) {
         self.block = block
     }
 
-    public func execute(_ value: T, delay: TimeInterval = 0.0) {
+    internal func execute(_ value: T, delay: TimeInterval = 0.0) {
         if delay > 0.0 {
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                 self.block(value)
@@ -42,20 +50,20 @@ public struct ActionWith<T> {
         }
     }
 
-    public func map<C>(_ block: @escaping (C) -> (T)) -> ActionWith<C> {
+    internal func map<C>(_ block: @escaping (C) -> (T)) -> ActionWith<C> {
         return ActionWith<C> { value in
             self.execute(block(value))
         }
     }
 
-    public func compactMap<C>(_ block: @escaping (C) -> (T?)) -> ActionWith<C> {
+    internal func compactMap<C>(_ block: @escaping (C) -> (T?)) -> ActionWith<C> {
         return ActionWith<C> { value in
             block(value).map { self.execute($0) }
         }
     }
 }
 
-public extension Action {
+internal extension Action {
 
     func adapt<T>() -> ActionWith<T> {
         return self.map({ _ in })
@@ -66,7 +74,7 @@ public extension Action {
     }
 }
 
-public extension ActionWith {
+internal extension ActionWith {
 
     static var empty: ActionWith<T> {
         return ActionWith { _ in }

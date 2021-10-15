@@ -40,11 +40,11 @@ internal extension UIScrollView {
 
     func bindToKeyboard(extraOffset: CGFloat) {
         let defaultInsets = self.contentInset
-        (self as? KeyboardBindable)?.observer.onWillShow(.init({ [weak self] height in
+        (self as? KeyboardBindable)?.observer.onWillShow { [weak self] height in
             self?.contentInset.bottom = height + extraOffset
-        }))
-        (self as? KeyboardBindable)?.observer.onWillHide(.init({ [weak self] in
+        }
+        (self as? KeyboardBindable)?.observer.onWillHide { [weak self] in
             self?.contentInset = defaultInsets
-        }))
+        }
     }
 }

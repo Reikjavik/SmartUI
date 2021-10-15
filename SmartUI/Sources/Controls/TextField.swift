@@ -40,37 +40,6 @@ public class TextField: Control {
         super.init()
     }
 
-    public init(_ title: String,
-                text: Binding<String>,
-                onEditingChanged: ActionWith<Bool>,
-                onCommit: Action) {
-        self.title = title
-        self.text = text
-        self.onEditingChanged = onEditingChanged
-        self.onCommit = onCommit
-        super.init()
-    }
-
-    public init(_ title: String,
-                text: Binding<String>,
-                onEditingChanged: ActionWith<Bool>) {
-        self.title = title
-        self.text = text
-        self.onEditingChanged = onEditingChanged
-        self.onCommit = .empty
-        super.init()
-    }
-
-    public init(_ title: String,
-                text: Binding<String>,
-                onCommit: Action) {
-        self.title = title
-        self.text = text
-        self.onEditingChanged = .empty
-        self.onCommit = onCommit
-        super.init()
-    }
-
     override internal var toUIView: UIView {
         return TextFieldView(
             title: self.title,
