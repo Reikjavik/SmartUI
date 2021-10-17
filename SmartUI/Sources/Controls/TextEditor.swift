@@ -59,11 +59,18 @@ internal class TextEditorView: UITextView, UITextViewDelegate, KeyboardBindable 
     }
 
     private func setup() {
+        self.textBinding.bind(ActionWith<String> { [weak self] text in
+            self?.text = text
+            if self?.isFirstResponder != true {
+                self?.setupPlaceholder(didEnd: true)
+            }
+        })
+        self.text = self.textBinding.value
+
         self.textContainerInset = .zero
         self.textContainer.lineFragmentPadding = 0.0
         self.backgroundColor = .clear
         self.delegate = self
-        self.text = self.textBinding.value
 
         let width = self.widthAnchor.constraint(equalToConstant: UIView.maxConstraintConstantValue)
         width.priority = .defaultHigh

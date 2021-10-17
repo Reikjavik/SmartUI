@@ -13,7 +13,6 @@
 		3ADA47A3257D5E6D00A78FCD /* ProductView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADA47A2257D5E6D00A78FCD /* ProductView.swift */; };
 		3ADA47AA257D5F0B00A78FCD /* HorizontalScrollGallery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADA47A9257D5F0B00A78FCD /* HorizontalScrollGallery.swift */; };
 		3ADA47AD257D5F3E00A78FCD /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADA47AC257D5F3E00A78FCD /* LoginViewController.swift */; };
-		3ADA47B0257D5F6600A78FCD /* MessengerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADA47AF257D5F6600A78FCD /* MessengerViewController.swift */; };
 		51F3066BD4282313B5A341B9 /* Pods_SmartUI_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44A5946F29C98B87AB8869E1 /* Pods_SmartUI_Example.framework */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
@@ -30,7 +29,6 @@
 		3ADA47A2257D5E6D00A78FCD /* ProductView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductView.swift; sourceTree = "<group>"; };
 		3ADA47A9257D5F0B00A78FCD /* HorizontalScrollGallery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalScrollGallery.swift; sourceTree = "<group>"; };
 		3ADA47AC257D5F3E00A78FCD /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
-		3ADA47AF257D5F6600A78FCD /* MessengerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessengerViewController.swift; sourceTree = "<group>"; };
 		44A5946F29C98B87AB8869E1 /* Pods_SmartUI_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SmartUI_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5035370BB5D816E23570065F /* Pods-SmartUI_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartUI_Example.debug.xcconfig"; path = "Target Support Files/Pods-SmartUI_Example/Pods-SmartUI_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		56FBDC5ACDFFB33A75F8A82D /* Pods-SmartUI_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartUI_Tests.release.xcconfig"; path = "Target Support Files/Pods-SmartUI_Tests/Pods-SmartUI_Tests.release.xcconfig"; sourceTree = "<group>"; };
@@ -44,7 +42,7 @@
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		7C7935E54C12F87F34AC3F1B /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		8E6DB9020397081FE1F6391D /* SmartUI.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = SmartUI.podspec; path = ../SmartUI.podspec; sourceTree = "<group>"; };
+		8E6DB9020397081FE1F6391D /* SmartUI.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = SmartUI.podspec; path = ../SmartUI.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9E5A5F820BF798CD749021A4 /* Pods_SmartUI_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SmartUI_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE5E1411788A607AEEE04A03 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		C1D53A3026DDB891BAB146A3 /* Pods-SmartUI_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartUI_Tests.debug.xcconfig"; path = "Target Support Files/Pods-SmartUI_Tests/Pods-SmartUI_Tests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -92,7 +90,6 @@
 				3ADA479B257D591500A78FCD /* EditableProductsList.swift */,
 				3ADA47A9257D5F0B00A78FCD /* HorizontalScrollGallery.swift */,
 				3ADA47AC257D5F3E00A78FCD /* LoginViewController.swift */,
-				3ADA47AF257D5F6600A78FCD /* MessengerViewController.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
 			);
 			path = ViewControllers;
@@ -310,7 +307,6 @@
 			files = (
 				3ADA47AD257D5F3E00A78FCD /* LoginViewController.swift in Sources */,
 				2B08FDA42719A1A600D6BC95 /* Distinct.swift in Sources */,
-				3ADA47B0257D5F6600A78FCD /* MessengerViewController.swift in Sources */,
 				3ADA47AA257D5F0B00A78FCD /* HorizontalScrollGallery.swift in Sources */,
 				3ADA47A3257D5E6D00A78FCD /* ProductView.swift in Sources */,
 				2BB87DFB2709AB0D003A2382 /* String+Extensions.swift in Sources */,

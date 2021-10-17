@@ -11,9 +11,19 @@ import SmartUI
 
 class EditableProductsList: UIViewController {
 
-    enum DataSource {
+    enum DataSource: Identifiable {
+
         case form
         case product(Product)
+
+        var id: String {
+            switch self {
+            case .form:
+                return "form"
+            case .product(let product):
+                return product.id
+            }
+        }
     }
 
     let datasource: Binding<[DataSource]> = .create([.form, .product(.apple)])
@@ -58,7 +68,7 @@ class EditableProductsList: UIViewController {
                     return ProductRow.create(product: product)
                 }
             }
-            .separatorInset(UIEdgeInsets(top: 0.0, left: 10.0, bottom: 0.0, right: 0.0))
+            .separatorStyle(.none)
         }
     }
 
@@ -94,6 +104,7 @@ class EditableProductsList: UIViewController {
         let emojis = ["🥑", "🥨", "🧀", "🍳", "🍕", "🥘", "🍟"]
         var datasource = self.datasource.value ?? []
         let product = Product(
+            id: UUID().uuidString,
             emojiIcon: emojis.randomElement()!,
             title: self.name.value ?? "",
             description: self.info.value ?? "",

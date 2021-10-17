@@ -14,8 +14,7 @@ class ViewController: UIViewController {
     let targets: [(UIViewController.Type, String)] = [
         (LoginViewController.self, "Login Form"),
         (HorizontalScrollGallery.self, "Horizontal Scroll Gallery"),
-        (EditableProductsList.self, "Editable Products List"),
-        (MessengerViewController.self, "Messenger")
+        (EditableProductsList.self, "Editable Products List")
     ]
 
     override func viewDidLoad() {

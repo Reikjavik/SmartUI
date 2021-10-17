@@ -22,19 +22,34 @@
 
 import UIKit
 
+public protocol Identifiable {
+    var id: String { get }
+}
+
+struct TableUpdate {
+    let deleted: [IndexPath]
+    let inserted: [IndexPath]
+}
+
 public class List: View {
 
     private let selection: ActionWith<IndexPath>?
-    private let sectionsBinding: Binding<[Section]>
+    private let sectionsBinding: Binding<[Section]>?
+    private let itemsBinding: Binding<[Identifiable]>?
+    private let rowContent: ((Identifiable) -> View?)?
 
-    public init<Item>(_ data: Binding<[Item]>, selection: ((Item) -> Void)? = nil, rowContent: @escaping (Item) -> View) {
+    public init<Item: Identifiable>(_ data: Binding<[Item]>, selection: ((Item) -> Void)? = nil, rowContent: @escaping (Item) -> View) {
         let selectionAction = ActionWith<Item>(selection)
+        // Used for sections binding
         self.selection = selectionAction?.compactMap { data.value?[$0.row] }
-        self.sectionsBinding = data.map { items in [Section(rows: { items.map(rowContent) })] }
+        self.sectionsBinding = nil
+        // Used for diffable items binding
+        self.itemsBinding = data.map { $0 as [Identifiable] }
+        self.rowContent = { ($0 as? Item).map(rowContent) }
         super.init()
     }
 
-    public convenience init<Item>(_ data: [Item], selection: ((Item) -> Void)? = nil, rowContent: @escaping (Item) -> View) {
+    public convenience init<Item: Identifiable>(_ data: [Item], selection: ((Item) -> Void)? = nil, rowContent: @escaping (Item) -> View) {
         self.init(.create(data), selection: selection, rowContent: rowContent)
     }
 
@@ -42,6 +57,8 @@ public class List: View {
         let selectionAction = ActionWith<IndexPath>(selection)
         self.selection = selectionAction
         self.sectionsBinding = .create([Section(rows: rows)])
+        self.itemsBinding = nil
+        self.rowContent = nil
         super.init()
     }
 
@@ -49,6 +66,8 @@ public class List: View {
         let selectionAction = ActionWith<IndexPath>(selection)
         self.selection = selectionAction
         self.sectionsBinding = sections
+        self.itemsBinding = nil
+        self.rowContent = nil
         super.init()
     }
 
@@ -58,10 +77,8 @@ public class List: View {
 
     override var toUIView: UIView {
         let style = self.modifiers.compactMap { $0 as? ListStyleModifier }.last
-        return ListTableView(sections: self.sectionsBinding, selection: self.selection, style: style?.style.style ?? .plain)
+        return ListTableView(sections: self.sectionsBinding, items: self.itemsBinding, rowContent: self.rowContent, selection: self.selection, style: style?.style.style ?? .plain)
     }
-
-    override func addChild(child: View) {}
 }
 
 public class Section {
@@ -80,13 +97,23 @@ public class Section {
 internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataSource, KeyboardBindable {
 
     var observer = KeyboardHeightObserver()
-    let sections: Binding<[Section]>
+    let sectionsBinding: Binding<[Section]>?
+    let itemsBinding: Binding<[Identifiable]>?
+    let rowContent: ((Identifiable) -> View?)?
     let selection: ActionWith<IndexPath>
+
+    private var sections: [Section]?
+    private var items: [Identifiable]?
+
     weak var customDelegate: UIScrollViewDelegate?
 
-    init(sections: Binding<[Section]>, selection: ActionWith<IndexPath>?, style: UITableView.Style) {
-        self.sections = sections
+    init(sections: Binding<[Section]>?, items: Binding<[Identifiable]>?, rowContent: ((Identifiable) -> View?)?, selection: ActionWith<IndexPath>?, style: UITableView.Style) {
+        self.sectionsBinding = sections
+        self.itemsBinding = items
+        self.rowContent = rowContent
         self.selection = selection ?? .empty
+        self.sections = sections?.value
+        self.items = items?.value?.distinct()
         super.init(frame: .zero, style: style)
         self.backgroundColor = .clear
         let headerFooterView = UIView(frame: .init(x: 0, y: 0, width: 0, height: CGFloat.leastNormalMagnitude))
@@ -97,6 +124,7 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
         self.rowHeight = UITableView.automaticDimension
         self.allowsMultipleSelection = false
         self.allowsSelection = selection != nil
+        self.register(ListTableViewCell.self, forCellReuseIdentifier: ListTableViewCell.reuseIdentifier)
 
         if #available(iOS 15.0, *) {
             self.sectionHeaderTopPadding = 0
@@ -110,9 +138,33 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
         height.priority = .defaultLow
         height.isActive = true
 
-        self.sections.bind(ActionWith<[Section]> { [weak self] _ in
+        self.sectionsBinding?.bind(ActionWith<[Section]> { [weak self] sections in
+            self?.sections = sections
             self?.reloadData()
         })
+
+        self.itemsBinding?.bind(ActionWith<[Identifiable]> { [weak self] items in
+            self?.updateRows(items: items)
+        })
+    }
+
+    private func updateRows(items: [Identifiable]) {
+        let items = items.distinct()
+        let updates = self.calculateUpdates(old: self.items ?? [], new: items)
+        self.items = items
+        self.beginUpdates()
+        self.deleteRows(at: updates.deleted, with: .automatic)
+        self.insertRows(at: updates.inserted, with: .automatic)
+        self.endUpdates()
+    }
+
+    func calculateUpdates(old: [Identifiable], new: [Identifiable], in section: Int = 0) -> TableUpdate {
+        let oldIds = old.map { $0.id }
+        let newIds = new.map { $0.id }
+        let diff = Diff(oldIds, newIds)
+        let inserted = diff.inserted.map { IndexPath(row: $0.0, section: section) }
+        let deleted = diff.deleted.map { IndexPath(row: $0.0, section: section) }
+        return TableUpdate(deleted: deleted, inserted: inserted)
     }
 
     required init?(coder: NSCoder) {
@@ -120,20 +172,34 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return self.sections.value?.count ?? 0
+        return self.sections?.count ?? 1
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.sections.value?[section].rows.count ?? 0
+        return self.sections?[section].rows.count ?? self.items?.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
+
+        let cell = tableView.dequeueReusableCell(withIdentifier: ListTableViewCell.reuseIdentifier, for: indexPath)
         cell.backgroundColor = .clear
         cell.contentView.backgroundColor = .clear
-        (self.sections.value?[indexPath.section].rows[indexPath.row].display()).map {
-            cell.contentView.addSubview($0, insets: .zero)
+
+        if let cell = cell as? ListTableViewCell {
+
+            // Sections binding
+            if let view = self.sections?[indexPath.section].rows[indexPath.row] {
+                cell.configure(view: view)
+            }
+
+            // Items binding
+            if let item = self.items?[indexPath.row] {
+                let view = self.rowContent?(item)
+                cell.configure(view: view)
+                cell.id = item.id
+            }
         }
+
         return cell
     }
 
@@ -143,20 +209,20 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let view = self.sections.value?[indexPath.section].rows[indexPath.row]
+        let view = self.sections?[indexPath.section].rows[indexPath.row]
         return view is Divider ? Divider.height : UITableView.automaticDimension
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return self.sections.value?[section].header?.display()
+        return self.sections?[section].header?.display()
     }
 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return self.sections.value?[section].footer?.display()
+        return self.sections?[section].footer?.display()
     }
 
     func tableView(_ tableView:  UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if self.sections.value?[section].header != nil {
+        if self.sections?[section].header != nil {
             return UITableView.automaticDimension
         } else {
             return CGFloat.leastNormalMagnitude
@@ -164,11 +230,20 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
     }
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        if self.sections.value?[section].footer != nil {
+        if self.sections?[section].footer != nil {
             return UITableView.automaticDimension
         } else {
             return CGFloat.leastNormalMagnitude
         }
+    }
+}
+
+final class ListTableViewCell: UITableViewCell, Identifiable {
+    static let reuseIdentifier = String(describing: ListTableViewCell.self)
+    var id: String = ""
+    func configure(view: View?) {
+        self.contentView.removeAllSubviews()
+        view.map { self.contentView.addSubview($0.display(), insets: .zero) }
     }
 }
 
@@ -250,5 +325,12 @@ public extension List {
 
     func listStyle(_ style: ListStyle) -> Self {
         return self.add(modifier: ListStyleModifier(style: style))
+    }
+}
+
+extension Array where Element == Identifiable {
+
+    func distinct() -> [Element] {
+        self.distinct(where: { $0.map { $0.id }.contains($1.id) })
     }
 }

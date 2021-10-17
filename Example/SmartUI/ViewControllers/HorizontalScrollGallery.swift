@@ -35,11 +35,8 @@ class HorizontalScrollGallery: UIViewController {
                     .font(Font.system(size: 20, weight: .semibold))
                     .padding(8),
                 ProductRow.create(product: .carrot),
-                Divider(),
                 ProductRow.create(product: .avocado),
-                Divider(),
-                ProductRow.create(product: .apple),
-                Spacer().frame(height: 32.0)
+                ProductRow.create(product: .apple)
             ]}.separatorStyle(.none)
         }
         self.contentView?.layout(in: view)
