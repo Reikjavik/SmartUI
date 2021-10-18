@@ -22,10 +22,6 @@
 
 import UIKit
 
-public protocol Identifiable {
-    var id: String { get }
-}
-
 struct TableUpdate {
     let deleted: [IndexPath]
     let inserted: [IndexPath]
@@ -35,21 +31,21 @@ public class List: View {
 
     private let selection: ActionWith<IndexPath>?
     private let sectionsBinding: Binding<[Section]>?
-    private let itemsBinding: Binding<[Identifiable]>?
-    private let rowContent: ((Identifiable) -> View?)?
+    private let itemsBinding: Binding<[AnyHashable]>?
+    private let rowContent: ((AnyHashable) -> View?)?
 
-    public init<Item: Identifiable>(_ data: Binding<[Item]>, selection: ((Item) -> Void)? = nil, rowContent: @escaping (Item) -> View) {
+    public init<Item: Hashable>(_ data: Binding<[Item]>, selection: ((Item) -> Void)? = nil, rowContent: @escaping (Item) -> View) {
         let selectionAction = ActionWith<Item>(selection)
         // Used for sections binding
         self.selection = selectionAction?.compactMap { data.value?[$0.row] }
         self.sectionsBinding = nil
         // Used for diffable items binding
-        self.itemsBinding = data.map { $0 as [Identifiable] }
+        self.itemsBinding = data.map { $0 as [AnyHashable] }
         self.rowContent = { ($0 as? Item).map(rowContent) }
         super.init()
     }
 
-    public convenience init<Item: Identifiable>(_ data: [Item], selection: ((Item) -> Void)? = nil, rowContent: @escaping (Item) -> View) {
+    public convenience init<Item: Hashable>(_ data: [Item], selection: ((Item) -> Void)? = nil, rowContent: @escaping (Item) -> View) {
         self.init(.create(data), selection: selection, rowContent: rowContent)
     }
 
@@ -98,16 +94,16 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
 
     var observer = KeyboardHeightObserver()
     let sectionsBinding: Binding<[Section]>?
-    let itemsBinding: Binding<[Identifiable]>?
-    let rowContent: ((Identifiable) -> View?)?
+    let itemsBinding: Binding<[AnyHashable]>?
+    let rowContent: ((AnyHashable) -> View?)?
     let selection: ActionWith<IndexPath>
 
     private var sections: [Section]?
-    private var items: [Identifiable]?
+    private var items: [AnyHashable]?
 
     weak var customDelegate: UIScrollViewDelegate?
 
-    init(sections: Binding<[Section]>?, items: Binding<[Identifiable]>?, rowContent: ((Identifiable) -> View?)?, selection: ActionWith<IndexPath>?, style: UITableView.Style) {
+    init(sections: Binding<[Section]>?, items: Binding<[AnyHashable]>?, rowContent: ((AnyHashable) -> View?)?, selection: ActionWith<IndexPath>?, style: UITableView.Style) {
         self.sectionsBinding = sections
         self.itemsBinding = items
         self.rowContent = rowContent
@@ -143,12 +139,12 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
             self?.reloadData()
         })
 
-        self.itemsBinding?.bind(ActionWith<[Identifiable]> { [weak self] items in
+        self.itemsBinding?.bind(ActionWith<[AnyHashable]> { [weak self] items in
             self?.updateRows(items: items)
         })
     }
 
-    private func updateRows(items: [Identifiable]) {
+    private func updateRows(items: [AnyHashable]) {
         let items = items.distinct()
         let updates = self.calculateUpdates(old: self.items ?? [], new: items)
         self.items = items
@@ -158,10 +154,8 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
         self.endUpdates()
     }
 
-    func calculateUpdates(old: [Identifiable], new: [Identifiable], in section: Int = 0) -> TableUpdate {
-        let oldIds = old.map { $0.id }
-        let newIds = new.map { $0.id }
-        let diff = Diff(oldIds, newIds)
+    func calculateUpdates(old: [AnyHashable], new: [AnyHashable], in section: Int = 0) -> TableUpdate {
+        let diff = Diff(old, new)
         let inserted = diff.inserted.map { IndexPath(row: $0.0, section: section) }
         let deleted = diff.deleted.map { IndexPath(row: $0.0, section: section) }
         return TableUpdate(deleted: deleted, inserted: inserted)
@@ -194,9 +188,11 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
 
             // Items binding
             if let item = self.items?[indexPath.row] {
-                let view = self.rowContent?(item)
-                cell.configure(view: view)
-                cell.id = item.id
+                if item.hashValue != cell.itemHash {
+                    let view = self.rowContent?(item)
+                    cell.configure(view: view)
+                }
+                cell.itemHash = item.hashValue
             }
         }
 
@@ -240,7 +236,7 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
 
 final class ListTableViewCell: UITableViewCell, Identifiable {
     static let reuseIdentifier = String(describing: ListTableViewCell.self)
-    var id: String = ""
+    var itemHash: Int?
     func configure(view: View?) {
         self.contentView.removeAllSubviews()
         view.map { self.contentView.addSubview($0.display(), insets: .zero) }
@@ -325,12 +321,5 @@ public extension List {
 
     func listStyle(_ style: ListStyle) -> Self {
         return self.add(modifier: ListStyleModifier(style: style))
-    }
-}
-
-extension Array where Element == Identifiable {
-
-    func distinct() -> [Element] {
-        self.distinct(where: { $0.map { $0.id }.contains($1.id) })
     }
 }

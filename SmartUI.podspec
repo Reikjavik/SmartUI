@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'SmartUI'
-  s.version          = '0.4.0'
+  s.version          = '0.4.1'
   s.summary          = 'SwiftUI inspired framework which uses the same syntax and provides support for iOS 10 and above'
   s.homepage         = 'https://github.com/Reikjavik/SmartUI'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }

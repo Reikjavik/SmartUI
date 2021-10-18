@@ -44,8 +44,7 @@ struct ProductRow {
     }
 }
 
-struct Product: Identifiable {
-    let id: String
+struct Product: Hashable {
     let emojiIcon: String
     let title: String
     let description: String
@@ -60,7 +59,6 @@ extension Product {
 
     static var carrot: Product {
         Product(
-            id: "carrot",
             emojiIcon: "🥕",
             title: "Carrot",
             description: "The carrot is a root vegetable, usually orange in color, though purple, black, red, white, and yellow cultivars exist. (c) Wikipedia",
@@ -70,7 +68,6 @@ extension Product {
 
     static var avocado: Product {
         Product(
-            id: "avocado",
             emojiIcon: "🥑",
             title: "Avocado",
             description: "The avocado, a tree likely originating from south central Mexico, is classified as a member of the flowering plant family Lauraceae. (c) Wikipedia",
@@ -79,7 +76,6 @@ extension Product {
     }
     static var apple: Product {
         Product(
-            id: "apple",
             emojiIcon: "🍎",
             title: "Apple",
             description: "An apple is an edible fruit produced by an apple tree. Apple trees are cultivated worldwide and are the most widely grown species in the genus Malus. (c) Wikipedia",
