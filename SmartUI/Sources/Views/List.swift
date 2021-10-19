@@ -73,7 +73,15 @@ public class List: View {
 
     override var toUIView: UIView {
         let style = self.modifiers.compactMap { $0 as? ListStyleModifier }.last
-        return ListTableView(sections: self.sectionsBinding, items: self.itemsBinding, rowContent: self.rowContent, selection: self.selection, style: style?.style.style ?? .plain)
+        let rowAnimation = self.modifiers.compactMap { $0 as? RowAnimation }.last
+        return ListTableView(
+            sections: self.sectionsBinding,
+            items: self.itemsBinding,
+            rowContent: self.rowContent,
+            rowAnimation: rowAnimation?.rowAnimation,
+            selection: self.selection,
+            style: style?.style.style ?? .plain
+        )
     }
 }
 
@@ -97,19 +105,26 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
     let itemsBinding: Binding<[AnyHashable]>?
     let rowContent: ((AnyHashable) -> View?)?
     let selection: ActionWith<IndexPath>
+    let rowAnimation: Binding<UITableView.RowAnimation>?
 
     private var sections: [Section]?
     private var items: [AnyHashable]?
 
     weak var customDelegate: UIScrollViewDelegate?
 
-    init(sections: Binding<[Section]>?, items: Binding<[AnyHashable]>?, rowContent: ((AnyHashable) -> View?)?, selection: ActionWith<IndexPath>?, style: UITableView.Style) {
+    init(sections: Binding<[Section]>?,
+         items: Binding<[AnyHashable]>?,
+         rowContent: ((AnyHashable) -> View?)?,
+         rowAnimation: Binding<UITableView.RowAnimation>?,
+         selection: ActionWith<IndexPath>?,
+         style: UITableView.Style) {
         self.sectionsBinding = sections
         self.itemsBinding = items
         self.rowContent = rowContent
         self.selection = selection ?? .empty
         self.sections = sections?.value
         self.items = items?.value?.distinct()
+        self.rowAnimation = rowAnimation
         super.init(frame: .zero, style: style)
         self.backgroundColor = .clear
         let headerFooterView = UIView(frame: .init(x: 0, y: 0, width: 0, height: CGFloat.leastNormalMagnitude))
@@ -148,9 +163,10 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
         let items = items.distinct()
         let updates = self.calculateUpdates(old: self.items ?? [], new: items)
         self.items = items
+        let rowAnimation = self.rowAnimation?.value ?? .automatic
         self.beginUpdates()
-        self.deleteRows(at: updates.deleted, with: .automatic)
-        self.insertRows(at: updates.inserted, with: .automatic)
+        self.deleteRows(at: updates.deleted, with: rowAnimation)
+        self.insertRows(at: updates.inserted, with: rowAnimation)
         self.endUpdates()
     }
 
@@ -321,5 +337,13 @@ public extension List {
 
     func listStyle(_ style: ListStyle) -> Self {
         return self.add(modifier: ListStyleModifier(style: style))
+    }
+
+    func rowAnimation(_ animation: UITableView.RowAnimation) -> Self {
+        return self.add(modifier: RowAnimation(rowAnimation: .create(animation)))
+    }
+
+    func rowAnimation(_ animation: Binding<UITableView.RowAnimation>) -> Self {
+        return self.add(modifier: RowAnimation(rowAnimation: animation))
     }
 }
