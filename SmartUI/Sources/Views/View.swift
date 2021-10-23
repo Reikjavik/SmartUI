@@ -137,4 +137,8 @@ public extension View {
     func customModifier(_ modification: @escaping (UIView) -> UIView) -> Self {
         return self.add(modifier: CustomModifier(modificationBlock: modification))
     }
+
+    func selectionStyle(_ style: UITableViewCell.SelectionStyle) -> Self {
+        return self.add(modifier: SelectionStyle(style: style))
+    }
 }

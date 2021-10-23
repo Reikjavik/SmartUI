@@ -199,6 +199,8 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
 
             // Sections binding
             if let view = self.sections?[indexPath.section].rows[indexPath.row] {
+                let selectionStyle = view.modifiers.compactMap { $0 as? SelectionStyle }.last
+                selectionStyle.map { cell.selectionStyle = $0.style }
                 cell.configure(view: view)
             }
 
@@ -206,6 +208,8 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
             if let item = self.items?[indexPath.row] {
                 if item.hashValue != cell.itemHash {
                     let view = self.rowContent?(item)
+                    let selectionStyle = view?.modifiers.compactMap { $0 as? SelectionStyle }.last
+                    selectionStyle.map { cell.selectionStyle = $0.style }
                     cell.configure(view: view)
                 }
                 cell.itemHash = item.hashValue
