@@ -1289,38 +1289,6 @@
 			};
 			name = Debug;
 		};
-		A3C4F25E8ACAF4B8BF595364C1ED1F4D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = E08B092BF83349D19D1CF8F4CAE84344 /* SmartUI.debug.xcconfig */;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/SmartUI/SmartUI-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/SmartUI/SmartUI-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/SmartUI/SmartUI.modulemap";
-				PRODUCT_MODULE_NAME = SmartUI;
-				PRODUCT_NAME = SmartUI;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
 		B4EFE046ACF8F37157F6E322C7FCFC28 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1454,7 +1422,7 @@
 			};
 			name = Release;
 		};
-		EB78C71482DFE047CE6FEFE3D1E58CBE /* Release */ = {
+		DF7DC302BBEC51CCE2A91B3350CB116F /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B5CC49DE7A5098A0CBEF18DA0FAC702D /* SmartUI.release.xcconfig */;
 			buildSettings = {
@@ -1471,7 +1439,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/SmartUI/SmartUI-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/SmartUI/SmartUI-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/SmartUI/SmartUI.modulemap";
 				PRODUCT_MODULE_NAME = SmartUI;
@@ -1486,6 +1454,38 @@
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
+		};
+		F44F75CDA1AAD4F242E50A34E9DA4FD0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E08B092BF83349D19D1CF8F4CAE84344 /* SmartUI.debug.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/SmartUI/SmartUI-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/SmartUI/SmartUI-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/SmartUI/SmartUI.modulemap";
+				PRODUCT_MODULE_NAME = SmartUI;
+				PRODUCT_NAME = SmartUI;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
 		};
 /* End XCBuildConfiguration section */
 
@@ -1529,8 +1529,8 @@
 		CC8C1F05731CBE27F1F599E528F81B2E /* Build configuration list for PBXNativeTarget "SmartUI" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				A3C4F25E8ACAF4B8BF595364C1ED1F4D /* Debug */,
-				EB78C71482DFE047CE6FEFE3D1E58CBE /* Release */,
+				F44F75CDA1AAD4F242E50A34E9DA4FD0 /* Debug */,
+				DF7DC302BBEC51CCE2A91B3350CB116F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

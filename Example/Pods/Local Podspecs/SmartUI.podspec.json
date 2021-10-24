@@ -15,7 +15,7 @@
     "tag": "0.5.0"
   },
   "platforms": {
-    "ios": "11.0"
+    "ios": "10.0"
   },
   "swift_versions": "5.0",
   "source_files": "SmartUI/Sources/**/*",
@@ -28,6 +28,9 @@
         "SnapshotTesting": [
           "~> 1.9.0"
         ]
+      },
+      "platforms": {
+        "ios": "11.0"
       }
     }
   ],
