@@ -30,3 +30,16 @@ public struct Gradient {
         self.colors = colors
     }
 }
+
+public extension Gradient {
+
+    struct Stop {
+        let color: Color
+        let location: CGFloat
+
+        public init(color: Color, location: CGFloat) {
+            self.color = color
+            self.location = location
+        }
+    }
+}

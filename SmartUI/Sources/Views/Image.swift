@@ -26,7 +26,7 @@ public class Image: View {
 
     let content: UIImage?
 
-    public init(uiImage: UIImage) {
+    public init(uiImage: UIImage?) {
         self.content = uiImage
         super.init()
     }
@@ -34,6 +34,11 @@ public class Image: View {
     public init(_ name: String, bundle: Bundle? = nil) {
         self.content = UIImage(named: name, in: bundle, compatibleWith: nil)
         super.init()
+    }
+
+    @available(iOS 13.0, *)
+    public convenience init(systemName name: String) {
+        self.init(uiImage: UIImage(systemName: name))
     }
 
     override internal var toUIView: UIView {

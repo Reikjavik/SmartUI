@@ -25,9 +25,9 @@ import UIKit
 internal struct LabelsHidden: Modifier {
 
     internal func modify(_ view: UIView) -> UIView {
-        guard let stackView = view as? UIStackView,
-              let label = stackView.arrangedSubviews.filter({ !($0 is UISwitch) }).first else { return view }
-        label.isHidden = true
+        guard let stackView = view as? UIStackView else { return view }
+        let views = stackView.arrangedSubviews.filter { !($0 is UISwitch) }
+        views.forEach { $0.isHidden = true }
         return view
     }
 }

@@ -117,7 +117,7 @@ class EditableProductsList: UIViewController {
         self.price.update("")
 
         self.datasource.update(datasource)
-
+        
     }
 }
 

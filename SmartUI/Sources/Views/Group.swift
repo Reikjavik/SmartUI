@@ -22,4 +22,9 @@
 
 import UIKit
 
-public typealias Group = VStack
+public class Group: VStack {
+
+    public init(_ content: @escaping () -> ([View])) {
+        super.init(alignment: .center, spacing: 0.0, content: content)
+    }
+}

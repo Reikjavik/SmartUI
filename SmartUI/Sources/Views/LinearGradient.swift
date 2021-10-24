@@ -21,34 +21,56 @@
 // SOFTWARE.
 
 import UIKit
+import SwiftUI
 
 public class LinearGradient: View {
 
-    let gradient: Gradient
+    let stops: [Gradient.Stop]
     let startPoint: Alignment
     let endPoint: Alignment
 
-    public init(gradient: Gradient, startPoint: Alignment, endPoint: Alignment) {
-        self.gradient = gradient
+    public init(stops: [Gradient.Stop], startPoint: Alignment, endPoint: Alignment) {
+        self.stops = stops
         self.startPoint = startPoint
         self.endPoint = endPoint
         super.init()
     }
 
+    public convenience init(colors: [Color], startPoint: Alignment, endPoint: Alignment) {
+        self.init(gradient: .init(colors: colors), startPoint: startPoint, endPoint: endPoint)
+    }
+
+    public convenience init(gradient: Gradient, startPoint: Alignment, endPoint: Alignment) {
+        let stops = gradient.colors.enumerated().map {
+            Gradient.Stop(color: $0.element, location: CGFloat($0.offset) / CGFloat(gradient.colors.count - 1))
+        }
+        self.init(stops: stops, startPoint: startPoint, endPoint: endPoint)
+    }
+
     override internal var toUIView: UIView {
         return GradientView(
-            colors: self.gradient.colors.map { $0.color },
+            stops: self.stops,
             startPoint: self.startPoint.point,
             endPoint: self.endPoint.point
         )
+    }
+
+    override func view(view: UIView, didMoveTo parent: UIView) {
+        let width = view.widthAnchor.constraint(equalToConstant: UIView.maxConstraintConstantValue)
+        width.priority = .defaultLow
+        width.isActive = true
+
+        let height = view.heightAnchor.constraint(equalToConstant: UIView.maxConstraintConstantValue)
+        height.priority = .defaultLow
+        height.isActive = true
     }
 }
 
 internal class GradientView: UIView {
 
-    init(colors: [UIColor], startPoint: CGPoint, endPoint: CGPoint) {
+    init(stops: [Gradient.Stop], startPoint: CGPoint, endPoint: CGPoint) {
         super.init(frame: .zero)
-        self.setupGradient(colors: colors, startPoint: startPoint, endPoint: endPoint)
+        self.setupGradient(stops: stops, startPoint: startPoint, endPoint: endPoint)
     }
 
     required init?(coder: NSCoder) {
@@ -59,9 +81,13 @@ internal class GradientView: UIView {
         return CAGradientLayer.self
     }
 
-    func setupGradient(colors: [UIColor], startPoint: CGPoint, endPoint: CGPoint) {
+    func setupGradient(stops: [Gradient.Stop], startPoint: CGPoint, endPoint: CGPoint) {
+        let stops = stops.sorted(by: { $0.location < $1.location })
+        let colors = stops.map { $0.color.color.cgColor }
+        let locations = stops.map { $0.location as NSNumber }
         let layer = self.layer as? CAGradientLayer
-        layer?.colors = colors.map { $0.cgColor }
+        layer?.colors = colors
+        layer?.locations = locations
         layer?.startPoint = startPoint
         layer?.endPoint = endPoint
     }

@@ -8,13 +8,17 @@
 
 Pod::Spec.new do |s|
   s.name             = 'SmartUI'
-  s.version          = '0.4.2'
+  s.version          = '0.5.0'
   s.summary          = 'SwiftUI inspired framework which uses the same syntax and provides support for iOS 10 and above'
   s.homepage         = 'https://github.com/Reikjavik/SmartUI'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Igor Tiukavkin' => 'in.tyukavkin@gmail.com' }
   s.source           = { :git => 'https://github.com/Reikjavik/SmartUI.git', :tag => s.version.to_s }
-  s.ios.deployment_target = '10.0'
+  s.ios.deployment_target = '11.0'
   s.swift_version    = '5.0'
   s.source_files = 'SmartUI/Sources/**/*'
+  s.test_spec 'Tests' do |test_spec|
+    test_spec.source_files = 'SmartUI/Tests/**/*.swift'
+    test_spec.dependency 'SnapshotTesting', '~> 1.9.0'
+  end
 end

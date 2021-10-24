@@ -25,21 +25,21 @@ import UIKit
 public class Toggle: Control {
 
     private let isOn: Binding<Bool>
-    private let label: View
+    private let label: () -> View
 
     public convenience init(_ title: String? = nil, isOn: Bool) {
         self.init(title, isOn: .create(isOn))
     }
 
     public convenience init(_ title: String? = nil, isOn: Binding<Bool>) {
-        self.init(isOn: isOn, label: Text(title ?? "").multilineTextAlignment(.leading))
+        self.init(isOn: isOn, label: { Text(title ?? "").multilineTextAlignment(.leading) })
     }
 
-    public convenience init(isOn: Bool, label: View) {
+    public convenience init(isOn: Bool, label: @escaping () -> View) {
         self.init(isOn: .create(isOn), label: label)
     }
 
-    public init(isOn: Binding<Bool>, label: View) {
+    public init(isOn: Binding<Bool>, label: @escaping () -> View) {
         self.isOn = isOn
         self.label = label
         super.init()
@@ -51,13 +51,17 @@ public class Toggle: Control {
         stackView.alignment = .center
         stackView.translatesAutoresizingMaskIntoConstraints = false
 
-        let label = self.label.display()
+        let label = self.label().display()
         let width = label.widthAnchor.constraint(equalToConstant: UIView.maxConstraintConstantValue)
-        width.priority = .defaultHigh
+        width.priority = .defaultLow
         width.isActive = true
 
+        let spacer = Spacer().frame(width: .infinity, priority: .init(rawValue: 500))
+
         stackView.addArrangedSubview(label)
+        stackView.addArrangedSubview(spacer.display())
         stackView.addArrangedSubview(SwitchView(isOn: self.isOn))
+
         return stackView
     }
 }
@@ -126,5 +130,9 @@ public extension Toggle {
 
     func labelsHidden() -> Self {
         return self.add(modifier: LabelsHidden())
+    }
+
+    func tint(_ color: Color) -> Self {
+        return self.add(modifier: ToggleStyle(style: .init(tint: color)))
     }
 }

@@ -41,18 +41,18 @@ public class Divider: View {
         let constraint: NSLayoutConstraint
         let size: NSLayoutConstraint
 
-        let isHorizontal = (parent as? UIStackView)?.axis == .vertical
+        let isVertical = (parent as? UIStackView)?.axis == .horizontal
 
-        if isHorizontal {
-            size = view.heightAnchor.constraint(equalToConstant: Divider.height)
-            view.setContentHuggingPriority(.defaultLow, for: .horizontal)
-            constraint = view.widthAnchor.constraint(equalTo: parent.widthAnchor)
-        } else {
+        if isVertical {
             size = view.widthAnchor.constraint(equalToConstant: Divider.height)
             view.setContentHuggingPriority(.defaultLow, for: .vertical)
-            constraint = view.heightAnchor.constraint(equalTo: parent.heightAnchor)
+            constraint = view.heightAnchor.constraint(greaterThanOrEqualToConstant: UIView.maxConstraintConstantValue)
+        } else {
+            size = view.heightAnchor.constraint(equalToConstant: Divider.height)
+            view.setContentHuggingPriority(.defaultLow, for: .horizontal)
+            constraint = view.widthAnchor.constraint(greaterThanOrEqualToConstant: UIView.maxConstraintConstantValue)
         }
-        constraint.priority = .defaultHigh
+        constraint.priority = .init(rawValue: 999)
         constraint.isActive = true
 
         size.priority = .defaultHigh

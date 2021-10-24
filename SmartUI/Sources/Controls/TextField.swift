@@ -158,4 +158,8 @@ public extension TextField {
     func placeholderColor(_ color: Color) -> Self {
         return self.add(modifier: PlaceholderColor(color: color))
     }
+
+    func multilineTextAlignment(_ alignment: TextAlignment) -> Self {
+        return self.add(modifier: MultilineTextAlignment(alignment: alignment))
+    }
 }

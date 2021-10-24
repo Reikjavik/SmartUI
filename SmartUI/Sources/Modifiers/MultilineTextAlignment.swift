@@ -37,6 +37,9 @@ internal struct MultilineTextAlignment: Modifier {
         } else if let textView = view as? UITextView {
             textView.textAlignment = self.alignment.textAlignment
             return textView
+        } else if let textView = view as? UITextField {
+            textView.textAlignment = self.alignment.textAlignment
+            return textView
         } else if let button = view as? UIButton {
             button.contentHorizontalAlignment = self.alignment.contentAlignment
             return button

@@ -26,7 +26,7 @@ public class Button: Control {
 
     private let action: Action
     private let title: String?
-    private let label: View?
+    private let label: (() -> View)?
 
     public init(_ title: String, action: @escaping () -> Void) {
         self.action = Action(action)
@@ -35,7 +35,7 @@ public class Button: Control {
         super.init()
     }
 
-    public init(action: @escaping () -> Void, label: View) {
+    public init(action: @escaping () -> Void, label: @escaping () -> View) {
         self.action = Action(action)
         self.title = nil
         self.label = label
@@ -47,16 +47,19 @@ public class Button: Control {
             let button = UIButton(type: .system)
             button.setTitle(title, for: .normal)
             button.addAction(action)
+            button.titleLabel?.textAlignment = .center
+            button.titleLabel?.numberOfLines = 0
             return button
-        } else if let label = self.label?.display() {
+        } else if let label = self.label?().display() {
             let container = UIView()
             let button = LabelButton(label: label)
             button.addAction(action)
             container.addSubview(label, insets: .zero)
             container.addSubview(button, insets: .zero)
             return container
+        } else {
+            return super.toUIView
         }
-        return super.toUIView
     }
 }
 
