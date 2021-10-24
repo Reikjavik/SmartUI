@@ -17,9 +17,4 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '10.0'
   s.swift_version    = '5.0'
   s.source_files = 'SmartUI/Sources/**/*'
-  s.test_spec 'Tests' do |test_spec|
-    test_spec.source_files = 'SmartUI/Tests/**/*.swift'
-    test_spec.dependency 'SnapshotTesting', '~> 1.9.0'
-    test_spec.ios.deployment_target = '11.0'
-  end
 end

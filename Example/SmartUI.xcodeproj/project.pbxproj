@@ -9,7 +9,17 @@
 /* Begin PBXBuildFile section */
 		1DABCEF05B94F842C651B286 /* Pods_SmartUI_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3144CD4A487D1B996386E8F4 /* Pods_SmartUI_Example.framework */; };
 		2B08FDA42719A1A600D6BC95 /* Distinct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B08FDA32719A1A600D6BC95 /* Distinct.swift */; };
+		2B0966CC2725CCE100FF3B2B /* GradientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B0966C32725CCE000FF3B2B /* GradientTests.swift */; };
+		2B0966CD2725CCE100FF3B2B /* ShapeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B0966C42725CCE000FF3B2B /* ShapeTests.swift */; };
+		2B0966CE2725CCE100FF3B2B /* ToggleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B0966C52725CCE000FF3B2B /* ToggleTests.swift */; };
+		2B0966CF2725CCE100FF3B2B /* TextEditorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B0966C62725CCE000FF3B2B /* TextEditorTests.swift */; };
+		2B0966D02725CCE100FF3B2B /* StackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B0966C72725CCE000FF3B2B /* StackTests.swift */; };
+		2B0966D12725CCE100FF3B2B /* DividerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B0966C82725CCE100FF3B2B /* DividerTests.swift */; };
+		2B0966D22725CCE100FF3B2B /* ButtonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B0966C92725CCE100FF3B2B /* ButtonTests.swift */; };
+		2B0966D32725CCE100FF3B2B /* TextFieldTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B0966CA2725CCE100FF3B2B /* TextFieldTests.swift */; };
+		2B0966D42725CCE100FF3B2B /* TextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B0966CB2725CCE100FF3B2B /* TextTests.swift */; };
 		2BB87DFB2709AB0D003A2382 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB87DFA2709AB0D003A2382 /* String+Extensions.swift */; };
+		2F8E6C2C684993AE2BBEF587 /* Pods_SmartUI_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7689F076C9480502ECAD494 /* Pods_SmartUI_Tests.framework */; };
 		3ADA479C257D591500A78FCD /* EditableProductsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADA479B257D591500A78FCD /* EditableProductsList.swift */; };
 		3ADA47A3257D5E6D00A78FCD /* ProductView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADA47A2257D5E6D00A78FCD /* ProductView.swift */; };
 		3ADA47AA257D5F0B00A78FCD /* HorizontalScrollGallery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADA47A9257D5F0B00A78FCD /* HorizontalScrollGallery.swift */; };
@@ -21,9 +31,29 @@
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		2B0966BE2725CCC500FF3B2B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 607FACC81AFB9204008FA782 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 607FACCF1AFB9204008FA782;
+			remoteInfo = SmartUI_Example;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		1E8746444437E9D0B0A1066A /* Pods-SmartUI_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartUI_Example.debug.xcconfig"; path = "Target Support Files/Pods-SmartUI_Example/Pods-SmartUI_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		2B08FDA32719A1A600D6BC95 /* Distinct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Distinct.swift; sourceTree = "<group>"; };
+		2B0966BA2725CCC500FF3B2B /* SmartUI_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SmartUI_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2B0966C32725CCE000FF3B2B /* GradientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientTests.swift; sourceTree = "<group>"; };
+		2B0966C42725CCE000FF3B2B /* ShapeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShapeTests.swift; sourceTree = "<group>"; };
+		2B0966C52725CCE000FF3B2B /* ToggleTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToggleTests.swift; sourceTree = "<group>"; };
+		2B0966C62725CCE000FF3B2B /* TextEditorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextEditorTests.swift; sourceTree = "<group>"; };
+		2B0966C72725CCE000FF3B2B /* StackTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StackTests.swift; sourceTree = "<group>"; };
+		2B0966C82725CCE100FF3B2B /* DividerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DividerTests.swift; sourceTree = "<group>"; };
+		2B0966C92725CCE100FF3B2B /* ButtonTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonTests.swift; sourceTree = "<group>"; };
+		2B0966CA2725CCE100FF3B2B /* TextFieldTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldTests.swift; sourceTree = "<group>"; };
+		2B0966CB2725CCE100FF3B2B /* TextTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextTests.swift; sourceTree = "<group>"; };
 		2BB87DFA2709AB0D003A2382 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		3144CD4A487D1B996386E8F4 /* Pods_SmartUI_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SmartUI_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3ADA479B257D591500A78FCD /* EditableProductsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableProductsList.swift; sourceTree = "<group>"; };
@@ -37,13 +67,24 @@
 		607FACDA1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		607FACDC1AFB9204008FA782 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		6C4BAD7C16F7E6C5023E83EE /* Pods-SmartUI_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartUI_Tests.release.xcconfig"; path = "Target Support Files/Pods-SmartUI_Tests/Pods-SmartUI_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		7C7935E54C12F87F34AC3F1B /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		8E6DB9020397081FE1F6391D /* SmartUI.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = SmartUI.podspec; path = ../SmartUI.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		A2EF1631B602E049FCEC7242 /* Pods-SmartUI_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartUI_Example.release.xcconfig"; path = "Target Support Files/Pods-SmartUI_Example/Pods-SmartUI_Example.release.xcconfig"; sourceTree = "<group>"; };
 		BE5E1411788A607AEEE04A03 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		C7689F076C9480502ECAD494 /* Pods_SmartUI_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SmartUI_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4D7F1FE2B96F9619A6C311B /* Pods-SmartUI_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartUI_Tests.debug.xcconfig"; path = "Target Support Files/Pods-SmartUI_Tests/Pods-SmartUI_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		2B0966B72725CCC500FF3B2B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2F8E6C2C684993AE2BBEF587 /* Pods_SmartUI_Tests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		607FACCD1AFB9204008FA782 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -71,6 +112,22 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		2B0966BB2725CCC500FF3B2B /* SmartUI_Tests */ = {
+			isa = PBXGroup;
+			children = (
+				2B0966C92725CCE100FF3B2B /* ButtonTests.swift */,
+				2B0966C82725CCE100FF3B2B /* DividerTests.swift */,
+				2B0966C32725CCE000FF3B2B /* GradientTests.swift */,
+				2B0966C42725CCE000FF3B2B /* ShapeTests.swift */,
+				2B0966C72725CCE000FF3B2B /* StackTests.swift */,
+				2B0966C62725CCE000FF3B2B /* TextEditorTests.swift */,
+				2B0966CA2725CCE100FF3B2B /* TextFieldTests.swift */,
+				2B0966CB2725CCE100FF3B2B /* TextTests.swift */,
+				2B0966C52725CCE000FF3B2B /* ToggleTests.swift */,
+			);
+			path = SmartUI_Tests;
+			sourceTree = "<group>";
+		};
 		2BB87DF92709AAF3003A2382 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -95,6 +152,7 @@
 			children = (
 				607FACF51AFB993E008FA782 /* Podspec Metadata */,
 				607FACD21AFB9204008FA782 /* Example for SmartUI */,
+				2B0966BB2725CCC500FF3B2B /* SmartUI_Tests */,
 				607FACD11AFB9204008FA782 /* Products */,
 				6A03BA34E590D3771D2F3EF7 /* Pods */,
 				F309BB450EFC0BDB788A1495 /* Frameworks */,
@@ -105,6 +163,7 @@
 			isa = PBXGroup;
 			children = (
 				607FACD01AFB9204008FA782 /* SmartUI_Example.app */,
+				2B0966BA2725CCC500FF3B2B /* SmartUI_Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -149,6 +208,8 @@
 			children = (
 				1E8746444437E9D0B0A1066A /* Pods-SmartUI_Example.debug.xcconfig */,
 				A2EF1631B602E049FCEC7242 /* Pods-SmartUI_Example.release.xcconfig */,
+				D4D7F1FE2B96F9619A6C311B /* Pods-SmartUI_Tests.debug.xcconfig */,
+				6C4BAD7C16F7E6C5023E83EE /* Pods-SmartUI_Tests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -157,6 +218,7 @@
 			isa = PBXGroup;
 			children = (
 				3144CD4A487D1B996386E8F4 /* Pods_SmartUI_Example.framework */,
+				C7689F076C9480502ECAD494 /* Pods_SmartUI_Tests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -164,6 +226,26 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		2B0966B92725CCC500FF3B2B /* SmartUI_Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2B0966C02725CCC500FF3B2B /* Build configuration list for PBXNativeTarget "SmartUI_Tests" */;
+			buildPhases = (
+				0582D4A8D950A4C25C78F040 /* [CP] Check Pods Manifest.lock */,
+				2B0966B62725CCC500FF3B2B /* Sources */,
+				2B0966B72725CCC500FF3B2B /* Frameworks */,
+				2B0966B82725CCC500FF3B2B /* Resources */,
+				515D83FE787A08EA879C97DC /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2B0966BF2725CCC500FF3B2B /* PBXTargetDependency */,
+			);
+			name = SmartUI_Tests;
+			productName = SmartUI_Tests;
+			productReference = 2B0966BA2725CCC500FF3B2B /* SmartUI_Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		607FACCF1AFB9204008FA782 /* SmartUI_Example */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 607FACEF1AFB9204008FA782 /* Build configuration list for PBXNativeTarget "SmartUI_Example" */;
@@ -189,10 +271,15 @@
 		607FACC81AFB9204008FA782 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0830;
+				LastSwiftUpdateCheck = 1300;
 				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = SmartUI;
 				TargetAttributes = {
+					2B0966B92725CCC500FF3B2B = {
+						CreatedOnToolsVersion = 13.0;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 607FACCF1AFB9204008FA782;
+					};
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
 						LastSwiftMigration = 0900;
@@ -214,11 +301,19 @@
 			projectRoot = "";
 			targets = (
 				607FACCF1AFB9204008FA782 /* SmartUI_Example */,
+				2B0966B92725CCC500FF3B2B /* SmartUI_Tests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		2B0966B82725CCC500FF3B2B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		607FACCE1AFB9204008FA782 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -232,6 +327,28 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0582D4A8D950A4C25C78F040 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SmartUI_Tests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		49E5710CFAF698BF05789335 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -252,6 +369,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		515D83FE787A08EA879C97DC /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SmartUI_Tests/Pods-SmartUI_Tests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/SmartUI/SmartUI.framework",
+				"${BUILT_PRODUCTS_DIR}/SnapshotTesting/SnapshotTesting.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SmartUI.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapshotTesting.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SmartUI_Tests/Pods-SmartUI_Tests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		99E341812E206AC4AE5A1994 /* [CP] Embed Pods Frameworks */ = {
@@ -275,6 +412,22 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		2B0966B62725CCC500FF3B2B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2B0966D02725CCE100FF3B2B /* StackTests.swift in Sources */,
+				2B0966D22725CCE100FF3B2B /* ButtonTests.swift in Sources */,
+				2B0966D42725CCE100FF3B2B /* TextTests.swift in Sources */,
+				2B0966CC2725CCE100FF3B2B /* GradientTests.swift in Sources */,
+				2B0966D32725CCE100FF3B2B /* TextFieldTests.swift in Sources */,
+				2B0966CE2725CCE100FF3B2B /* ToggleTests.swift in Sources */,
+				2B0966CD2725CCE100FF3B2B /* ShapeTests.swift in Sources */,
+				2B0966CF2725CCE100FF3B2B /* TextEditorTests.swift in Sources */,
+				2B0966D12725CCE100FF3B2B /* DividerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		607FACCC1AFB9204008FA782 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -291,6 +444,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2B0966BF2725CCC500FF3B2B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 607FACCF1AFB9204008FA782 /* SmartUI_Example */;
+			targetProxy = 2B0966BE2725CCC500FF3B2B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		607FACD91AFB9204008FA782 /* Main.storyboard */ = {
@@ -312,6 +473,71 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		2B0966C12725CCC500FF3B2B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D4D7F1FE2B96F9619A6C311B /* Pods-SmartUI_Tests.debug.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.igortiukavkin.demo.SmartUI-Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SmartUI_Example.app/SmartUI_Example";
+			};
+			name = Debug;
+		};
+		2B0966C22725CCC500FF3B2B /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6C4BAD7C16F7E6C5023E83EE /* Pods-SmartUI_Tests.release.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.igortiukavkin.demo.SmartUI-Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SmartUI_Example.app/SmartUI_Example";
+			};
+			name = Release;
+		};
 		607FACED1AFB9204008FA782 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -357,7 +583,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -403,7 +629,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -444,6 +670,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		2B0966C02725CCC500FF3B2B /* Build configuration list for PBXNativeTarget "SmartUI_Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2B0966C12725CCC500FF3B2B /* Debug */,
+				2B0966C22725CCC500FF3B2B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		607FACCB1AFB9204008FA782 /* Build configuration list for PBXProject "SmartUI" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

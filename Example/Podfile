@@ -3,5 +3,10 @@ use_frameworks!
 platform :ios, '11.0'
 
 target 'SmartUI_Example' do
-  pod 'SmartUI', :path => '../', :testspecs => ['Tests']
+  pod 'SmartUI', :path => '../'
+end
+
+target 'SmartUI_Tests' do
+  pod 'SmartUI', :path => '../'
+  pod 'SnapshotTesting', '~> 1.9.0'
 end

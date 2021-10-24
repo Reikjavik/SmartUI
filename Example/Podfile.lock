@@ -1,12 +1,10 @@
 PODS:
   - SmartUI (0.5.0)
-  - SmartUI/Tests (0.5.0):
-    - SnapshotTesting (~> 1.9.0)
   - SnapshotTesting (1.9.0)
 
 DEPENDENCIES:
   - SmartUI (from `../`)
-  - SmartUI/Tests (from `../`)
+  - SnapshotTesting (~> 1.9.0)
 
 SPEC REPOS:
   trunk:
@@ -17,9 +15,9 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  SmartUI: 3cf1dd3fc4f01650eb73d227de5ccbc59c1ebb97
+  SmartUI: e700f58287f4e22eb24beba07f68b5ec20f13be6
   SnapshotTesting: 6141c48b6aa76ead61431ca665c14ab9a066c53b
 
-PODFILE CHECKSUM: bed914ed0f4677176b61c62e45169a71bba73490
+PODFILE CHECKSUM: d9eb0555616a65e83cfaaadaf84a6574ced59ef5
 
 COCOAPODS: 1.10.2
