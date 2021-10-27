@@ -36,11 +36,18 @@ public class List: View {
 
     public init<Item: Hashable>(_ data: Binding<[Item]>, selection: ((Item) -> Void)? = nil, rowContent: @escaping (Item) -> View) {
         let selectionAction = ActionWith<Item>(selection)
+        let dataBinding = data.map { (items) -> [Item] in
+            let uniqueItems = items.distinct()
+            if items.count != uniqueItems.count {
+                print("⚠️ SmartUI: There are duplicates in the items array provided for List update. Be careful, this may cause problems. Only unique items will be displayed.")
+            }
+            return uniqueItems
+        }
         // Used for sections binding
-        self.selection = selectionAction?.compactMap { data.value?[$0.row] }
+        self.selection = selectionAction?.compactMap { dataBinding.value?[$0.row] }
         self.sectionsBinding = nil
         // Used for diffable items binding
-        self.itemsBinding = data.map { $0 as [AnyHashable] }
+        self.itemsBinding = dataBinding.map { $0 as [AnyHashable] }
         self.rowContent = { ($0 as? Item).map(rowContent) }
         super.init()
     }
@@ -123,7 +130,7 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
         self.rowContent = rowContent
         self.selection = selection ?? .empty
         self.sections = sections?.value
-        self.items = items?.value?.distinct()
+        self.items = items?.value
         self.rowAnimation = rowAnimation
         super.init(frame: .zero, style: style)
         self.backgroundColor = .clear
@@ -160,7 +167,6 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
     }
 
     private func updateRows(items: [AnyHashable]) {
-        let items = items.distinct()
         let updates = self.calculateUpdates(old: self.items ?? [], new: items)
         self.items = items
         let rowAnimation = self.rowAnimation?.value ?? .automatic
@@ -200,7 +206,7 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
             // Sections binding
             if let view = self.sections?[indexPath.section].rows[indexPath.row] {
                 let selectionStyle = view.modifiers.compactMap { $0 as? SelectionStyle }.last
-                selectionStyle.map { cell.selectionStyle = $0.style }
+                cell.selectionStyle = selectionStyle?.style ?? .default
                 cell.configure(view: view)
             }
 
@@ -209,7 +215,7 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
                 if item.hashValue != cell.itemHash {
                     let view = self.rowContent?(item)
                     let selectionStyle = view?.modifiers.compactMap { $0 as? SelectionStyle }.last
-                    selectionStyle.map { cell.selectionStyle = $0.style }
+                    cell.selectionStyle = selectionStyle?.style ?? .default
                     cell.configure(view: view)
                 }
                 cell.itemHash = item.hashValue

@@ -44,3 +44,9 @@ public struct GroupedListStyle: ListStyle {
     public let style: UITableView.Style = .grouped
     public init() {}
 }
+
+@available(iOS 13.0, *)
+public struct InsetGroupedListStyle: ListStyle {
+    public let style: UITableView.Style = .insetGrouped
+    public init() {}
+}
