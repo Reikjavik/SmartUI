@@ -25,6 +25,10 @@ import UIKit
 struct TableUpdate {
     let deleted: [IndexPath]
     let inserted: [IndexPath]
+
+    var hasUpdates: Bool {
+        return deleted.count > 0 || inserted.count > 0
+    }
 }
 
 public class List: View {
@@ -169,11 +173,17 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
     private func updateRows(items: [AnyHashable]) {
         let updates = self.calculateUpdates(old: self.items ?? [], new: items)
         self.items = items
-        let rowAnimation = self.rowAnimation?.value ?? .automatic
-        self.beginUpdates()
-        self.deleteRows(at: updates.deleted, with: rowAnimation)
-        self.insertRows(at: updates.inserted, with: rowAnimation)
-        self.endUpdates()
+        guard updates.hasUpdates else { return }
+        let isVisible = self.window != nil
+        if isVisible {
+            let rowAnimation = self.rowAnimation?.value ?? .automatic
+            self.beginUpdates()
+            self.deleteRows(at: updates.deleted, with: rowAnimation)
+            self.insertRows(at: updates.inserted, with: rowAnimation)
+            self.endUpdates()
+        } else {
+            self.reloadData()
+        }
     }
 
     func calculateUpdates(old: [AnyHashable], new: [AnyHashable], in section: Int = 0) -> TableUpdate {

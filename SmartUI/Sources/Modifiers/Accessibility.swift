@@ -31,20 +31,23 @@ internal struct Accessibility: Modifier {
     let accessibilityLanguage: String?
 
     func modify(_ view: UIView) -> UIView {
-        self.accessibilityIdentifier.map {
-            view.accessibilityIdentifier = $0
-        }
-        self.accessibilityLabel.map {
-            view.accessibilityLabel = $0
-        }
-        self.accessibilityHint.map {
-            view.accessibilityHint = $0
-        }
-        self.accessibilityValue.map {
-            view.accessibilityValue = $0
-        }
-        self.accessibilityLanguage.map {
-            view.accessibilityLanguage = $0
+        let allView = [view] + view.find()
+        allView.forEach { view in
+            self.accessibilityIdentifier.map {
+                view.accessibilityIdentifier = $0
+            }
+            self.accessibilityLabel.map {
+                view.accessibilityLabel = $0
+            }
+            self.accessibilityHint.map {
+                view.accessibilityHint = $0
+            }
+            self.accessibilityValue.map {
+                view.accessibilityValue = $0
+            }
+            self.accessibilityLanguage.map {
+                view.accessibilityLanguage = $0
+            }
         }
         return view
     }
