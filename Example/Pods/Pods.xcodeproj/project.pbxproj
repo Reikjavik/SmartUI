@@ -97,6 +97,9 @@
 		9F806238911DAA5F48D1849CD18AF445 /* Clipped.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EBDAF55A7EB0FB23781DE536932572 /* Clipped.swift */; };
 		A11FE7710122E3C8A26BBF47650F559B /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D57AACCBF515D755B62330EBCF37EBC /* Shape.swift */; };
 		A132C6A385AFFA1E83BECBCDFC14321A /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA3E80303656C6DE9758E30F3D89DC21 /* Font.swift */; };
+		A3ED434C2729A3A400CD6498 /* LazyVGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3ED434B2729A3A400CD6498 /* LazyVGrid.swift */; };
+		A3ED434E2729A6C500CD6498 /* LazyHStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3ED434D2729A6C500CD6498 /* LazyHStack.swift */; };
+		A3ED4358272D564F00CD6498 /* CollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3ED4357272D564F00CD6498 /* CollectionViewLayout.swift */; };
 		A4313842F12659739869AC70D5B4DF7B /* SmartUI-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 40571F7921BB7E4C592DB9ED3D479689 /* SmartUI-dummy.m */; };
 		A4605BC41D97C4726BBE7CF71A3CC5DF /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF998B9A1F03BD261B66A57DC50FE79B /* Button.swift */; };
 		A5A53D6123F5647F0274F75464C162D7 /* SecureField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E9C9CA326B8EEC48051A4C75DCFA9E /* SecureField.swift */; };
@@ -222,7 +225,7 @@
 		52C3176C4D255F06254C5B4A54915C19 /* Axis.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Axis.swift; sourceTree = "<group>"; };
 		52FB576D06DF6052AAB1F3D649CF769A /* PlistEncoder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PlistEncoder.swift; path = Sources/SnapshotTesting/Common/PlistEncoder.swift; sourceTree = "<group>"; };
 		5308B3FDAAB88F27CCCFE96F7459FE65 /* FillShape.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FillShape.swift; sourceTree = "<group>"; };
-		55C0CFC5FB0AEBBD15B4D5D354446379 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
+		55C0CFC5FB0AEBBD15B4D5D354446379 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		5766D6AE392BC265F51ECF13BFE61629 /* SpriteKit.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SpriteKit.swift; path = Sources/SnapshotTesting/Snapshotting/SpriteKit.swift; sourceTree = "<group>"; };
 		5924EFDA8CBEA7B9140C1F59A5802336 /* Snapshotting.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Snapshotting.swift; path = Sources/SnapshotTesting/Snapshotting.swift; sourceTree = "<group>"; };
 		5966BDFB02A4FD86E9485E72593C46AA /* ContentHuggingPriority.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ContentHuggingPriority.swift; sourceTree = "<group>"; };
@@ -241,7 +244,7 @@
 		6DE030DCBDE4AFDC4A809F00BF5A2E6E /* SwiftUIView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SwiftUIView.swift; path = Sources/SnapshotTesting/Snapshotting/SwiftUIView.swift; sourceTree = "<group>"; };
 		6E65A3E409F3660F07563032195F342F /* Text.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Text.swift; sourceTree = "<group>"; };
 		6FEE962F97AAE8063FA205490E3D17B6 /* Pods-SmartUI_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-SmartUI_Tests.modulemap"; sourceTree = "<group>"; };
-		704B14FF336B061450670FE2212234AC /* SmartUI.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = SmartUI.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		704B14FF336B061450670FE2212234AC /* SmartUI.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = SmartUI.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		70B0D9BD0252C8CE2F18E0FBD17C957C /* CustomModifier.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CustomModifier.swift; sourceTree = "<group>"; };
 		71DAA105168283E92D0BBD7D28C82214 /* Core.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Core.swift; path = SmartUI/Sources/Core.swift; sourceTree = "<group>"; };
 		73D04972BBEB9C6CF04DE05510F1720F /* SmartUI-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SmartUI-umbrella.h"; sourceTree = "<group>"; };
@@ -270,11 +273,14 @@
 		96D84CE76B4D9A996FE664A18DF46D76 /* CGPath.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CGPath.swift; path = Sources/SnapshotTesting/Snapshotting/CGPath.swift; sourceTree = "<group>"; };
 		9907A612DD874F0B8314A6122DBF9369 /* UIBezierPath.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UIBezierPath.swift; path = Sources/SnapshotTesting/Snapshotting/UIBezierPath.swift; sourceTree = "<group>"; };
 		9D5BB01682A4CE34DC4102C3BEC2F5F3 /* SeparatorColor.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SeparatorColor.swift; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9EA47E980A59475FC817CEB420C096BA /* PlaceholderColor.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PlaceholderColor.swift; sourceTree = "<group>"; };
 		A037DBBCCACBFACB5C39A80B1C273043 /* SnapshotTesting */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SnapshotTesting; path = SnapshotTesting.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A18F48D444BE347D96C3AD0854AC5C56 /* Alpha.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Alpha.swift; sourceTree = "<group>"; };
 		A3090ED4E3513AE03577641AE61CA2A4 /* SelectionStyle.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SelectionStyle.swift; sourceTree = "<group>"; };
+		A3ED434B2729A3A400CD6498 /* LazyVGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyVGrid.swift; sourceTree = "<group>"; };
+		A3ED434D2729A6C500CD6498 /* LazyHStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyHStack.swift; sourceTree = "<group>"; };
+		A3ED4357272D564F00CD6498 /* CollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewLayout.swift; sourceTree = "<group>"; };
 		A5BC0C3F036A655DFBAE897130982019 /* Spacer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Spacer.swift; sourceTree = "<group>"; };
 		A6DAC91A78ED55C471223475389423AA /* CALayer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CALayer.swift; path = Sources/SnapshotTesting/Snapshotting/CALayer.swift; sourceTree = "<group>"; };
 		A7A7191BFF241AD77A86F3A0823A83B3 /* Action+UIKit.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "Action+UIKit.swift"; sourceTree = "<group>"; };
@@ -301,7 +307,7 @@
 		CF07B420AD324139ECE152B1082B5ADF /* View.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = View.swift; path = Sources/SnapshotTesting/Common/View.swift; sourceTree = "<group>"; };
 		CF78BEEDDCAE80D5BB0ECBA3B012D3EF /* ContentMode.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ContentMode.swift; sourceTree = "<group>"; };
 		D023E4597BDBE674AD8A17671B3A9AAD /* Pods-SmartUI_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-SmartUI_Example-dummy.m"; sourceTree = "<group>"; };
-		D34E06097016E0248773C365385967E1 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		D34E06097016E0248773C365385967E1 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		D3B66D7AD9F299A37267476B9E9BF6A7 /* String+SpecialCharacters.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "String+SpecialCharacters.swift"; path = "Sources/SnapshotTesting/Common/String+SpecialCharacters.swift"; sourceTree = "<group>"; };
 		D5168A1566AEEAA1A2183C7D120DF932 /* Description.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Description.swift; path = Sources/SnapshotTesting/Snapshotting/Description.swift; sourceTree = "<group>"; };
 		D657A2F80E3AF53BA295EB5F994B17E0 /* Diff.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Diff.swift; sourceTree = "<group>"; };
@@ -514,7 +520,6 @@
 				FF9DDDF7ACDC8DD63A6BAB8F998A9EFA /* XCTAttachment.swift */,
 				74D743E54D8B3BF3F758B564B858A712 /* Support Files */,
 			);
-			name = SnapshotTesting;
 			path = SnapshotTesting;
 			sourceTree = "<group>";
 		};
@@ -550,6 +555,8 @@
 				1B75E3557978C1A4BC44236766A483FC /* Image.swift */,
 				E5A06E752DF13141FA870D02A735B16E /* LinearGradient.swift */,
 				01B1A2D61F9CE855525CD98D1237E765 /* List.swift */,
+				A3ED434B2729A3A400CD6498 /* LazyVGrid.swift */,
+				A3ED434D2729A6C500CD6498 /* LazyHStack.swift */,
 				1D518F1166D3745D11EB5A3DDD488F80 /* ScrollView.swift */,
 				A5BC0C3F036A655DFBAE897130982019 /* Spacer.swift */,
 				C85DE4C08EBBA06BFE076DE6F54963D9 /* Stack.swift */,
@@ -651,6 +658,7 @@
 				EFADABA9ACE5D2058E57D3920D1C6B0C /* Optional+Extensions.swift */,
 				827A6E863B12EA611B4160801D37768B /* UIImage+Extensions.swift */,
 				8D14897876422810FE7D3437C433B40C /* UIVew+Extensions.swift */,
+				A3ED4357272D564F00CD6498 /* CollectionViewLayout.swift */,
 			);
 			name = Utils;
 			path = SmartUI/Sources/Utils;
@@ -937,6 +945,7 @@
 				962E97714DCCF81B0E770BD4218F5AB7 /* KeyboardObserver.swift in Sources */,
 				0EC7E736319F3D11D869749B2843FB21 /* LabelsHidden.swift in Sources */,
 				7E588B93EA15CE088EEE5563D834D0DC /* Layout.swift in Sources */,
+				A3ED434E2729A6C500CD6498 /* LazyHStack.swift in Sources */,
 				85CE8218404851E4EE3261A611178AD3 /* LinearGradient.swift in Sources */,
 				CA7097AA427C263062563C5B5D4DA204 /* LineLimit.swift in Sources */,
 				DCFFE92D2199FD0E6D01B9688A483867 /* List.swift in Sources */,
@@ -946,11 +955,13 @@
 				9149795A58DDB9F176157EE36B4739B2 /* Optional+Extensions.swift in Sources */,
 				23D959F1423A23D25B5C2C22EDFDFCBD /* Overlay.swift in Sources */,
 				663E16DDDB1D0876370EDD5EDFEF89E0 /* Padding.swift in Sources */,
+				A3ED434C2729A3A400CD6498 /* LazyVGrid.swift in Sources */,
 				C8329214A6B194972AA17CA4A712699B /* PagingEnabled.swift in Sources */,
 				C4A32F6E69C9D807E4A141B9DA17E8A4 /* PlaceholderColor.swift in Sources */,
 				D6B16A83A3974416F6D646768C021139 /* Rectangle.swift in Sources */,
 				24E7E6BF09BC7E678928AF3C7599FB5E /* Resizeable.swift in Sources */,
 				421A19FD591B21DE9A274F528F6AB2A8 /* Rotation.swift in Sources */,
+				A3ED4358272D564F00CD6498 /* CollectionViewLayout.swift in Sources */,
 				AE943CECD1818973B97C51D190C61C01 /* RoundedRenctangle.swift in Sources */,
 				DDB027880329D9833B21A7AB9105DAF1 /* RowAnimation.swift in Sources */,
 				53AB2962A46B96D26EAAA89A723B1BCB /* ScaleShape.swift in Sources */,
@@ -1321,8 +1332,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 5.0;
 				SYMROOT = "${SRCROOT}/../build";
 			};

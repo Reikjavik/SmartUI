@@ -60,10 +60,10 @@ public class List: View {
         self.init(.create(data), selection: selection, rowContent: rowContent)
     }
 
-    public init(selection: ((IndexPath) -> Void)? = nil, rows: () -> [View]) {
+    public init(selection: ((IndexPath) -> Void)? = nil, content: () -> [View]) {
         let selectionAction = ActionWith<IndexPath>(selection)
         self.selection = selectionAction
-        self.sectionsBinding = .create([Section(rows: rows)])
+        self.sectionsBinding = .create([Section(content: content)])
         self.itemsBinding = nil
         self.rowContent = nil
         super.init()
@@ -99,13 +99,13 @@ public class List: View {
 public class Section {
 
     let header: View?
-    let rows: [View]
+    let content: [View]
     let footer: View?
 
-    public init(header: View? = nil, footer: View? = nil, rows: () -> [View]) {
+    public init(header: View? = nil, footer: View? = nil, content: () -> [View]) {
         self.header = header
         self.footer = footer
-        self.rows = rows()
+        self.content = content()
     }
 }
 
@@ -202,7 +202,7 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.sections?[section].rows.count ?? self.items?.count ?? 0
+        return self.sections?[section].content.count ?? self.items?.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -214,7 +214,7 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
         if let cell = cell as? ListTableViewCell {
 
             // Sections binding
-            if let view = self.sections?[indexPath.section].rows[indexPath.row] {
+            if let view = self.sections?[indexPath.section].content[indexPath.row] {
                 let selectionStyle = view.modifiers.compactMap { $0 as? SelectionStyle }.last
                 cell.selectionStyle = selectionStyle?.style ?? .default
                 cell.configure(view: view)
@@ -241,7 +241,7 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let view = self.sections?[indexPath.section].rows[indexPath.row]
+        let view = self.sections?[indexPath.section].content[indexPath.row]
         return view is Divider ? Divider.height : UITableView.automaticDimension
     }
 

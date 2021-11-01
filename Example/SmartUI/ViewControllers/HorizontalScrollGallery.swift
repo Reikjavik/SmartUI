@@ -11,7 +11,6 @@ import SmartUI
 
 class HorizontalScrollGallery: UIViewController {
 
-    private var contentView: ContainerView?
     private let emojis = ["🥑", "🥨", "🧀", "🍳", "🍕", "🥘", "🍟"].shuffled()
     private lazy var viewSize = Distinct<CGSize>()
     private let pageControl = UIPageControl()
@@ -27,7 +26,7 @@ class HorizontalScrollGallery: UIViewController {
         self.pageControl.pageIndicatorTintColor = .lightGray
         self.pageControl.currentPageIndicatorTintColor = .darkGray
 
-        self.contentView = ContainerView { [unowned self] in
+        ContainerView { [unowned self] in
             List {[
                 self.galleryView,
                 CustomView(view: self.pageControl),
@@ -38,43 +37,32 @@ class HorizontalScrollGallery: UIViewController {
                 ProductRow.create(product: .avocado),
                 ProductRow.create(product: .apple)
             ]}.separatorStyle(.none)
-        }
-        self.contentView?.layout(in: view)
+        }.layout(in: view)
     }
     
     private var galleryView: View {
-        ScrollView(.horizontal, showsIndicators: false) { [unowned self] in
-            HStack(alignment: .fill, spacing: 0.0) {
-                self.emojis.map { emoji in
-                    ZStack {[
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(self.itemBgColor)
-                            .scale(0.9),
-                        Circle()
-                            .fill(self.itemCircleColor)
-                            .scale(0.8),
-                        Text(emoji)
-                            .font(Font.system(size: 80))
-                    ]}
-                    .frame(width: self.view.bounds.width)
-                    .padding(.top, 12)
-                    .onTapGesture { [weak self] in
-                        self?.showAlert()
-                    }
+        LazyHStack(alignment: .fill, itemsSize: .manual({ view, _ in
+            return view.bounds.size
+        }), spacing: 0.0) {
+            self.emojis.map { emoji in
+                ZStack {[
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(self.itemBgColor)
+                        .scale(0.9),
+                    Circle()
+                        .fill(self.itemCircleColor)
+                        .size(width: 150, height: 150),
+                    Text(emoji)
+                        .font(Font.system(size: 80))
+                ]}
+                .onTapGesture { [weak self] in
+                    self?.showAlert()
                 }
             }
         }
         .delegate(self)
         .pagingEnabled(true)
-        .frame(width: self.view.bounds.width)
         .aspectRatio(16/9)
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        self.viewSize.distinct(value: self.view.bounds.size) { [unowned self] in
-            self.contentView?.redraw()
-        }
     }
 
     private func showAlert() {

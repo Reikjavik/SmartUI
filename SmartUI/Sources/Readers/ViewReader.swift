@@ -40,3 +40,4 @@ public class ViewReader<T: UIView>: View {
 
 public class ScrollViewReader: ViewReader<UIScrollView> {}
 public class TableViewReader: ViewReader<UITableView> {}
+public class CollectionViewReader: ViewReader<UICollectionView> {}

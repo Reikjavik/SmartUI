@@ -37,7 +37,8 @@ public class ScrollView: View {
 
     override var toUIView: UIView {
 
-        let contentView = self.content().display()
+        let view = self.content()
+        let contentView = view.display()
 
         let scrollView = BindableScrollView()
         scrollView.backgroundColor = .clear
@@ -47,6 +48,7 @@ public class ScrollView: View {
         scrollView.alwaysBounceHorizontal = self.axis == .horizontal
         scrollView.bounces = true
         scrollView.addSubview(contentView)
+        view.view(view: contentView, didMoveTo: scrollView)
 
         contentView.translatesAutoresizingMaskIntoConstraints = false
         contentView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
