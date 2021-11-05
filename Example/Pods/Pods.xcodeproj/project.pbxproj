@@ -97,6 +97,7 @@
 		9F806238911DAA5F48D1849CD18AF445 /* Clipped.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EBDAF55A7EB0FB23781DE536932572 /* Clipped.swift */; };
 		A11FE7710122E3C8A26BBF47650F559B /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D57AACCBF515D755B62330EBCF37EBC /* Shape.swift */; };
 		A132C6A385AFFA1E83BECBCDFC14321A /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA3E80303656C6DE9758E30F3D89DC21 /* Font.swift */; };
+		A34033EE273546ED0084510E /* Slider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34033ED273546ED0084510E /* Slider.swift */; };
 		A3ED434C2729A3A400CD6498 /* LazyVGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3ED434B2729A3A400CD6498 /* LazyVGrid.swift */; };
 		A3ED434E2729A6C500CD6498 /* LazyHStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3ED434D2729A6C500CD6498 /* LazyHStack.swift */; };
 		A3ED4358272D564F00CD6498 /* CollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3ED4357272D564F00CD6498 /* CollectionViewLayout.swift */; };
@@ -278,6 +279,7 @@
 		A037DBBCCACBFACB5C39A80B1C273043 /* SnapshotTesting */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SnapshotTesting; path = SnapshotTesting.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A18F48D444BE347D96C3AD0854AC5C56 /* Alpha.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Alpha.swift; sourceTree = "<group>"; };
 		A3090ED4E3513AE03577641AE61CA2A4 /* SelectionStyle.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SelectionStyle.swift; sourceTree = "<group>"; };
+		A34033ED273546ED0084510E /* Slider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Slider.swift; sourceTree = "<group>"; };
 		A3ED434B2729A3A400CD6498 /* LazyVGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyVGrid.swift; sourceTree = "<group>"; };
 		A3ED434D2729A6C500CD6498 /* LazyHStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyHStack.swift; sourceTree = "<group>"; };
 		A3ED4357272D564F00CD6498 /* CollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewLayout.swift; sourceTree = "<group>"; };
@@ -703,6 +705,7 @@
 				FF998B9A1F03BD261B66A57DC50FE79B /* Button.swift */,
 				78DB028C47C0FA6020680BC044FFC8EA /* Control.swift */,
 				14E9C9CA326B8EEC48051A4C75DCFA9E /* SecureField.swift */,
+				A34033ED273546ED0084510E /* Slider.swift */,
 				CB535426645CD8CE22C95974C14A4797 /* TextEditor.swift */,
 				8F8D98346E46954AC4C528A59AE7D106 /* TextField.swift */,
 				94B2E59225CD6975D60885B3F22642DC /* Toggle.swift */,
@@ -903,6 +906,7 @@
 				640C698801339D32D996029D0B0CB51D /* Action.swift in Sources */,
 				C5EA567691F7A9AB0460BDF560A7F7DC /* Action+UIKit.swift in Sources */,
 				6603943B5245DC0F77325135AC24BBFE /* ActionCreator.swift in Sources */,
+				A34033EE273546ED0084510E /* Slider.swift in Sources */,
 				608FD629704DE2C3B9D42FDF5FB32428 /* Alignment.swift in Sources */,
 				8810F78AB0E1B1FD1690D0F634292632 /* Alpha.swift in Sources */,
 				3B3F915B78027EBC96A6E21C6882F0A2 /* Angle.swift in Sources */,

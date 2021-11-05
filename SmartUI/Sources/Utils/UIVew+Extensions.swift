@@ -29,7 +29,13 @@ extension UIView {
         if let view = self as? T {
             result.append(view)
         }
-        self.subviews.forEach { subview in
+        let subviews: [UIView]
+        if let stackView = self as? UIStackView {
+            subviews = stackView.arrangedSubviews
+        } else {
+            subviews = self.subviews
+        }
+        subviews.forEach { subview in
             if let view = subview as? T {
                 result.append(view)
             }

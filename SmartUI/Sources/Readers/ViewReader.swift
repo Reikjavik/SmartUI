@@ -33,7 +33,7 @@ public class ViewReader<T: UIView>: View {
 
     override var toUIView: UIView {
         let content = self.reader(nil).display()
-        defer { _ = self.reader(content.find().first) }
+        defer { _ = self.reader(content.find().compactMap { $0 as? T }.first) }
         return content
     }
 }

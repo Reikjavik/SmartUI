@@ -35,6 +35,10 @@ internal struct Disabled: Modifier {
                 toggle.isEnabled = !disabled
             } else if let textView = view as? UITextView {
                 textView.isEditable = !disabled
+            } else if let stackView = view as? UIStackView,
+                      let nestedStack = stackView.arrangedSubviews.compactMap({ $0 as? UIStackView }).first,
+                      let slider = nestedStack.arrangedSubviews.compactMap({ $0 as? UISlider }).first {
+                slider.isEnabled = !disabled
             } else {
                 view?.isUserInteractionEnabled = !disabled
             }
