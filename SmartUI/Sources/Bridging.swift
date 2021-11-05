@@ -22,18 +22,26 @@
 
 import UIKit
 
-internal class Container: View {
-
-    internal init(view: View) {
-        super.init(children: [view])
-    }
-}
-
 public class ContainerView: UIView {
 
-    private let content: () -> View
+    public enum Alignment {
+        case fill
+        case center
+        case top
+        case topLeading
+        case topTrailing
+        case leading
+        case trailing
+        case bottom
+        case bottomLeading
+        case bottomTrailing
+    }
 
-    public init(_ content: @escaping () -> View) {
+    let alignment: Alignment
+    let content: () -> View
+
+    public init(alignment: Alignment = .center, content: @escaping () -> View) {
+        self.alignment = alignment
         self.content = content
         super.init(frame: .zero)
         self.redraw()
@@ -45,9 +53,31 @@ public class ContainerView: UIView {
 
     public func redraw() {
         self.removeAllSubviews()
-        let view = self.content()
-        let container = Container(view: view)
-        self.addSubview(container.display(), insets: .zero)
+        let content = self.content()
+        let view = content.display()
+        switch self.alignment {
+        case .fill:
+            self.addSubview(view, insets: .zero)
+        case .center:
+            view.layout(in: self, alignment: .center)
+        case .top:
+            view.layout(in: self, alignment: .top)
+        case .topLeading:
+            view.layout(in: self, alignment: .topLeading)
+        case .topTrailing:
+            view.layout(in: self, alignment: .topTrailing)
+        case .leading:
+            view.layout(in: self, alignment: .leading)
+        case .trailing:
+            view.layout(in: self, alignment: .trailing)
+        case .bottom:
+            view.layout(in: self, alignment: .bottom)
+        case .bottomLeading:
+            view.layout(in: self, alignment: .bottomLeading)
+        case .bottomTrailing:
+            view.layout(in: self, alignment: .bottomTrailing)
+        }
+        content.view(view: view, didMoveTo: self)
     }
 
     @discardableResult

@@ -31,7 +31,12 @@ class LoginViewController: UIViewController {
                         .font(Font.system(size: 60, weight: .bold))
                         .foregroundColor(.white)
                         .frame(width: 100, height: 100)
-                        .background(Color.blue.opacity(0.4))
+                        .background(
+                            LinearGradient(colors: [
+                                Color.blue.opacity(0.5),
+                                Color.blue.opacity(0.2)
+                            ], startPoint: .topTrailing, endPoint: .bottomLeading)
+                        )
                         .clipShape(Circle())
                         .padding([.top, .bottom], 40),
                     Text("Sign In")

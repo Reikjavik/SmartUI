@@ -115,6 +115,13 @@ public class Binding<Value>: AnyBinding {
         self.debugName = name
         return self
     }
+
+    public func view(placeholder: View = .empty, onUpdate: @escaping (Value) -> View) -> View {
+        CustomView(view: ContainerView(alignment: .fill) { [weak self] in
+            guard let value = self?.value else { return placeholder }
+            return onUpdate(value)
+        }.redraw(on: self))
+    }
 }
 
 public protocol AnyBinding {
