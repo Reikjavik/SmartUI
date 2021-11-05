@@ -122,7 +122,11 @@ internal class SliderView: UISlider {
         self.onEditingChanged = onEditingChanged
         super.init(frame: .zero)
         value.bind { [weak self] value in
-            self?.value = value
+            if self?.isTracking == true {
+                self?.value = value
+            } else {
+                self?.setValue(value, animated: true)
+            }
         }
         self.minimumValue = range.lowerBound
         self.maximumValue = range.upperBound
