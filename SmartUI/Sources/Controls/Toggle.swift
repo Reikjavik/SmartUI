@@ -24,14 +24,14 @@ import UIKit
 
 public class Toggle: Control {
 
-    private let isOn: Binding<Bool>
+    private let isOn: Publisher<Bool>
     private let label: () -> View
 
     public convenience init(_ title: String? = nil, isOn: Bool) {
         self.init(title, isOn: .create(isOn))
     }
 
-    public convenience init(_ title: String? = nil, isOn: Binding<Bool>) {
+    public convenience init(_ title: String? = nil, isOn: Publisher<Bool>) {
         self.init(isOn: isOn, label: { Text(title ?? "").multilineTextAlignment(.leading) })
     }
 
@@ -39,7 +39,7 @@ public class Toggle: Control {
         self.init(isOn: .create(isOn), label: label)
     }
 
-    public init(isOn: Binding<Bool>, label: @escaping () -> View) {
+    public init(isOn: Publisher<Bool>, label: @escaping () -> View) {
         self.isOn = isOn
         self.label = label
         super.init()
@@ -68,9 +68,9 @@ public class Toggle: Control {
 
 internal class SwitchView: UISwitch {
 
-    private let isOnBinding: Binding<Bool>
+    private let isOnBinding: Publisher<Bool>
 
-    internal init(isOn: Binding<Bool>) {
+    internal init(isOn: Publisher<Bool>) {
         self.isOnBinding = isOn
         super.init(frame: .zero)
         self.setup()

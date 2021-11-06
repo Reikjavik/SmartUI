@@ -25,12 +25,12 @@ import UIKit
 public class TextField: Control {
 
     private let title: String
-    private let text: Binding<String>
+    private let text: Publisher<String>
     private let onEditingChanged: ActionWith<Bool>
     private let onCommit: Action
 
     public init(_ title: String,
-                text: Binding<String>,
+                text: Publisher<String>,
                 onEditingChanged: @escaping (Bool) -> Void = { _ in },
                 onCommit: @escaping () -> Void = {}) {
         self.title = title
@@ -53,13 +53,13 @@ public class TextField: Control {
 internal class TextFieldView: UITextField, UITextFieldDelegate {
 
     private let title: String
-    private let value: Binding<String>
+    private let value: Publisher<String>
     private let onEditingChanged: ActionWith<Bool>
     private let onCommit: Action
     internal var placeholderColor: UIColor = .lightGray
 
     internal init(title: String,
-         value: Binding<String>,
+         value: Publisher<String>,
          onEditingChanged: ActionWith<Bool>,
          onCommit: Action) {
         self.title = title

@@ -22,20 +22,20 @@
 
 import UIKit
 
-public class Slider: Control {
+public class Slider<Value: BinaryFloatingPoint>: Control {
 
-    private let value: Binding<Float>
-    private let range: ClosedRange<Float>
-    private let step: Float
+    private let value: Publisher<Value>
+    private let range: ClosedRange<Value>
+    private let step: Value
     private let label: (() -> View)?
     private let minimumValueLabel: (() -> View)?
     private let maximumValueLabel: (() -> View)?
     private let onEditingChanged: ((Bool) -> Void)?
 
     public init(
-        value: Binding<Float>,
-        in range: ClosedRange<Float>,
-        step: Float,
+        value: Publisher<Value>,
+        in range: ClosedRange<Value>,
+        step: Value,
         label: (() -> View)? = nil,
         minimumValueLabel: (() -> View)? = nil,
         maximumValueLabel: (() -> View)? = nil,
@@ -103,17 +103,17 @@ public class Slider: Control {
     }
 }
 
-internal class SliderView: UISlider {
+internal class SliderView<Value: BinaryFloatingPoint>: UISlider {
 
-    private let valueBinding: Binding<Float>
-    private let range: ClosedRange<Float>
-    private let step: Float
+    private let valueBinding: Publisher<Value>
+    private let range: ClosedRange<Value>
+    private let step: Value
     private let onEditingChanged: ((Bool) -> Void)?
 
     init(
-        value: Binding<Float>,
-        in range: ClosedRange<Float>,
-        step: Float,
+        value: Publisher<Value>,
+        in range: ClosedRange<Value>,
+        step: Value,
         onEditingChanged: ((Bool) -> Void)? = nil
     ) {
         self.valueBinding = value
@@ -123,14 +123,14 @@ internal class SliderView: UISlider {
         super.init(frame: .zero)
         value.bind { [weak self] value in
             if self?.isTracking == true {
-                self?.value = value
+                self?.value = Float(value)
             } else {
-                self?.setValue(value, animated: true)
+                self?.setValue(Float(value), animated: true)
             }
         }
-        self.minimumValue = range.lowerBound
-        self.maximumValue = range.upperBound
-        self.value = value.value ?? 0
+        self.minimumValue = Float(range.lowerBound)
+        self.maximumValue = Float(range.upperBound)
+        self.value = Float(value.value ?? 0)
         self.addTarget(self, action: #selector(self.valueChanged), for: .valueChanged)
         self.addTarget(self, action: #selector(self.editingDidBegin), for: .touchDown)
         self.addTarget(self, action: #selector(self.editingDidEnd), for: .touchUpInside)
@@ -143,10 +143,11 @@ internal class SliderView: UISlider {
     }
 
     @objc private func valueChanged(sender: UISlider) {
-        let value = round(sender.value / self.step) * self.step
+        let step = Float(self.step)
+        let value = round(sender.value / step) * step
         self.value = value
-        guard self.valueBinding.value != value else { return }
-        self.valueBinding.update(value)
+        guard self.valueBinding.value != Value(value) else { return }
+        self.valueBinding.update(Value(value))
     }
 
     @objc private func editingDidBegin() {

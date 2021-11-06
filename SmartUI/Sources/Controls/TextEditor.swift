@@ -25,9 +25,9 @@ import UIKit
 public class TextEditor: Control {
 
     private let title: String?
-    private let text: Binding<String>
+    private let text: Publisher<String>
 
-    public init(_ title: String? = nil, text: Binding<String>) {
+    public init(_ title: String? = nil, text: Publisher<String>) {
         self.title = title
         self.text = text
     }
@@ -42,12 +42,12 @@ internal class TextEditorView: UITextView, UITextViewDelegate, KeyboardBindable 
     internal var observer = KeyboardHeightObserver()
 
     private let title: String?
-    private let textBinding: Binding<String>
+    private let textBinding: Publisher<String>
     internal var heightConstraint: NSLayoutConstraint?
     internal var placeholderColor = UIColor.lightGray
     internal var color = UIColor.black
 
-    internal init(title: String?, text: Binding<String>) {
+    internal init(title: String?, text: Publisher<String>) {
         self.title = title
         self.textBinding = text
         super.init(frame: .zero, textContainer: nil)

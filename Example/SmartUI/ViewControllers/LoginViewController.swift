@@ -11,8 +11,8 @@ import SmartUI
 
 class LoginViewController: UIViewController {
     
-    let username: Binding<String> = .create("")
-    let password: Binding<String> = .create("")
+    let username: Publisher<String> = .create("")
+    let password: Publisher<String> = .create("")
 
     lazy var notValid = self.username.combine(self.password)
         .map { $0.0.isEmpty || $0.1.isEmpty }

@@ -22,22 +22,10 @@
 
 import Foundation
 
-public class Binding<Value>: AnyBinding {
+public class Publisher<Value>: Binding<Value> {
 
-    private(set) public var value: Value?
-    private var bindings: [ActionWith<Value>] = []
-    private var debugName: String? = nil
-
-    deinit {
-        self.debugName.map { $0.isEmpty ? print("Deinit") : print($0 + ": Deinit" ) }
-    }
-
-    public init(value: Value? = nil) {
-        self.value = value
-    }
-    
-    public static func create<Value>(_ value: Value) -> Binding<Value> {
-        return Binding<Value>(value: value)
+    public override class func create<Value>(_ value: Value) -> Publisher<Value> {
+        return Publisher<Value>(value: value)
     }
 
     public func update(_ value: Value) {
@@ -48,6 +36,25 @@ public class Binding<Value>: AnyBinding {
         }
         self.value = value
         self.bindings.forEach { $0.execute(value) }
+    }
+}
+
+public class Binding<Value>: AnyBinding {
+
+    fileprivate(set) public var value: Value?
+    fileprivate var bindings: [ActionWith<Value>] = []
+    fileprivate var debugName: String? = nil
+
+    deinit {
+        self.debugName.map { $0.isEmpty ? print("Deinit") : print($0 + ": Deinit" ) }
+    }
+
+    public init(value: Value? = nil) {
+        self.value = value
+    }
+
+    public class func create<Value>(_ value: Value) -> Binding<Value> {
+        return Binding<Value>(value: value)
     }
 
     internal func bind(_ onChange: ActionWith<Value>) {
@@ -61,7 +68,7 @@ public class Binding<Value>: AnyBinding {
     }
 
     public func map<C>(_ block: @escaping (Value) -> (C)) -> Binding<C> {
-        let newBinding = Binding<C>(value: self.value.map(block))
+        let newBinding = Publisher<C>(value: self.value.map(block))
         self.bind(ActionWith<Value> { value in
             newBinding.update(block(value))
         })
@@ -69,7 +76,7 @@ public class Binding<Value>: AnyBinding {
     }
 
     public func compactMap<C>(_ block: @escaping (Value) -> (C?)) -> Binding<C> {
-        let newBinding = Binding<C>(value: self.value.flatMap(block))
+        let newBinding = Publisher<C>(value: self.value.flatMap(block))
         self.bind(ActionWith<Value> { value in
             block(value).map { newBinding.update($0) }
         })
@@ -81,7 +88,7 @@ public class Binding<Value>: AnyBinding {
     }
 
     public func combine(_ another: Binding<Value>) -> Binding<(Value, Value)> {
-        let newBinding = Binding<(Value, Value)>(value: self.value.with(another.value))
+        let newBinding = Publisher<(Value, Value)>(value: self.value.with(another.value))
         self.bind(ActionWith<Value> { [weak another] value in
             guard let anotherValue = another?.value else { return }
             newBinding.update((value, anotherValue))
@@ -94,7 +101,7 @@ public class Binding<Value>: AnyBinding {
     }
 
     public static func merge(_ bindings: Binding<Value>...) -> Binding<Value> {
-        let newBinding = Binding<Value>()
+        let newBinding = Publisher<Value>()
         bindings.forEach { binding in
             binding.bind(ActionWith<Value> { value in
                 newBinding.update(value)
@@ -104,7 +111,7 @@ public class Binding<Value>: AnyBinding {
     }
 
     public func filter(_ block: @escaping (Value) -> Bool) -> Binding<Value> {
-        let newBinding = Binding(value: self.value.flatMap { block($0) ? $0 : nil })
+        let newBinding = Publisher(value: self.value.flatMap { block($0) ? $0 : nil })
         self.bind(ActionWith<Value> {
             block($0) ? newBinding.update($0) : ()
         })
@@ -139,13 +146,13 @@ extension AnyBinding {
     }
 }
 
-extension Binding where Value == Void {
+extension Publisher where Value == Void {
 
     public func update() {
         self.update(())
     }
 
-    public static func create() -> Binding<Void> {
+    public static func create() -> Publisher<Void> {
         return self.create(())
     }
 }

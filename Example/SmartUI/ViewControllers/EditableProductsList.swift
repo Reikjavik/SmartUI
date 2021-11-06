@@ -26,17 +26,14 @@ class EditableProductsList: UIViewController {
         }
     }
 
-    let datasource: Binding<[DataSource]> = .create([.form, .product(.apple)])
+    let datasource: Publisher<[DataSource]> = .create([.form, .product(.apple)])
 
-    let name: Binding<String> = .create("")
-    let info: Binding<String> = .create("")
-    let price: Binding<String> = .create("")
+    let name: Publisher<String> = .create("")
+    let info: Publisher<String> = .create("")
+    let price: Publisher<String> = .create("")
 
     lazy var checkButtonTrigger = Binding.merge(self.name, self.info, self.price).mapToVoid()
-    lazy var buttonDisabled = self.checkButtonTrigger.map { [weak self] _ -> Bool in
-        guard let self = self else { return true }
-        return self.name.value.isEmpty || self.info.value.isEmpty || self.price.value.isEmpty
-    }
+    let buttonDisabled: Publisher<Bool> = .create(true)
 
     private let grayBackground: Color = Color.gray.opacity(0.1)
     private var tableView: UITableView?
@@ -54,7 +51,11 @@ class EditableProductsList: UIViewController {
             self?.tableView?.endUpdates()
         }
 
-        self.checkButtonTrigger.update()
+        self.checkButtonTrigger.mapToVoid().bind { [weak self] in
+            guard let self = self else { return }
+            let disabled =  self.name.value.isEmpty || self.info.value.isEmpty || self.price.value.isEmpty
+            self.buttonDisabled.update(disabled)
+        }
     }
 
     private var productsList: View {
