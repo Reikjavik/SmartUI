@@ -55,7 +55,7 @@ public class Divider: View {
         constraint.priority = .init(rawValue: 999)
         constraint.isActive = true
 
-        size.priority = .defaultHigh
+        size.priority = .init(rawValue: 999)
         size.isActive = true
     }
 }
