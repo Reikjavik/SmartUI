@@ -42,20 +42,20 @@ public class Spacer: View {
 
     override func view(view: UIView, didMoveTo parent: UIView) {
 
-        let isVertical = (parent as? UIStackView)?.axis == .vertical
+        let isHorizontal = (parent as? UIStackView)?.axis == .horizontal
         let constant = { $0 == .infinity ? UIView.maxConstraintConstantValue : $0 }
 
-        if isVertical {
-            self.minLenght.map {
-                let minHeight = view.heightAnchor.constraint(greaterThanOrEqualToConstant: constant($0))
-                minHeight.priority = .defaultHigh
-                minHeight.isActive = true
-            }
-        } else {
+        if isHorizontal {
             self.minLenght.map {
                 let minWidth = view.widthAnchor.constraint(greaterThanOrEqualToConstant: constant($0))
                 minWidth.priority = .defaultHigh
                 minWidth.isActive = true
+            }
+        } else {
+            self.minLenght.map {
+                let minHeight = view.heightAnchor.constraint(greaterThanOrEqualToConstant: constant($0))
+                minHeight.priority = .defaultHigh
+                minHeight.isActive = true
             }
         }
     }

@@ -122,13 +122,3 @@ class EditableProductsList: UIViewController {
     }
 }
 
-extension NumberFormatter {
-
-    static let priceFormatter: NumberFormatter = {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.currencySymbol = "$"
-        return formatter
-    }()
-}
-

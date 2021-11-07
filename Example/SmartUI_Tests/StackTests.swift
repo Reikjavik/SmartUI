@@ -40,6 +40,77 @@ class StackTests: XCTestCase {
         assertSnapshot(matching: vc, as: .image)
     }
 
+    func testHStackWithSpacer() {
+        let view = HStack(spacing: 36.0) {[
+            Rectangle()
+                .fill(.red)
+                .frame(width: 50, height: 50),
+            Text("123"),
+            Spacer(),
+            Circle()
+                .fill(.blue)
+                .frame(width: 50, height: 50)
+        ]}
+        let vc = HostingViewController(view: view)
+        assertSnapshot(matching: vc, as: .image)
+    }
+
+    func testHStackAlignmentCenter() {
+        let view = HStack(alignment: .center) {[
+            Text("Hello, world!").padding().background(Color.brown.opacity(0.2))
+        ]}.frame(width: .infinity, height: 200)
+          .background(Color.lightGray.opacity(0.2))
+        let vc = HostingViewController(view: view)
+        assertSnapshot(matching: vc, as: .image)
+    }
+
+    func testHStackAlignmentTop() {
+        let view = HStack(alignment: .top) {[
+            Text("Hello, world!").padding().background(Color.brown.opacity(0.2))
+        ]}.frame(width: .infinity, height: 200)
+          .background(Color.lightGray.opacity(0.2))
+        let vc = HostingViewController(view: view)
+        assertSnapshot(matching: vc, as: .image)
+    }
+
+    func testHStackAlignmentBottom() {
+        let view = HStack(alignment: .bottom) {[
+            Text("Hello, world!").padding().background(Color.brown.opacity(0.2))
+        ]}.frame(width: .infinity, height: 200)
+          .background(Color.lightGray.opacity(0.2))
+        let vc = HostingViewController(view: view)
+        assertSnapshot(matching: vc, as: .image)
+    }
+
+    func testHStackAlignmentFill() {
+        let view = HStack(alignment: .fill) {[
+            Text("Hello, world!").padding().background(Color.brown.opacity(0.2))
+        ]}.frame(width: .infinity, height: 200)
+          .background(Color.lightGray.opacity(0.2))
+        let vc = HostingViewController(view: view)
+        assertSnapshot(matching: vc, as: .image)
+    }
+
+    func testHStackAlignmentFirstTextBaseline() {
+        let view = HStack(alignment: .firstTextBaseline) {[
+            Text("Hello, world!").padding().background(Color.brown.opacity(0.2)),
+            Text("Hello, world!\nHello, world!").padding().background(Color.red.opacity(0.2))
+        ]}.frame(width: .infinity, height: 200)
+          .background(Color.lightGray.opacity(0.2))
+        let vc = HostingViewController(view: view)
+        assertSnapshot(matching: vc, as: .image)
+    }
+
+    func testHStackAlignmentLastTextBaseline() {
+        let view = HStack(alignment: .lastTextBaseline) {[
+            Text("Hello, world!").padding().background(Color.brown.opacity(0.2)),
+            Text("Hello, world!\nHello, world!").padding().background(Color.red.opacity(0.2))
+        ]}.frame(width: .infinity, height: 200)
+          .background(Color.lightGray.opacity(0.2))
+        let vc = HostingViewController(view: view)
+        assertSnapshot(matching: vc, as: .image)
+    }
+
     func testVStack() {
         let view = VStack(spacing: 36.0) {[
             Rectangle()
@@ -49,6 +120,95 @@ class StackTests: XCTestCase {
             Circle()
                 .fill(.blue)
                 .frame(width: 50, height: 50)
+        ]}
+        let vc = HostingViewController(view: view)
+        assertSnapshot(matching: vc, as: .image)
+    }
+
+    func testVStackWithSpacer() {
+        let view = VStack(spacing: 36.0) {[
+            Rectangle()
+                .fill(.red)
+                .frame(width: 50, height: 50),
+            Text("123"),
+            Spacer().frame(width: .infinity),
+            Circle()
+                .fill(.blue)
+                .frame(width: 50, height: 50)
+        ]}
+        let vc = HostingViewController(view: view)
+        assertSnapshot(matching: vc, as: .image)
+    }
+
+    func testVStackAlignmentLeading() {
+        let view = VStack(alignment: .leading) {[
+            Text("Hello, world!").padding().background(Color.brown.opacity(0.2))
+        ]}.frame(width: .infinity, height: 200)
+          .background(Color.lightGray.opacity(0.2))
+        let vc = HostingViewController(view: view)
+        assertSnapshot(matching: vc, as: .image)
+    }
+
+    func testVStackAlignmentTrailing() {
+        let view = VStack(alignment: .trailing) {[
+            Text("Hello, world!").padding().background(Color.brown.opacity(0.2))
+        ]}.frame(width: .infinity, height: 200)
+          .background(Color.lightGray.opacity(0.2))
+        let vc = HostingViewController(view: view)
+        assertSnapshot(matching: vc, as: .image)
+    }
+
+    func testVStackAlignmentCenter() {
+        let view = VStack(alignment: .center) {[
+            Text("Hello, world!").padding().background(Color.brown.opacity(0.2))
+        ]}.frame(width: .infinity, height: 200)
+          .background(Color.lightGray.opacity(0.2))
+        let vc = HostingViewController(view: view)
+        assertSnapshot(matching: vc, as: .image)
+    }
+
+    func testVStackAlignmentFill() {
+        let view = VStack(alignment: .fill) {[
+            Text("Hello, world!").padding().background(Color.brown.opacity(0.2))
+        ]}.frame(width: .infinity, height: 200)
+          .background(Color.lightGray.opacity(0.2))
+        let vc = HostingViewController(view: view)
+        assertSnapshot(matching: vc, as: .image)
+    }
+
+    func testHStacksCombination() {
+        let view = HStack {[
+            Text("Hello"),
+            VStack(spacing: 36.0) {[
+                Rectangle()
+                    .fill(.red)
+                    .frame(width: 50, height: 50),
+                Text("123")
+                    .contentCompressionResistance(.required),
+                Spacer().frame(height: .infinity),
+                Circle()
+                    .fill(.blue)
+                    .frame(width: 50, height: 50)
+            ]}
+        ]}
+        let vc = HostingViewController(view: view)
+        assertSnapshot(matching: vc, as: .image)
+    }
+
+    func testVStacksCombination() {
+        let view = VStack {[
+            Text("Hello"),
+            HStack(spacing: 36.0) {[
+                Rectangle()
+                    .fill(.red)
+                    .frame(width: 50, height: 50),
+                Text("123")
+                    .contentCompressionResistance(.required),
+                Spacer().frame(width: .infinity),
+                Circle()
+                    .fill(.blue)
+                    .frame(width: 50, height: 50)
+            ]}
         ]}
         let vc = HostingViewController(view: view)
         assertSnapshot(matching: vc, as: .image)
@@ -192,6 +352,34 @@ class StackTests: XCTestCase {
             Text("123")
                 .foregroundColor(.white),
         ]}
+        let vc = HostingViewController(view: view)
+        assertSnapshot(matching: vc, as: .image)
+    }
+
+    func testLazyHStack() {
+        let view = LazyHStack(spacing: 36.0) {[
+            Rectangle().fill(.red).frame(width: 100, height: 100),
+            Text("123"),
+            Circle().fill(.blue).frame(width: 100, height: 100),
+            Rectangle().fill(.red).frame(width: 100, height: 100),
+            Text("123"),
+            Circle().fill(.blue).frame(width: 100, height: 100)
+        ]}.frame(height: 100)
+        let vc = HostingViewController(view: view)
+        assertSnapshot(matching: vc, as: .image)
+    }
+
+    func testLazyHStackManualSized() {
+        let view = LazyHStack(itemsSize: .manual({ _, _ in
+            return CGSize(width: 50, height: 50)
+        }), spacing: 26.0) {[
+            Rectangle().fill(.red).frame(width: 100, height: 100),
+            Text("123"),
+            Circle().fill(.blue).frame(width: 100, height: 100),
+            Rectangle().fill(.red).frame(width: 100, height: 100),
+            Text("123"),
+            Circle().fill(.blue).frame(width: 100, height: 100)
+        ]}.frame(height: 100)
         let vc = HostingViewController(view: view)
         assertSnapshot(matching: vc, as: .image)
     }

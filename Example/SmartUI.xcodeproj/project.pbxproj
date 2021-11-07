@@ -30,6 +30,11 @@
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		A34033F0273567440084510E /* SliderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34033EF273567440084510E /* SliderTests.swift */; };
+		A3CF5A952736BA2300868A28 /* CustomViewsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CF5A942736BA2300868A28 /* CustomViewsTests.swift */; };
+		A3CF5A962737DD7500868A28 /* ProductView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADA47A2257D5E6D00A78FCD /* ProductView.swift */; };
+		A3CF5A982737E16A00868A28 /* ListTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CF5A972737E16A00868A28 /* ListTests.swift */; };
+		A3CF5A9A2737E44400868A28 /* GridTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CF5A992737E44400868A28 /* GridTests.swift */; };
+		A3CF5A9C2737EA6E00868A28 /* ScrollViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CF5A9B2737EA6E00868A28 /* ScrollViewTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +78,10 @@
 		8E6DB9020397081FE1F6391D /* SmartUI.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = SmartUI.podspec; path = ../SmartUI.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		A2EF1631B602E049FCEC7242 /* Pods-SmartUI_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartUI_Example.release.xcconfig"; path = "Target Support Files/Pods-SmartUI_Example/Pods-SmartUI_Example.release.xcconfig"; sourceTree = "<group>"; };
 		A34033EF273567440084510E /* SliderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderTests.swift; sourceTree = "<group>"; };
+		A3CF5A942736BA2300868A28 /* CustomViewsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViewsTests.swift; sourceTree = "<group>"; };
+		A3CF5A972737E16A00868A28 /* ListTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTests.swift; sourceTree = "<group>"; };
+		A3CF5A992737E44400868A28 /* GridTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridTests.swift; sourceTree = "<group>"; };
+		A3CF5A9B2737EA6E00868A28 /* ScrollViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViewTests.swift; sourceTree = "<group>"; };
 		BE5E1411788A607AEEE04A03 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		C7689F076C9480502ECAD494 /* Pods_SmartUI_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SmartUI_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4D7F1FE2B96F9619A6C311B /* Pods-SmartUI_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartUI_Tests.debug.xcconfig"; path = "Target Support Files/Pods-SmartUI_Tests/Pods-SmartUI_Tests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -118,8 +127,12 @@
 			isa = PBXGroup;
 			children = (
 				2B0966C92725CCE100FF3B2B /* ButtonTests.swift */,
+				A3CF5A942736BA2300868A28 /* CustomViewsTests.swift */,
 				2B0966C82725CCE100FF3B2B /* DividerTests.swift */,
 				2B0966C32725CCE000FF3B2B /* GradientTests.swift */,
+				A3CF5A992737E44400868A28 /* GridTests.swift */,
+				A3CF5A972737E16A00868A28 /* ListTests.swift */,
+				A3CF5A9B2737EA6E00868A28 /* ScrollViewTests.swift */,
 				2B0966C42725CCE000FF3B2B /* ShapeTests.swift */,
 				2B0966C72725CCE000FF3B2B /* StackTests.swift */,
 				A34033EF273567440084510E /* SliderTests.swift */,
@@ -421,13 +434,18 @@
 			files = (
 				2B0966D02725CCE100FF3B2B /* StackTests.swift in Sources */,
 				2B0966D22725CCE100FF3B2B /* ButtonTests.swift in Sources */,
+				A3CF5A952736BA2300868A28 /* CustomViewsTests.swift in Sources */,
+				A3CF5A9A2737E44400868A28 /* GridTests.swift in Sources */,
 				2B0966D42725CCE100FF3B2B /* TextTests.swift in Sources */,
+				A3CF5A982737E16A00868A28 /* ListTests.swift in Sources */,
+				A3CF5A962737DD7500868A28 /* ProductView.swift in Sources */,
 				2B0966CC2725CCE100FF3B2B /* GradientTests.swift in Sources */,
 				2B0966D32725CCE100FF3B2B /* TextFieldTests.swift in Sources */,
 				2B0966CE2725CCE100FF3B2B /* ToggleTests.swift in Sources */,
 				A34033F0273567440084510E /* SliderTests.swift in Sources */,
 				2B0966CD2725CCE100FF3B2B /* ShapeTests.swift in Sources */,
 				2B0966CF2725CCE100FF3B2B /* TextEditorTests.swift in Sources */,
+				A3CF5A9C2737EA6E00868A28 /* ScrollViewTests.swift in Sources */,
 				2B0966D12725CCE100FF3B2B /* DividerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

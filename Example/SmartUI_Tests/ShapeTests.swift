@@ -24,7 +24,6 @@ import XCTest
 import SmartUI
 import SnapshotTesting
 
-
 class ShapeTests: XCTestCase {
 
     func testCircle() {

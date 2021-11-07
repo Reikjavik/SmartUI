@@ -18,7 +18,11 @@ struct ProductRow {
                     Text(product.emojiIcon)
                         .font(Font.system(size: 40))
                         .padding(8.0)
-                        .background(Circle().fill(Color.gray.opacity(0.2)))
+                        .background(Circle().fill(
+                            LinearGradient(colors: [
+                                Color.lightGray.opacity(0.4), Color.lightGray.opacity(0.1),
+                            ], startPoint: .topTrailing, endPoint: .bottomTrailing)
+                        ))
                         .contentHuggingPriority(.defaultHigh),
                     Spacer()
                 ]}.frame(width: 64.0),
@@ -53,6 +57,16 @@ struct Product: Hashable {
     var priceString: String {
         return NumberFormatter.priceFormatter.string(from: NSNumber(value: self.price))!
     }
+}
+
+extension NumberFormatter {
+
+    static let priceFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.currencySymbol = "$"
+        return formatter
+    }()
 }
 
 extension Product {

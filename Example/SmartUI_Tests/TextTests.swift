@@ -76,4 +76,13 @@ class TextTests: XCTestCase {
         let vc = HostingViewController(view: view)
         assertSnapshot(matching: vc, as: .image)
     }
+
+    func testTextWithShadow() {
+        let view = Text("🔥 SmartUI")
+            .foregroundColor(.red)
+            .font(.largeTitle)
+            .shadow(color: .black, radius: 1, x: 0, y: 2)
+        let vc = HostingViewController(view: view)
+        assertSnapshot(matching: vc, as: .image)
+    }
 }
