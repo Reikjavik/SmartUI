@@ -87,13 +87,13 @@ public class Binding<Value>: AnyBinding {
         return self.map { _ in }
     }
 
-    public func combine(_ another: Binding<Value>) -> Binding<(Value, Value)> {
-        let newBinding = Publisher<(Value, Value)>(value: self.value.with(another.value))
+    public func combine<C>(_ another: Binding<C>) -> Binding<(Value, C)> {
+        let newBinding = Publisher<(Value, C)>(value: self.value.with(another.value))
         self.bind(ActionWith<Value> { [weak another] value in
             guard let anotherValue = another?.value else { return }
             newBinding.update((value, anotherValue))
         })
-        another.bind(ActionWith<Value> { [weak self] value in
+        another.bind(ActionWith<C> { [weak self] value in
             guard let selfValue = self?.value else { return }
             newBinding.update((selfValue, value))
         })
