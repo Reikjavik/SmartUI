@@ -161,4 +161,16 @@ internal class SliderView<Value: BinaryFloatingPoint>: UISlider {
     override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         return true
     }
+
+    override func accessibilityIncrement() {
+        self.onEditingChanged?(true)
+        super.accessibilityIncrement()
+        self.onEditingChanged?(false)
+    }
+
+    override func accessibilityDecrement() {
+        self.onEditingChanged?(true)
+        super.accessibilityDecrement()
+        self.onEditingChanged?(false)
+    }
 }
