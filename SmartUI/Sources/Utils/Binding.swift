@@ -24,18 +24,42 @@ import Foundation
 
 public class Publisher<Value>: Binding<Value> {
 
+    private var debounceTimer: Timer?
+
+    deinit {
+        self.stopDebounceTimer()
+    }
+
     public override class func create<Value>(_ value: Value) -> Publisher<Value> {
         return Publisher<Value>(value: value)
     }
 
     public func update(_ value: Value) {
+        self.stopDebounceTimer()
+        if self.debounceInterval > 0 {
+            let timer = Timer(timeInterval: self.debounceInterval, repeats: false) { [weak self] _ in
+                self?.updateValue(value)
+            }
+            self.debounceTimer = timer
+            RunLoop.current.add(timer, forMode: .common)
+        } else {
+            self.updateValue(value)
+        }
+    }
+
+    private func updateValue(_ newValue: Value) {
         self.debugName.map {
             $0.isEmpty ?
-            print("Update, new value: \(String(describing: value))") :
-            print($0 + ": Update, new value: \(String(describing: value))")
+            print("Update, new value: \(String(describing: newValue))") :
+            print($0 + ": Update, new value: \(String(describing: newValue))")
         }
-        self.value = value
-        self.bindings.forEach { $0.execute(value) }
+        self.value = newValue
+        self.bindings.forEach { $0.execute(newValue) }
+    }
+
+    private func stopDebounceTimer() {
+        self.debounceTimer?.invalidate()
+        self.debounceTimer = nil
     }
 }
 
@@ -44,6 +68,7 @@ public class Binding<Value>: AnyBinding {
     fileprivate(set) public var value: Value?
     fileprivate var bindings: [ActionWith<Value>] = []
     fileprivate var debugName: String? = nil
+    fileprivate var debounceInterval: TimeInterval = 0.0
 
     deinit {
         self.debugName.map { $0.isEmpty ? print("Deinit") : print($0 + ": Deinit" ) }
@@ -116,6 +141,11 @@ public class Binding<Value>: AnyBinding {
             block($0) ? newBinding.update($0) : ()
         })
         return newBinding
+    }
+
+    public func debounce(for seconds: TimeInterval) -> Binding<Value> {
+        self.debounceInterval = seconds
+        return self
     }
 
     public func debug(_ name: String = "") -> Binding<Value> {
