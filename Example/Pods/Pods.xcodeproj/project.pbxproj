@@ -97,6 +97,7 @@
 		9F806238911DAA5F48D1849CD18AF445 /* Clipped.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EBDAF55A7EB0FB23781DE536932572 /* Clipped.swift */; };
 		A11FE7710122E3C8A26BBF47650F559B /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D57AACCBF515D755B62330EBCF37EBC /* Shape.swift */; };
 		A132C6A385AFFA1E83BECBCDFC14321A /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA3E80303656C6DE9758E30F3D89DC21 /* Font.swift */; };
+		A302B346274006F2003B0D5E /* Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A302B345274006F2003B0D5E /* Animation.swift */; };
 		A34033EE273546ED0084510E /* Slider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34033ED273546ED0084510E /* Slider.swift */; };
 		A3ED434C2729A3A400CD6498 /* LazyVGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3ED434B2729A3A400CD6498 /* LazyVGrid.swift */; };
 		A3ED434E2729A6C500CD6498 /* LazyHStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3ED434D2729A6C500CD6498 /* LazyHStack.swift */; };
@@ -278,6 +279,7 @@
 		9EA47E980A59475FC817CEB420C096BA /* PlaceholderColor.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PlaceholderColor.swift; sourceTree = "<group>"; };
 		A037DBBCCACBFACB5C39A80B1C273043 /* SnapshotTesting */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SnapshotTesting; path = SnapshotTesting.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A18F48D444BE347D96C3AD0854AC5C56 /* Alpha.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Alpha.swift; sourceTree = "<group>"; };
+		A302B345274006F2003B0D5E /* Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animation.swift; sourceTree = "<group>"; };
 		A3090ED4E3513AE03577641AE61CA2A4 /* SelectionStyle.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SelectionStyle.swift; sourceTree = "<group>"; };
 		A34033ED273546ED0084510E /* Slider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Slider.swift; sourceTree = "<group>"; };
 		A3ED434B2729A3A400CD6498 /* LazyVGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyVGrid.swift; sourceTree = "<group>"; };
@@ -646,6 +648,7 @@
 				A7A7191BFF241AD77A86F3A0823A83B3 /* Action+UIKit.swift */,
 				8BB22D5FE02829446DB78AC8DE563E18 /* Alignment.swift */,
 				2D804DB12A01C7AAF577491058D9B386 /* Angle.swift */,
+				A302B345274006F2003B0D5E /* Animation.swift */,
 				52C3176C4D255F06254C5B4A54915C19 /* Axis.swift */,
 				FDADE689BC9CA0FD5C625328A4EEDDD0 /* Binding.swift */,
 				8B75AB6EB7A21528C4F1F9232ABDF9E4 /* CGGeometry+Extensions.swift */,
@@ -942,6 +945,7 @@
 				CB98D69403E3E2985A14D52E0A9E579D /* ForegroundColor.swift in Sources */,
 				430FE3728E6F92ECB35AE198A3E7732C /* Frame.swift in Sources */,
 				2AA89E179E3D9581121550ACA45EBDF5 /* Gradient.swift in Sources */,
+				A302B346274006F2003B0D5E /* Animation.swift in Sources */,
 				00DB6E547290620476FB27DD4C91AFB2 /* Group.swift in Sources */,
 				1A6FB02C9FEA89656FBC9867506F6CA9 /* Hidden.swift in Sources */,
 				FBF011398251AB22E60B6BCCD2E9FAFF /* HostingViewController.swift in Sources */,

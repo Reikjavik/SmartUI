@@ -51,7 +51,7 @@ public class ContainerView: UIView {
         fatalError("initWithCoder is not supported")
     }
 
-    public func redraw() {
+    public func redraw(animation: Animation? = nil) {
         self.removeAllSubviews()
         let content = self.content()
         let view = content.display()
@@ -78,13 +78,14 @@ public class ContainerView: UIView {
             view.layout(in: self, alignment: .bottomTrailing)
         }
         content.view(view: view, didMoveTo: self)
+        animation.map { self.layer.add($0.animation, forKey: "SmartUI.Animation") }
     }
 
     @discardableResult
-    public func redraw(on binding: AnyBinding) -> ContainerView {
+    public func redraw(on binding: AnyBinding, animation: Animation? = nil) -> ContainerView {
         binding.onChange { [weak self] in
             DispatchQueue.main.async {
-                self?.redraw()
+                self?.redraw(animation: animation)
             }
         }
         return self

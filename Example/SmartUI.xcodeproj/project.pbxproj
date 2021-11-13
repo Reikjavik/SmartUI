@@ -29,6 +29,7 @@
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
+		A302B344273FFD03003B0D5E /* OverlayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A302B343273FFD03003B0D5E /* OverlayTests.swift */; };
 		A34033F0273567440084510E /* SliderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34033EF273567440084510E /* SliderTests.swift */; };
 		A3CF5A952736BA2300868A28 /* CustomViewsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CF5A942736BA2300868A28 /* CustomViewsTests.swift */; };
 		A3CF5A962737DD7500868A28 /* ProductView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADA47A2257D5E6D00A78FCD /* ProductView.swift */; };
@@ -77,6 +78,7 @@
 		7C7935E54C12F87F34AC3F1B /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		8E6DB9020397081FE1F6391D /* SmartUI.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = SmartUI.podspec; path = ../SmartUI.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		A2EF1631B602E049FCEC7242 /* Pods-SmartUI_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartUI_Example.release.xcconfig"; path = "Target Support Files/Pods-SmartUI_Example/Pods-SmartUI_Example.release.xcconfig"; sourceTree = "<group>"; };
+		A302B343273FFD03003B0D5E /* OverlayTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayTests.swift; sourceTree = "<group>"; };
 		A34033EF273567440084510E /* SliderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderTests.swift; sourceTree = "<group>"; };
 		A3CF5A942736BA2300868A28 /* CustomViewsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViewsTests.swift; sourceTree = "<group>"; };
 		A3CF5A972737E16A00868A28 /* ListTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTests.swift; sourceTree = "<group>"; };
@@ -132,6 +134,7 @@
 				2B0966C32725CCE000FF3B2B /* GradientTests.swift */,
 				A3CF5A992737E44400868A28 /* GridTests.swift */,
 				A3CF5A972737E16A00868A28 /* ListTests.swift */,
+				A302B343273FFD03003B0D5E /* OverlayTests.swift */,
 				A3CF5A9B2737EA6E00868A28 /* ScrollViewTests.swift */,
 				2B0966C42725CCE000FF3B2B /* ShapeTests.swift */,
 				2B0966C72725CCE000FF3B2B /* StackTests.swift */,
@@ -434,6 +437,7 @@
 			files = (
 				2B0966D02725CCE100FF3B2B /* StackTests.swift in Sources */,
 				2B0966D22725CCE100FF3B2B /* ButtonTests.swift in Sources */,
+				A302B344273FFD03003B0D5E /* OverlayTests.swift in Sources */,
 				A3CF5A952736BA2300868A28 /* CustomViewsTests.swift in Sources */,
 				A3CF5A9A2737E44400868A28 /* GridTests.swift in Sources */,
 				2B0966D42725CCE100FF3B2B /* TextTests.swift in Sources */,

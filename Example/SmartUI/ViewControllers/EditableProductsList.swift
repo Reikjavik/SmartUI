@@ -74,28 +74,30 @@ class EditableProductsList: UIViewController {
     }
 
     private var addProductForm: View {
-        return VStack(spacing: 8.0) { [unowned self] in [
-            TextField("Title", text: self.name)
-                .font(Font.system(size: 16))
-                .padding(8)
-                .background(self.grayBackground)
-                .cornerRadius(4.0),
-            TextEditor("Description", text: self.info)
-                .font(Font.system(size: 16))
-                .scrollEnabled(false)
-                .padding(8)
-                .background(self.grayBackground)
-                .cornerRadius(4.0),
-            TextField("Price", text: self.price)
-                .font(Font.system(size: 16))
-                .keyboardType(.numbersAndPunctuation)
-                .padding(8)
-                .background(self.grayBackground)
-                .cornerRadius(4.0),
-            Button("Add", action: { [weak self] in
-                self?.addProduct()
-            }).disabled(self.buttonDisabled)
-        ]}.padding(8.0)
+        withAnimation(.fade, on: self.datasource) { [unowned self] in
+            VStack(spacing: 8.0) {[
+                TextField("Title", text: self.name)
+                    .font(Font.system(size: 16))
+                    .padding(8)
+                    .background(self.grayBackground)
+                    .cornerRadius(4.0),
+                TextEditor("Description", text: self.info)
+                    .font(Font.system(size: 16))
+                    .scrollEnabled(false)
+                    .padding(8)
+                    .background(self.grayBackground)
+                    .cornerRadius(4.0),
+                TextField("Price", text: self.price)
+                    .font(Font.system(size: 16))
+                    .keyboardType(.numbersAndPunctuation)
+                    .padding(8)
+                    .background(self.grayBackground)
+                    .cornerRadius(4.0),
+                Button("Add", action: { [weak self] in
+                    self?.addProduct()
+                }).disabled(self.buttonDisabled)
+            ]}.padding(8.0)
+        }
     }
 
     private func addProduct() {
