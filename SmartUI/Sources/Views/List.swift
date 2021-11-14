@@ -366,4 +366,12 @@ public extension List {
     func rowAnimation(_ animation: Binding<UITableView.RowAnimation>) -> Self {
         return self.add(modifier: RowAnimation(rowAnimation: animation))
     }
+
+    func estimatedRowHeight(_ value: CGFloat) -> Self {
+        return self.customModifier { view in
+            let tableView = view as? UITableView
+            tableView?.estimatedRowHeight = value
+            return view
+        }
+    }
 }
