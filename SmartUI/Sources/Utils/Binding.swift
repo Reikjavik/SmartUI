@@ -144,8 +144,12 @@ public class Binding<Value>: AnyBinding {
     }
 
     public func debounce(for seconds: TimeInterval) -> Binding<Value> {
-        self.debounceInterval = seconds
-        return self
+        let newBinding = Publisher(value: self.value)
+        newBinding.debounceInterval = seconds
+        self.bind(ActionWith<Value> {
+            newBinding.update($0)
+        })
+        return newBinding
     }
 
     public func debug(_ name: String = "") -> Binding<Value> {
