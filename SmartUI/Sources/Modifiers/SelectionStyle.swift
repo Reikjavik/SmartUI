@@ -24,7 +24,13 @@ import UIKit
 
 internal struct SelectionStyle: Modifier {
 
-    let style: UITableViewCell.SelectionStyle
+    let style: UITableViewCell.SelectionStyle?
+    let color: Color?
+
+    init(style: UITableViewCell.SelectionStyle? = nil, color: Color? = nil) {
+        self.style = style
+        self.color = color
+    }
 
     func modify(_ view: UIView) -> UIView {
         return view

@@ -105,7 +105,7 @@
 		A4313842F12659739869AC70D5B4DF7B /* SmartUI-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 40571F7921BB7E4C592DB9ED3D479689 /* SmartUI-dummy.m */; };
 		A4605BC41D97C4726BBE7CF71A3CC5DF /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF998B9A1F03BD261B66A57DC50FE79B /* Button.swift */; };
 		A5A53D6123F5647F0274F75464C162D7 /* SecureField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E9C9CA326B8EEC48051A4C75DCFA9E /* SecureField.swift */; };
-		AE943CECD1818973B97C51D190C61C01 /* RoundedRenctangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C0962E07CAA884D4D46AC318CC8962E /* RoundedRenctangle.swift */; };
+		AE943CECD1818973B97C51D190C61C01 /* RoundedRectangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C0962E07CAA884D4D46AC318CC8962E /* RoundedRectangle.swift */; };
 		AF0208DEB151553C175B79C4579A7E47 /* ViewReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088BE340556BCC0C202B4DBB6F3BC75D /* ViewReader.swift */; };
 		AFE414B3E0D49B39A358DE524B0839D5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA8B94E9D3B433157168D1EECCEC11CD /* Foundation.framework */; };
 		B65E5935A956BAC75ED87B8D3CDAE315 /* Divider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0FA35A65823E389A108A77D616A179 /* Divider.swift */; };
@@ -220,7 +220,7 @@
 		485B507C31AE640F7CB9C91C0773EEB3 /* SnapshotTesting.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = SnapshotTesting.modulemap; sourceTree = "<group>"; };
 		49A4C3B6B51FD9110C7F68F085F76F0F /* AssertInlineSnapshot.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AssertInlineSnapshot.swift; path = Sources/SnapshotTesting/AssertInlineSnapshot.swift; sourceTree = "<group>"; };
 		4A427CBF7EEEF2E5A5A6A4A8282357A5 /* Pods-SmartUI_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-SmartUI_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		4C0962E07CAA884D4D46AC318CC8962E /* RoundedRenctangle.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RoundedRenctangle.swift; sourceTree = "<group>"; };
+		4C0962E07CAA884D4D46AC318CC8962E /* RoundedRectangle.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RoundedRectangle.swift; sourceTree = "<group>"; };
 		4CDF6C2F62324C6A5922DB5320EEE63E /* Async.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Async.swift; path = Sources/SnapshotTesting/Async.swift; sourceTree = "<group>"; };
 		4D477DE11F8FBC1024F11638FDC71303 /* UIView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UIView.swift; path = Sources/SnapshotTesting/Snapshotting/UIView.swift; sourceTree = "<group>"; };
 		512F7056D4581E2F304D2EED5561AB73 /* SeparatorStyle.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SeparatorStyle.swift; sourceTree = "<group>"; };
@@ -686,7 +686,7 @@
 			children = (
 				CB55A82DBF2501CADAAE1A9426760401 /* Circle.swift */,
 				AD925477E2C761D9CDD2C464DDDA48E8 /* Rectangle.swift */,
-				4C0962E07CAA884D4D46AC318CC8962E /* RoundedRenctangle.swift */,
+				4C0962E07CAA884D4D46AC318CC8962E /* RoundedRectangle.swift */,
 				6D57AACCBF515D755B62330EBCF37EBC /* Shape.swift */,
 			);
 			name = Shapes;
@@ -970,7 +970,7 @@
 				24E7E6BF09BC7E678928AF3C7599FB5E /* Resizeable.swift in Sources */,
 				421A19FD591B21DE9A274F528F6AB2A8 /* Rotation.swift in Sources */,
 				A3ED4358272D564F00CD6498 /* CollectionViewLayout.swift in Sources */,
-				AE943CECD1818973B97C51D190C61C01 /* RoundedRenctangle.swift in Sources */,
+				AE943CECD1818973B97C51D190C61C01 /* RoundedRectangle.swift in Sources */,
 				DDB027880329D9833B21A7AB9105DAF1 /* RowAnimation.swift in Sources */,
 				53AB2962A46B96D26EAAA89A723B1BCB /* ScaleShape.swift in Sources */,
 				FEBECA7D1180AB42CE324A69D8318759 /* ScrollEnabled.swift in Sources */,

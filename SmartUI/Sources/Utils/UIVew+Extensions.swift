@@ -41,6 +41,6 @@ extension UIView {
             }
             result.append(contentsOf: subview.find() as? [T] ?? [])
         }
-        return result
+        return result.distinct()
     }
 }

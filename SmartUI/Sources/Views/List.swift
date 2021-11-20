@@ -216,7 +216,7 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
             // Sections binding
             if let view = self.sections?[indexPath.section].content[indexPath.row] {
                 let selectionStyle = view.modifiers.compactMap { $0 as? SelectionStyle }.last
-                cell.selectionStyle = selectionStyle?.style ?? .default
+                self.applySelectionStyle(cell: cell, style: selectionStyle)
                 cell.configure(view: view)
             }
 
@@ -225,7 +225,7 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
                 if item.hashValue != cell.itemHash {
                     let view = self.rowContent?(item)
                     let selectionStyle = view?.modifiers.compactMap { $0 as? SelectionStyle }.last
-                    cell.selectionStyle = selectionStyle?.style ?? .default
+                    self.applySelectionStyle(cell: cell, style: selectionStyle)
                     cell.configure(view: view)
                 }
                 cell.itemHash = item.hashValue
@@ -233,6 +233,17 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
         }
 
         return cell
+    }
+
+    private func applySelectionStyle(cell: UITableViewCell, style: SelectionStyle?) {
+        if let color = style?.color {
+            cell.selectionStyle = .default
+            let view = UIView()
+            view.backgroundColor = color.color
+            cell.selectedBackgroundView = view
+        } else {
+            cell.selectionStyle = style?.style ?? .default
+        }
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -271,11 +282,41 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
 }
 
 final class ListTableViewCell: UITableViewCell, Identifiable {
+
     static let reuseIdentifier = String(describing: ListTableViewCell.self)
     var itemHash: Int?
+    var view: UIView?
+    var colorsCache: [UIView: UIColor] = [:]
+
     func configure(view: View?) {
         self.contentView.removeAllSubviews()
-        view.map { self.contentView.addSubview($0.display(), insets: .zero) }
+        view.map {
+            let uiView = $0.display()
+            self.contentView.addSubview(uiView, insets: .zero)
+            self.view = uiView
+        }
+        self.cacheBackgroundColors()
+    }
+
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        self.handleBackgroundsSwitch(highlighted: selected)
+    }
+
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        super.setHighlighted(highlighted, animated: animated)
+        self.handleBackgroundsSwitch(highlighted: highlighted)
+    }
+
+    private func handleBackgroundsSwitch(highlighted: Bool) {
+        let allViews: [UIView] = self.view?.find() ?? []
+        allViews.forEach { $0.backgroundColor = highlighted ? .clear : self.colorsCache[$0] }
+    }
+
+    private func cacheBackgroundColors() {
+        self.colorsCache = [:]
+        let allViews: [UIView] = self.view?.find() ?? []
+        allViews.forEach { self.colorsCache[$0] = $0.backgroundColor }
     }
 }
 

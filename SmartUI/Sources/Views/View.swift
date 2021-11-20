@@ -141,4 +141,8 @@ public extension View {
     func selectionStyle(_ style: UITableViewCell.SelectionStyle) -> Self {
         return self.add(modifier: SelectionStyle(style: style))
     }
+
+    func selectionStyle(_ color: Color) -> Self {
+        return self.add(modifier: SelectionStyle(color: color))
+    }
 }
