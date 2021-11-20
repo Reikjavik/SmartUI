@@ -10,6 +10,7 @@ Table of contents:
 * [Animations](#are-there-animations-available-for-smartui-views)
 * [Using UIViews](#can-a-uiview-be-provided-to-smartui)
 * [Custom Views and Modifiers](#how-to-create-a-custom-modifier-or-a-view)
+* [ViewReader](#what-is-viewReader)
 
 ### What is exactly a ContainerView and how to layout it?
 **ContainerView** is just a UIView which serves as a container for SmartUI views. The easiest way to layout ContainerView is to call an extension method for UIView **layout(in:)**
@@ -93,7 +94,7 @@ extension Text {
     }
 }
 
-Text("213")
+Text("Hello, world!")
     .myCustomModifier()
 ```
 The second option is to use the predefined **CustomModifier**
@@ -112,6 +113,27 @@ struct MyViews {
         Text(title)
             .font(.headline)
             .foregroundColor(Color(color))
+    }
+}
+```
+
+### What is ViewReader? 
+ViewReader is a wrapper which allows to get access to some specific UIView in SmartUI spec (the first in the hierarchy). 
+There is a generic ViewReader for finding any of UIViews
+```swift
+ViewReader<UILabel> { label in
+    // here you can use label to make some additional setup
+    Text("Hello, world!")
+        .font(.body)
+}
+```
+If in the exmple above will be more than one Text object, the first one will be taken by the reader.
+
+You can also use ScrollViewReader, TableViewReader and CollectionViewReader
+```swift
+ScrollViewReader { scrollView in
+    ScrollView {
+        Text("Hellow, world!")
     }
 }
 ```

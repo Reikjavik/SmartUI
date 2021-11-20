@@ -2,6 +2,7 @@
 * Button
 * Color
 * Circle
+* CollectionViewReader
 * Divider
 * Image
 * HStack
@@ -14,13 +15,16 @@
 * Rectangle
 * RoundedRectangle
 * ScrollView
+* ScrollViewReader
 * SecureField
 * Slider
 * Spacer
+* TableViewReader
 * Text
 * TextEditor
 * TextField
 * Toggle
+* ViewReader
 
 ## Available modifiers
 * Accessibility
