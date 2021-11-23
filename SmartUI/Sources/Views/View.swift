@@ -121,8 +121,7 @@ public extension View {
         label: String? = nil,
         hint: String? = nil,
         value: String? = nil,
-        language: String? = nil,
-        isAccessibilityElement: Bool? = nil
+        language: String? = nil
     ) -> View {
         return self.add(
             modifier: Accessibility(
@@ -130,10 +129,21 @@ public extension View {
                 accessibilityLabel: label,
                 accessibilityHint: hint,
                 accessibilityValue: value,
-                accessibilityLanguage: language,
-                isAccessibilityElement: isAccessibilityElement
+                accessibilityLanguage: language
             )
         )
+    }
+
+    func isAccessibilityElement(_ value: Bool) -> View {
+        return self.add(modifier: IsAccessibilityElement(value: value))
+    }
+
+    func accessibilityElementsHidden(_ value: Bool) -> View {
+        return self.add(modifier: AccessibilityElementsHidden(value: value))
+    }
+
+    func accessibilityIgnoresInvertColors(_ value: Bool) -> View {
+        return self.add(modifier: AccessibilityIgnoresInvertColors(value: value))
     }
 
     func customModifier(_ modification: @escaping (UIView) -> UIView) -> Self {
@@ -146,5 +156,15 @@ public extension View {
 
     func selectionStyle(_ color: Color) -> Self {
         return self.add(modifier: SelectionStyle(color: color))
+    }
+}
+
+extension View {
+
+    var allAccessibilityModifiers: [Modifier] {
+        self.modifiers.filter { $0 is Accessibility } +
+        self.modifiers.filter { $0 is IsAccessibilityElement } +
+        self.modifiers.filter { $0 is AccessibilityElementsHidden } +
+        self.modifiers.filter { $0 is AccessibilityIgnoresInvertColors }
     }
 }

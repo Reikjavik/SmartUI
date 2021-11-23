@@ -236,8 +236,8 @@ extension LazyVGridView: UICollectionViewDelegate, UICollectionViewDataSource, U
 
             // Sections binding
             if let view = self.sections?[indexPath.section].content[indexPath.row] {
-                let accessibility = view.modifiers.compactMap { $0 as? Accessibility }.last
-                self.applyAccessibility(cell: cell, modifier: accessibility)
+                let accessibility = view.allAccessibilityModifiers
+                self.applyAccessibility(cell: cell, modifiers: accessibility)
                 cell.configure(view: view)
             }
 
@@ -245,8 +245,8 @@ extension LazyVGridView: UICollectionViewDelegate, UICollectionViewDataSource, U
             if let item = self.items?[indexPath.row] {
                 if item.hashValue != cell.itemHash {
                     let view = self.itemContent?(item)
-                    let accessibility = view?.modifiers.compactMap { $0 as? Accessibility }.last
-                    self.applyAccessibility(cell: cell, modifier: accessibility)
+                    let accessibility = view?.allAccessibilityModifiers ?? []
+                    self.applyAccessibility(cell: cell, modifiers: accessibility)
                     cell.configure(view: view)
                 }
                 cell.itemHash = item.hashValue
@@ -256,8 +256,10 @@ extension LazyVGridView: UICollectionViewDelegate, UICollectionViewDataSource, U
         return cell
     }
 
-    private func applyAccessibility(cell: UICollectionViewCell, modifier: Accessibility?) {
-        _ = modifier?.modify(cell)
+    private func applyAccessibility(cell: UICollectionViewCell, modifiers: [Modifier]) {
+        modifiers.forEach {
+            _ = $0.modify(cell)
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {

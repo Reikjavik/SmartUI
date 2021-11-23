@@ -29,7 +29,6 @@ internal struct Accessibility: Modifier {
     let accessibilityHint: String?
     let accessibilityValue: String?
     let accessibilityLanguage: String?
-    let isAccessibilityElement: Bool?
 
     func modify(_ view: UIView) -> UIView {
         let allView = [view] + view.find()
@@ -49,8 +48,46 @@ internal struct Accessibility: Modifier {
             self.accessibilityLanguage.map {
                 view.accessibilityLanguage = $0
             }
-            self.isAccessibilityElement.map {
-                view.isAccessibilityElement = $0
+        }
+        return view
+    }
+}
+
+internal struct IsAccessibilityElement: Modifier {
+
+    let value: Bool
+
+    func modify(_ view: UIView) -> UIView {
+        let allView = [view] + view.find()
+        allView.forEach { view in
+            view.isAccessibilityElement = self.value
+        }
+        return view
+    }
+}
+
+internal struct AccessibilityElementsHidden: Modifier {
+
+    let value: Bool
+
+    func modify(_ view: UIView) -> UIView {
+        let allView = [view] + view.find()
+        allView.forEach { view in
+            view.accessibilityElementsHidden = self.value
+        }
+        return view
+    }
+}
+
+internal struct AccessibilityIgnoresInvertColors: Modifier {
+
+    let value: Bool
+
+    func modify(_ view: UIView) -> UIView {
+        let allView = [view] + view.find()
+        allView.forEach { view in
+            if #available(iOS 11.0, *) {
+                view.accessibilityIgnoresInvertColors = self.value
             }
         }
         return view

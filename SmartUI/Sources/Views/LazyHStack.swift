@@ -154,16 +154,18 @@ extension LazyHStackView: UICollectionViewDelegate, UICollectionViewDataSource, 
 
         if let cell = cell as? LazyCollectionCell {
             let view = self.items[indexPath.item]
-            let accessibility = view.modifiers.compactMap { $0 as? Accessibility }.last
-            self.applyAccessibility(cell: cell, modifier: accessibility)
+            let accessibility = view.allAccessibilityModifiers
+            self.applyAccessibility(cell: cell, modifiers: accessibility)
             cell.configure(view: view, in: collectionView)
         }
 
         return cell
     }
 
-    private func applyAccessibility(cell: UICollectionViewCell, modifier: Accessibility?) {
-        _ = modifier?.modify(cell)
+    private func applyAccessibility(cell: UICollectionViewCell, modifiers: [Modifier]) {
+        modifiers.forEach {
+            _ = $0.modify(cell)
+        }
     }
 }
 
