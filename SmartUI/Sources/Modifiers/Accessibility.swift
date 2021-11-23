@@ -29,6 +29,7 @@ internal struct Accessibility: Modifier {
     let accessibilityHint: String?
     let accessibilityValue: String?
     let accessibilityLanguage: String?
+    let isAccessibilityElement: Bool?
 
     func modify(_ view: UIView) -> UIView {
         let allView = [view] + view.find()
@@ -47,6 +48,9 @@ internal struct Accessibility: Modifier {
             }
             self.accessibilityLanguage.map {
                 view.accessibilityLanguage = $0
+            }
+            self.isAccessibilityElement.map {
+                view.isAccessibilityElement = $0
             }
         }
         return view

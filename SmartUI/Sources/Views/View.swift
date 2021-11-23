@@ -121,7 +121,8 @@ public extension View {
         label: String? = nil,
         hint: String? = nil,
         value: String? = nil,
-        language: String? = nil
+        language: String? = nil,
+        isAccessibilityElement: Bool? = nil
     ) -> View {
         return self.add(
             modifier: Accessibility(
@@ -129,7 +130,8 @@ public extension View {
                 accessibilityLabel: label,
                 accessibilityHint: hint,
                 accessibilityValue: value,
-                accessibilityLanguage: language
+                accessibilityLanguage: language,
+                isAccessibilityElement: isAccessibilityElement
             )
         )
     }
