@@ -216,7 +216,9 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
             // Sections binding
             if let view = self.sections?[indexPath.section].content[indexPath.row] {
                 let selectionStyle = view.modifiers.compactMap { $0 as? SelectionStyle }.last
+                let accessibility = view.modifiers.compactMap { $0 as? Accessibility }.last
                 self.applySelectionStyle(cell: cell, style: selectionStyle)
+                self.applyAccessibility(cell: cell, modifier: accessibility)
                 cell.configure(view: view)
             }
 
@@ -225,7 +227,9 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
                 if item.hashValue != cell.itemHash {
                     let view = self.rowContent?(item)
                     let selectionStyle = view?.modifiers.compactMap { $0 as? SelectionStyle }.last
+                    let accessibility = view?.modifiers.compactMap { $0 as? Accessibility }.last
                     self.applySelectionStyle(cell: cell, style: selectionStyle)
+                    self.applyAccessibility(cell: cell, modifier: accessibility)
                     cell.configure(view: view)
                 }
                 cell.itemHash = item.hashValue
@@ -244,6 +248,10 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
         } else {
             cell.selectionStyle = style?.style ?? .default
         }
+    }
+
+    private func applyAccessibility(cell: UITableViewCell, modifier: Accessibility?) {
+        _ = modifier?.modify(cell)
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
