@@ -93,3 +93,16 @@ internal struct AccessibilityIgnoresInvertColors: Modifier {
         return view
     }
 }
+
+internal struct AccessibilityTraits: Modifier {
+
+    let value: UIAccessibilityTraits
+
+    func modify(_ view: UIView) -> UIView {
+        let allView = [view] + view.find()
+        allView.forEach { view in
+            view.accessibilityTraits = self.value
+        }
+        return view
+    }
+}

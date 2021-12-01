@@ -146,6 +146,10 @@ public extension View {
         return self.add(modifier: AccessibilityIgnoresInvertColors(value: value))
     }
 
+    func accessibilityTraits(_ value: UIAccessibilityTraits) -> View {
+        return self.add(modifier: AccessibilityTraits(value: value))
+    }
+
     func customModifier(_ modification: @escaping (UIView) -> UIView) -> Self {
         return self.add(modifier: CustomModifier(modificationBlock: modification))
     }
@@ -162,9 +166,11 @@ public extension View {
 extension View {
 
     var allAccessibilityModifiers: [Modifier] {
-        self.modifiers.filter { $0 is Accessibility } +
-        self.modifiers.filter { $0 is IsAccessibilityElement } +
-        self.modifiers.filter { $0 is AccessibilityElementsHidden } +
-        self.modifiers.filter { $0 is AccessibilityIgnoresInvertColors }
+        let a1 = self.modifiers.filter { $0 is Accessibility }
+        let a2 = self.modifiers.filter { $0 is AccessibilityTraits }
+        let a3 = self.modifiers.filter { $0 is IsAccessibilityElement }
+        let a4 = self.modifiers.filter { $0 is AccessibilityElementsHidden }
+        let a5 = self.modifiers.filter { $0 is AccessibilityIgnoresInvertColors }
+        return a1 + a2 + a3 + a4 + a5
     }
 }
