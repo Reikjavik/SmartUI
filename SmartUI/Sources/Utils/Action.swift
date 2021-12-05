@@ -26,17 +26,20 @@ internal typealias Action = ActionWith<Void>
 
 internal struct ActionWith<T> {
 
+    let id: String
     private let block: (T) -> Void
 
-    internal init?(_ block: ((T) -> Void)?) {
+    internal init?(id: String = UUID().uuidString, _ block: ((T) -> Void)?) {
         if let block = block {
+            self.id = id
             self.block = block
         } else {
             return nil
         }
     }
 
-    internal init(_ block: @escaping (T) -> Void) {
+    internal init(id: String = UUID().uuidString, _ block: @escaping (T) -> Void) {
+        self.id = id
         self.block = block
     }
 

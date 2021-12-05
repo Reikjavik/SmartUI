@@ -43,7 +43,7 @@ internal struct Disabled: Modifier {
                 view?.isUserInteractionEnabled = !disabled
             }
         }
-        self.disabled.bind(ActionWith(handleDisabled))
+        self.disabled.bind(ActionWith(handleDisabled)).store(in: &view.disposeBag)
         self.disabled.value.map(handleDisabled)
         return view
     }

@@ -163,6 +163,7 @@ extension LazyHStackView: UICollectionViewDelegate, UICollectionViewDataSource, 
     }
 
     private func applyAccessibility(cell: UICollectionViewCell, modifiers: [Modifier]) {
+        cell.resetAccessibilityFields()
         modifiers.forEach {
             _ = $0.modify(cell)
         }

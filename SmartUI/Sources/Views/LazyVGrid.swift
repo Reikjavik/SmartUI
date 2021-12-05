@@ -34,27 +34,17 @@ public class LazyVGrid: View {
     private let spacing: CGFloat
     private let pinnedViews: PinnedScrollableViews
     private let selection: ActionWith<IndexPath>?
-    private let itemsBinding: Binding<[AnyHashable]>?
-    private let sectionsBinding: Binding<[Section]>?
-    private let itemContent: ((AnyHashable) -> View?)?
+    private let sectionsBinding: Binding<[Section]>
 
     public init<Item: Hashable>(_ data: Binding<[Item]>, alignment: HorizontalAlignment = .center, spacing: CGFloat = UIView.defaultSpacing, itemsSize: LazyItemsSize = .auto, selection: ((Item) -> Void)? = nil, content: @escaping (Item) -> View) {
         let selectionAction = ActionWith<Item>(selection)
-        let dataBinding = data.map { (items) -> [Item] in
-            let uniqueItems = items.distinct()
-            if items.count != uniqueItems.count {
-                print("⚠️ SmartUI: There are duplicates in the items array provided for LazyVGrid update. Be careful, this may cause problems. Only unique items will be displayed.")
-            }
-            return uniqueItems
-        }
+        let section = Section(data: data, content: content)
         self.itemsSize = itemsSize
         self.alignment = alignment
         self.spacing = spacing
         self.pinnedViews = .init()
-        self.selection = selectionAction?.compactMap { dataBinding.value?[$0.row] }
-        self.itemContent = { ($0 as? Item).map(content) }
-        self.itemsBinding = dataBinding.map { $0 as [AnyHashable] }
-        self.sectionsBinding = nil
+        self.selection = selectionAction?.compactMap { data.value?[$0.row] }
+        self.sectionsBinding = .create([section])
         super.init()
     }
 
@@ -81,17 +71,15 @@ public class LazyVGrid: View {
         self.selection = ActionWith(selection)
         self.sectionsBinding = sections
         self.itemsSize = itemsSize
-        self.itemsBinding = nil
-        self.itemContent = nil
         super.init()
     }
 
     override var toUIView: UIView {
         switch self.itemsSize {
         case .auto:
-            return LazyVGridView(alignment: self.alignment, spacing: self.spacing, pinnedViews: self.pinnedViews, itemsSize: self.itemsSize, sectionsBinding: self.sectionsBinding, itemsBinding: self.itemsBinding, itemContent: self.itemContent, selection: self.selection)
+            return LazyVGridView(alignment: self.alignment, spacing: self.spacing, pinnedViews: self.pinnedViews, itemsSize: self.itemsSize, sectionsBinding: self.sectionsBinding, selection: self.selection)
         case .manual:
-            return ManualSizedVGridView(alignment: self.alignment, spacing: self.spacing, pinnedViews: self.pinnedViews, itemsSize: self.itemsSize, sectionsBinding: self.sectionsBinding, itemsBinding: self.itemsBinding, itemContent: self.itemContent, selection: self.selection)
+            return ManualSizedVGridView(alignment: self.alignment, spacing: self.spacing, pinnedViews: self.pinnedViews, itemsSize: self.itemsSize, sectionsBinding: self.sectionsBinding, selection: self.selection)
         }
     }
 
@@ -101,35 +89,27 @@ public class LazyVGrid: View {
     }
 }
 
-internal class LazyVGridView: UICollectionView, KeyboardBindable {
+internal class LazyVGridView: UICollectionView, KeyboardBindable, DiffableCollection {
 
     var observer = KeyboardHeightObserver()
-    let sectionsBinding: Binding<[Section]>?
-    let itemsBinding: Binding<[AnyHashable]>?
-    let itemContent: ((AnyHashable) -> View?)?
+    let sectionsBinding: Binding<[Section]>
     let selection: ActionWith<IndexPath>?
     let itemsSize: LazyItemsSize
 
-    private var sections: [Section]?
-    private var items: [AnyHashable]?
-
+    var sections: [Section] = []
+    var items: [Section: [AnyHashable]] = [:]
+    var updatesDisposeBag: [AnyCancellable] = []
     weak var customDelegate: UIScrollViewDelegate?
 
     init(alignment: HorizontalAlignment,
          spacing: CGFloat,
          pinnedViews: PinnedScrollableViews,
          itemsSize: LazyItemsSize,
-         sectionsBinding: Binding<[Section]>?,
-         itemsBinding: Binding<[AnyHashable]>?,
-         itemContent: ((AnyHashable) -> View?)?,
+         sectionsBinding: Binding<[Section]>,
          selection: ActionWith<IndexPath>?) {
         self.itemsSize = itemsSize
-        self.itemsBinding = itemsBinding
-        self.itemContent = itemContent
         self.selection = selection
         self.sectionsBinding = sectionsBinding
-        self.sections = sectionsBinding?.value
-        self.items = itemsBinding?.value
         let layout: UICollectionViewFlowLayout
         switch alignment {
         case .fill:
@@ -168,14 +148,11 @@ internal class LazyVGridView: UICollectionView, KeyboardBindable {
         height.priority = .defaultLow
         height.isActive = true
 
-        self.sectionsBinding?.bind(ActionWith<[Section]> { [weak self] sections in
-            self?.sections = sections
-            self?.reloadData()
-        })
+        self.sectionsBinding.bind(ActionWith<[Section]> { [weak self] sections in
+            self?.reload(sections: sections)
+        }).store(in: &disposeBag)
 
-        self.itemsBinding?.bind(ActionWith<[AnyHashable]> { [weak self] items in
-            self?.update(items: items)
-        })
+        self.reload(sections: sectionsBinding.value ?? [])
     }
 
     @available(*, unavailable)
@@ -183,26 +160,18 @@ internal class LazyVGridView: UICollectionView, KeyboardBindable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func update(items: [AnyHashable]) {
-        self.items = items
-        let updates = self.calculateUpdates(old: self.items ?? [], new: items)
-        guard updates.hasUpdates else { return }
-        let isVisible = self.window != nil
-        if isVisible {
-            self.performBatchUpdates {
-                self.deleteItems(at: updates.deleted)
-                self.insertItems(at: updates.inserted)
-            }
-        } else {
-            self.reloadData()
+    func updateSections(inserted: IndexSet, deleted: IndexSet) {
+        self.performBatchUpdates {
+            self.deleteSections(deleted)
+            self.insertSections(inserted)
         }
     }
 
-    private func calculateUpdates(old: [AnyHashable], new: [AnyHashable], in section: Int = 0) -> TableUpdate {
-        let diff = Diff(old, new)
-        let inserted = diff.inserted.map { IndexPath(row: $0.0, section: section) }
-        let deleted = diff.deleted.map { IndexPath(row: $0.0, section: section) }
-        return TableUpdate(deleted: deleted, inserted: inserted)
+    func updateItems(inserted: [IndexPath], deleted: [IndexPath]) {
+        self.performBatchUpdates {
+            self.deleteItems(at: deleted)
+            self.insertItems(at: inserted)
+        }
     }
 }
 
@@ -220,11 +189,12 @@ internal class ManualSizedVGridView: LazyVGridView {
 extension LazyVGridView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return self.sections?.count ?? 1
+        return self.sections.count
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.sections?[section].content.count ?? self.items?.count ?? 0
+        guard let section = self.sections[safe: section] else { return 0 }
+        return self.items[section]?.count ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -234,17 +204,11 @@ extension LazyVGridView: UICollectionViewDelegate, UICollectionViewDataSource, U
 
         if let cell = cell as? LazyGridCell {
 
-            // Sections binding
-            if let view = self.sections?[indexPath.section].content[indexPath.row] {
-                let accessibility = view.allAccessibilityModifiers
-                self.applyAccessibility(cell: cell, modifiers: accessibility)
-                cell.configure(view: view)
-            }
-
             // Items binding
-            if let item = self.items?[indexPath.row] {
+            if let section = self.sections[safe: indexPath.section],
+               let item = self.items[section]?[indexPath.row] {
                 if item.hashValue != cell.itemHash {
-                    let view = self.itemContent?(item)
+                    let view = self.sections[indexPath.section].content(item)
                     let accessibility = view?.allAccessibilityModifiers ?? []
                     self.applyAccessibility(cell: cell, modifiers: accessibility)
                     cell.configure(view: view)
@@ -257,6 +221,7 @@ extension LazyVGridView: UICollectionViewDelegate, UICollectionViewDataSource, U
     }
 
     private func applyAccessibility(cell: UICollectionViewCell, modifiers: [Modifier]) {
+        cell.resetAccessibilityFields()
         modifiers.forEach {
             _ = $0.modify(cell)
         }
@@ -265,24 +230,24 @@ extension LazyVGridView: UICollectionViewDelegate, UICollectionViewDataSource, U
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: LazyGridFooterHeader.reuseIdentifier, for: indexPath)
         if kind == UICollectionView.elementKindSectionHeader {
-            let header = self.sections?[indexPath.section].header?.display()
+            let header = self.sections[indexPath.section].header?.display()
             header.map { view.addSubview($0, insets: .zero) }
             return view
         } else {
-            let footer = self.sections?[indexPath.section].footer?.display()
+            let footer = self.sections[indexPath.section].footer?.display()
             footer.map { view.addSubview($0, insets: .zero) }
             return view
         }
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        let header = self.sections?[section].header?.display()
+        let header = self.sections[section].header?.display()
         let size = header?.systemLayoutSizeFitting(collectionView.bounds.size)
         return size ?? .zero
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        let footer = self.sections?[section].footer?.display()
+        let footer = self.sections[section].footer?.display()
         let size = footer?.systemLayoutSizeFitting(collectionView.bounds.size)
         return size ?? .zero
     }

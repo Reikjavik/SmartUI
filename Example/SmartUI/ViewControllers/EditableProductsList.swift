@@ -26,13 +26,17 @@ class EditableProductsList: UIViewController {
         }
     }
 
+    deinit {
+        print("vc deinit")
+    }
+
     let datasource: Publisher<[DataSource]> = .create([.form, .product(.apple)])
 
     let name: Publisher<String> = .create("")
     let info: Publisher<String> = .create("")
     let price: Publisher<String> = .create("")
 
-    lazy var checkButtonTrigger = Binding.merge(self.name, self.info, self.price).mapToVoid()
+    lazy var checkButtonTrigger = self.name.combine(self.info).combine(self.price).mapToVoid()
     let buttonDisabled: Publisher<Bool> = .create(true)
 
     private let grayBackground: Color = Color.gray.opacity(0.1)
@@ -46,16 +50,16 @@ class EditableProductsList: UIViewController {
             self.productsList
         }.layout(in: view)
 
-        self.info.mapToVoid().bind { [weak self] in
+        self.info.debug("Info").mapToVoid().bind { [weak self] in
             self?.tableView?.beginUpdates()
             self?.tableView?.endUpdates()
-        }
+        }.store(in: &self.disposeBag)
 
-        self.checkButtonTrigger.mapToVoid().bind { [weak self] in
+        self.checkButtonTrigger.debug("Trigger").bind { [weak self] in
             guard let self = self else { return }
             let disabled =  self.name.value.isEmpty || self.info.value.isEmpty || self.price.value.isEmpty
             self.buttonDisabled.update(disabled)
-        }
+        }.store(in: &self.disposeBag)
     }
 
     private var productsList: View {

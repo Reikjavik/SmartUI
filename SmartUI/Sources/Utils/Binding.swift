@@ -69,9 +69,11 @@ public class Binding<Value>: AnyBinding {
     fileprivate var bindings: [ActionWith<Value>] = []
     fileprivate var debugName: String? = nil
     fileprivate var debounceInterval: TimeInterval = 0.0
+    fileprivate var disposeBag: [AnyCancellable] = []
 
     deinit {
         self.debugName.map { $0.isEmpty ? print("Deinit") : print($0 + ": Deinit" ) }
+        self.disposeBag.forEach { $0.cancel() }
     }
 
     public init(value: Value? = nil) {
@@ -82,29 +84,33 @@ public class Binding<Value>: AnyBinding {
         return Binding<Value>(value: value)
     }
 
-    internal func bind(_ onChange: ActionWith<Value>) {
-        self.debugName.map { $0.isEmpty ? print("Subscibed") : print($0 + ": Subscibed") }
+    internal func bind(_ onChange: ActionWith<Value>) -> AnyCancellable {
+        self.debugName.map { $0.isEmpty ? print("Subscribed") : print($0 + ": Subscribed") }
         self.bindings.append(onChange)
+        return Disposable { [weak self] in
+            self?.bindings.removeAll(where: { $0.id == onChange.id })
+        }
     }
 
-    public func bind(_ onChange: @escaping (Value) -> Void) {
-        self.debugName.map { $0.isEmpty ? print("Subscibed") : print($0 + ": Subscibed") }
-        self.bindings.append(ActionWith(onChange))
+    public func bind(_ onChange: @escaping (Value) -> Void) -> AnyCancellable {
+        return self.bind(ActionWith<Value>(onChange))
     }
 
     public func map<C>(_ block: @escaping (Value) -> (C)) -> Binding<C> {
         let newBinding = Publisher<C>(value: self.value.map(block))
-        self.bind(ActionWith<Value> { value in
+        let cancellable = self.bind(ActionWith<Value> { value in
             newBinding.update(block(value))
         })
+        self.disposeBag.append(cancellable)
         return newBinding
     }
 
     public func compactMap<C>(_ block: @escaping (Value) -> (C?)) -> Binding<C> {
         let newBinding = Publisher<C>(value: self.value.flatMap(block))
-        self.bind(ActionWith<Value> { value in
+        let cancellable = self.bind(ActionWith<Value> { value in
             block(value).map { newBinding.update($0) }
         })
+        self.disposeBag.append(cancellable)
         return newBinding
     }
 
@@ -114,41 +120,35 @@ public class Binding<Value>: AnyBinding {
 
     public func combine<C>(_ another: Binding<C>) -> Binding<(Value, C)> {
         let newBinding = Publisher<(Value, C)>(value: self.value.with(another.value))
-        self.bind(ActionWith<Value> { [weak another] value in
+        let cancellable1 = self.bind(ActionWith<Value> { [weak another] value in
             guard let anotherValue = another?.value else { return }
             newBinding.update((value, anotherValue))
         })
-        another.bind(ActionWith<C> { [weak self] value in
+        let cancellable2 = another.bind(ActionWith<C> { [weak self] value in
             guard let selfValue = self?.value else { return }
             newBinding.update((selfValue, value))
         })
-        return newBinding
-    }
-
-    public static func merge(_ bindings: Binding<Value>...) -> Binding<Value> {
-        let newBinding = Publisher<Value>()
-        bindings.forEach { binding in
-            binding.bind(ActionWith<Value> { value in
-                newBinding.update(value)
-            })
-        }
+        self.disposeBag.append(cancellable1)
+        self.disposeBag.append(cancellable2)
         return newBinding
     }
 
     public func filter(_ block: @escaping (Value) -> Bool) -> Binding<Value> {
         let newBinding = Publisher(value: self.value.flatMap { block($0) ? $0 : nil })
-        self.bind(ActionWith<Value> {
+        let cancellable = self.bind(ActionWith<Value> {
             block($0) ? newBinding.update($0) : ()
         })
+        self.disposeBag.append(cancellable)
         return newBinding
     }
 
     public func debounce(for seconds: TimeInterval) -> Binding<Value> {
         let newBinding = Publisher(value: self.value)
         newBinding.debounceInterval = seconds
-        self.bind(ActionWith<Value> {
+        let cancellable = self.bind(ActionWith<Value> {
             newBinding.update($0)
         })
+        self.disposeBag.append(cancellable)
         return newBinding
     }
 
@@ -171,11 +171,11 @@ public protocol AnyBinding {
 
 extension AnyBinding {
 
-    func onChange(_ onChange: Action) {
+    func onChange(_ onChange: Action) -> AnyCancellable {
         self.mapToVoid().bind(onChange)
     }
 
-    func onChange(_ onChange: @escaping () -> Void) {
+    func onChange(_ onChange: @escaping () -> Void) -> AnyCancellable {
         self.mapToVoid().bind(onChange)
     }
 }
@@ -188,5 +188,34 @@ extension Publisher where Value == Void {
 
     public static func create() -> Publisher<Void> {
         return self.create(())
+    }
+}
+
+// MARK: - Disposing
+
+public protocol AnyCancellable {
+    func cancel()
+}
+
+public extension AnyCancellable {
+    func store(in bag: inout [AnyCancellable]) {
+        bag.append(self)
+    }
+}
+
+class Disposable: AnyCancellable {
+
+    let onCancel: () -> Void
+
+    init(_ onCancel: @escaping () -> Void) {
+        self.onCancel = onCancel
+    }
+
+    deinit {
+        self.onCancel()
+    }
+
+    func cancel() {
+        self.onCancel()
     }
 }

@@ -87,7 +87,7 @@ public class ContainerView: UIView {
             DispatchQueue.main.async {
                 self?.redraw(animation: animation)
             }
-        }
+        }.store(in: &disposeBag)
         return self
     }
 }

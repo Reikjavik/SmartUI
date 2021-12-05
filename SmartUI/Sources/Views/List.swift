@@ -22,37 +22,16 @@
 
 import UIKit
 
-struct TableUpdate {
-    let deleted: [IndexPath]
-    let inserted: [IndexPath]
-
-    var hasUpdates: Bool {
-        return deleted.count > 0 || inserted.count > 0
-    }
-}
-
 public class List: View {
 
     private let selection: ActionWith<IndexPath>?
-    private let sectionsBinding: Binding<[Section]>?
-    private let itemsBinding: Binding<[AnyHashable]>?
-    private let rowContent: ((AnyHashable) -> View?)?
+    private let sections: Binding<[Section]>
 
     public init<Item: Hashable>(_ data: Binding<[Item]>, selection: ((Item) -> Void)? = nil, rowContent: @escaping (Item) -> View) {
         let selectionAction = ActionWith<Item>(selection)
-        let dataBinding = data.map { (items) -> [Item] in
-            let uniqueItems = items.distinct()
-            if items.count != uniqueItems.count {
-                print("⚠️ SmartUI: There are duplicates in the items array provided for List update. Be careful, this may cause problems. Only unique items will be displayed.")
-            }
-            return uniqueItems
-        }
-        // Used for sections binding
-        self.selection = selectionAction?.compactMap { dataBinding.value?[$0.row] }
-        self.sectionsBinding = nil
-        // Used for diffable items binding
-        self.itemsBinding = dataBinding.map { $0 as [AnyHashable] }
-        self.rowContent = { ($0 as? Item).map(rowContent) }
+        let section = Section(data: data, content: rowContent)
+        self.selection = selectionAction?.compactMap { data.value?[$0.row] }
+        self.sections = .create([section])
         super.init()
     }
 
@@ -63,18 +42,14 @@ public class List: View {
     public init(selection: ((IndexPath) -> Void)? = nil, content: () -> [View]) {
         let selectionAction = ActionWith<IndexPath>(selection)
         self.selection = selectionAction
-        self.sectionsBinding = .create([Section(content: content)])
-        self.itemsBinding = nil
-        self.rowContent = nil
+        self.sections = .create([Section(content: content)])
         super.init()
     }
 
     public init(selection: ((IndexPath) -> Void)? = nil, sections: Binding<[Section]>) {
         let selectionAction = ActionWith<IndexPath>(selection)
         self.selection = selectionAction
-        self.sectionsBinding = sections
-        self.itemsBinding = nil
-        self.rowContent = nil
+        self.sections = sections
         super.init()
     }
 
@@ -86,9 +61,7 @@ public class List: View {
         let style = self.modifiers.compactMap { $0 as? ListStyleModifier }.last
         let rowAnimation = self.modifiers.compactMap { $0 as? RowAnimation }.last
         return ListTableView(
-            sections: self.sectionsBinding,
-            items: self.itemsBinding,
-            rowContent: self.rowContent,
+            sections: self.sections,
             rowAnimation: rowAnimation?.rowAnimation,
             selection: self.selection,
             style: style?.style.style ?? .plain
@@ -96,45 +69,74 @@ public class List: View {
     }
 }
 
-public class Section {
+public protocol Identifiable {
+    var id: String { get }
+}
 
-    let header: View?
-    let content: [View]
-    let footer: View?
+public class Section: Identifiable, Hashable {
 
-    public init(header: View? = nil, footer: View? = nil, content: () -> [View]) {
+    public let id: String
+    public let header: View?
+    public let footer: View?
+    public let items: Binding<[AnyHashable]>
+    public let content: ((AnyHashable) -> View?)
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+
+    public static func == (lhs: Section, rhs: Section) -> Bool {
+        return lhs.hashValue == rhs.hashValue
+    }
+
+    public init<Item: Hashable>(id: String? = nil, data: Binding<[Item]>, header: View? = nil, footer: View? = nil, content: @escaping (Item) -> View) {
+        let dataBinding = data.map { (items) -> [Item] in
+            let uniqueItems = items.distinct()
+            if items.count != uniqueItems.count {
+                print("⚠️ SmartUI: There are duplicates in the items array provided for Section update. Be careful, this may cause problems. Only unique items will be displayed.")
+            }
+            return uniqueItems
+        }
+        // Used for diffable items binding
+        self.items = dataBinding.map { $0 as [AnyHashable] }
+        self.content = { ($0 as? Item).map(content) }
         self.header = header
         self.footer = footer
-        self.content = content()
+        self.id = id ?? UUID().uuidString
+    }
+
+    public convenience init<Item: Hashable>(id: String? = nil, data: [Item], header: View? = nil, footer: View? = nil, content: @escaping (Item) -> View) {
+        self.init(id: id, data: .create(data), header: header, footer: footer, content: content)
+    }
+
+    public convenience init(id: String? = nil, header: View? = nil, footer: View? = nil, content: () -> [View]) {
+        let views = content()
+        let ids = views.map { _ in UUID().uuidString }
+        self.init(id: id, data: ids, header: header, footer: footer) { id in
+            ids.firstIndex(of: id).map { views[$0] } ?? .empty
+        }
     }
 }
 
-internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataSource, KeyboardBindable {
+internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataSource, KeyboardBindable, DiffableCollection {
 
     var observer = KeyboardHeightObserver()
     let sectionsBinding: Binding<[Section]>?
-    let itemsBinding: Binding<[AnyHashable]>?
-    let rowContent: ((AnyHashable) -> View?)?
     let selection: ActionWith<IndexPath>
     let rowAnimation: Binding<UITableView.RowAnimation>?
 
-    private var sections: [Section]?
-    private var items: [AnyHashable]?
+    var sections: [Section] = []
+    var items: [Section: [AnyHashable]] = [:]
 
+    var updatesDisposeBag: [AnyCancellable] = []
     weak var customDelegate: UIScrollViewDelegate?
 
-    init(sections: Binding<[Section]>?,
-         items: Binding<[AnyHashable]>?,
-         rowContent: ((AnyHashable) -> View?)?,
+    init(sections: Binding<[Section]>,
          rowAnimation: Binding<UITableView.RowAnimation>?,
          selection: ActionWith<IndexPath>?,
          style: UITableView.Style) {
         self.sectionsBinding = sections
-        self.itemsBinding = items
-        self.rowContent = rowContent
         self.selection = selection ?? .empty
-        self.sections = sections?.value
-        self.items = items?.value
         self.rowAnimation = rowAnimation
         super.init(frame: .zero, style: style)
         self.backgroundColor = .clear
@@ -161,36 +163,26 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
         height.isActive = true
 
         self.sectionsBinding?.bind(ActionWith<[Section]> { [weak self] sections in
-            self?.sections = sections
-            self?.reloadData()
-        })
+            self?.reload(sections: sections)
+        }).store(in: &disposeBag)
 
-        self.itemsBinding?.bind(ActionWith<[AnyHashable]> { [weak self] items in
-            self?.updateRows(items: items)
-        })
+        self.reload(sections: sections.value ?? [])
     }
 
-    private func updateRows(items: [AnyHashable]) {
-        let updates = self.calculateUpdates(old: self.items ?? [], new: items)
-        self.items = items
-        guard updates.hasUpdates else { return }
-        let isVisible = self.window != nil
-        if isVisible {
-            let rowAnimation = self.rowAnimation?.value ?? .automatic
-            self.beginUpdates()
-            self.deleteRows(at: updates.deleted, with: rowAnimation)
-            self.insertRows(at: updates.inserted, with: rowAnimation)
-            self.endUpdates()
-        } else {
-            self.reloadData()
-        }
+    func updateSections(inserted: IndexSet, deleted: IndexSet) {
+        let rowAnimation = self.rowAnimation?.value ?? .automatic
+        self.beginUpdates()
+        self.deleteSections(deleted, with: rowAnimation)
+        self.insertSections(inserted, with: rowAnimation)
+        self.endUpdates()
     }
 
-    func calculateUpdates(old: [AnyHashable], new: [AnyHashable], in section: Int = 0) -> TableUpdate {
-        let diff = Diff(old, new)
-        let inserted = diff.inserted.map { IndexPath(row: $0.0, section: section) }
-        let deleted = diff.deleted.map { IndexPath(row: $0.0, section: section) }
-        return TableUpdate(deleted: deleted, inserted: inserted)
+    func updateItems(inserted: [IndexPath], deleted: [IndexPath]) {
+        let rowAnimation = self.rowAnimation?.value ?? .automatic
+        self.beginUpdates()
+        self.deleteRows(at: deleted, with: rowAnimation)
+        self.insertRows(at: inserted, with: rowAnimation)
+        self.endUpdates()
     }
 
     required init?(coder: NSCoder) {
@@ -198,11 +190,12 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return self.sections?.count ?? 1
+        return self.sections.count
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.sections?[section].content.count ?? self.items?.count ?? 0
+        guard let section = self.sections[safe: section] else { return 0 }
+        return self.items[section]?.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -213,19 +206,10 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
 
         if let cell = cell as? ListTableViewCell {
 
-            // Sections binding
-            if let view = self.sections?[indexPath.section].content[indexPath.row] {
-                let selectionStyle = view.modifiers.compactMap { $0 as? SelectionStyle }.last
-                let accessibility = view.allAccessibilityModifiers
-                self.applySelectionStyle(cell: cell, style: selectionStyle)
-                self.applyAccessibility(cell: cell, modifiers: accessibility)
-                cell.configure(view: view)
-            }
-
-            // Items binding
-            if let item = self.items?[indexPath.row] {
+            if let section = self.sections[safe: indexPath.section],
+               let item = self.items[section]?[safe: indexPath.row] {
                 if item.hashValue != cell.itemHash {
-                    let view = self.rowContent?(item)
+                    let view = self.sections[indexPath.section].content(item)
                     let selectionStyle = view?.modifiers.compactMap { $0 as? SelectionStyle }.last
                     let accessibility = view?.allAccessibilityModifiers ?? []
                     self.applySelectionStyle(cell: cell, style: selectionStyle)
@@ -251,6 +235,7 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
     }
 
     private func applyAccessibility(cell: UITableViewCell, modifiers: [Modifier]) {
+        cell.resetAccessibilityFields()
         modifiers.forEach {
             _ = $0.modify(cell)
         }
@@ -262,20 +247,19 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let view = self.sections?[indexPath.section].content[indexPath.row]
-        return view is Divider ? Divider.height : UITableView.automaticDimension
+        return UITableView.automaticDimension
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return self.sections?[section].header?.display()
+        return self.sections[section].header?.display()
     }
 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return self.sections?[section].footer?.display()
+        return self.sections[section].footer?.display()
     }
 
     func tableView(_ tableView:  UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if self.sections?[section].header != nil {
+        if self.sections[section].header != nil {
             return UITableView.automaticDimension
         } else {
             return CGFloat.leastNormalMagnitude
@@ -283,7 +267,7 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
     }
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        if self.sections?[section].footer != nil {
+        if self.sections[section].footer != nil {
             return UITableView.automaticDimension
         } else {
             return CGFloat.leastNormalMagnitude
@@ -291,7 +275,7 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
     }
 }
 
-final class ListTableViewCell: UITableViewCell, Identifiable {
+final class ListTableViewCell: UITableViewCell {
 
     static let reuseIdentifier = String(describing: ListTableViewCell.self)
     var itemHash: Int?

@@ -106,3 +106,16 @@ internal struct AccessibilityTraits: Modifier {
         return view
     }
 }
+
+extension UIView {
+
+    func resetAccessibilityFields() {
+        self.accessibilityIdentifier = nil
+        self.accessibilityLabel = nil
+        self.accessibilityHint = nil
+        self.accessibilityValue = nil
+        self.accessibilityLanguage = nil
+        self.accessibilityElementsHidden = false
+        self.accessibilityTraits = .none
+    }
+}

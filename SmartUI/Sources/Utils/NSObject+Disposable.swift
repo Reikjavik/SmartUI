@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright (c) 2020 Igor Tiukavkin.
+// Copyright (c) 2021 Igor Tiukavkin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,27 +20,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import UIKit
+import Foundation
 
-internal struct ScrollEnabled: Modifier {
+public extension NSObject {
 
-    let isScrollEnabled: Binding<Bool>
+    private static var kDisposeBag: Int8 = 0
 
-    func modify(_ view: UIView) -> UIView {
-
-        if let textView = view as? TextEditorView {
-            textView.heightConstraint?.isActive = false
-        }
-
-        if let scrollView = view as? UIScrollView {
-            self.isScrollEnabled.bind(ActionWith<Bool>({ [weak scrollView] (enabled) in
-                scrollView?.isScrollEnabled = enabled
-            })).store(in: &view.disposeBag)
-            self.isScrollEnabled.value.map {
-                scrollView.isScrollEnabled = $0
-            }
-        }
-
-        return view
+    var disposeBag: [AnyCancellable] {
+        get { objc_getAssociatedObject(self, &Self.kDisposeBag) as? [AnyCancellable] ?? [] }
+        set { objc_setAssociatedObject(self, &Self.kDisposeBag, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC) }
     }
 }

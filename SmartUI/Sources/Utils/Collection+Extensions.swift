@@ -19,4 +19,8 @@ extension Array {
     func distinct(where condition: ([Element], Element) -> Bool) -> [Element] {
         return self.reduce([], { condition($0, $1) ? $0 : $0 + [$1] })
     }
+
+    subscript (safe index: Int) -> Element? {
+        return (0..<count).contains(index) ? self[index] : nil
+    }
 }

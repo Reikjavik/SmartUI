@@ -64,7 +64,7 @@ internal class TextEditorView: UITextView, UITextViewDelegate, KeyboardBindable 
             if self?.isFirstResponder != true {
                 self?.setupPlaceholder(didEnd: true)
             }
-        })
+        }).store(in: &disposeBag)
         self.text = self.textBinding.value
 
         self.textContainerInset = .zero

@@ -127,7 +127,7 @@ internal class SliderView<Value: BinaryFloatingPoint>: UISlider {
             } else {
                 self?.setValue(Float(value), animated: true)
             }
-        }
+        }.store(in: &disposeBag)
         self.minimumValue = Float(range.lowerBound)
         self.maximumValue = Float(range.upperBound)
         self.value = Float(value.value ?? 0)

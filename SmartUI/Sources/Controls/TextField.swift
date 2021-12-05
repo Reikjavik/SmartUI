@@ -82,7 +82,7 @@ internal class TextFieldView: UITextField, UITextFieldDelegate {
     private func setup() {
         self.value.bind(ActionWith<String> { [weak self] text in
             self?.text = text
-        })
+        }).store(in: &disposeBag)
         self.text = self.value.value
         self.borderStyle = .none
         self.delegate = self

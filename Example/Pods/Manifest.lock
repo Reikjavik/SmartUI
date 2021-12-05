@@ -1,5 +1,5 @@
 PODS:
-  - SmartUI (0.5.0)
+  - SmartUI (0.9.9)
   - SnapshotTesting (1.9.0)
 
 DEPENDENCIES:
@@ -15,7 +15,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  SmartUI: e700f58287f4e22eb24beba07f68b5ec20f13be6
+  SmartUI: d27202a092824d9ee78261e195fabb47ca144ff2
   SnapshotTesting: 6141c48b6aa76ead61431ca665c14ab9a066c53b
 
 PODFILE CHECKSUM: d9eb0555616a65e83cfaaadaf84a6574ced59ef5
