@@ -50,12 +50,12 @@ class EditableProductsList: UIViewController {
             self.productsList
         }.layout(in: view)
 
-        self.info.debug("Info").mapToVoid().bind { [weak self] in
+        self.info.mapToVoid().bind { [weak self] in
             self?.tableView?.beginUpdates()
             self?.tableView?.endUpdates()
         }.store(in: &self.disposeBag)
 
-        self.checkButtonTrigger.debug("Trigger").bind { [weak self] in
+        self.checkButtonTrigger.bind { [weak self] in
             guard let self = self else { return }
             let disabled =  self.name.value.isEmpty || self.info.value.isEmpty || self.price.value.isEmpty
             self.buttonDisabled.update(disabled)
