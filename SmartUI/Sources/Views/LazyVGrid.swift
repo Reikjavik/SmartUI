@@ -97,7 +97,7 @@ internal class LazyVGridView: UICollectionView, KeyboardBindable, DiffableCollec
     let itemsSize: LazyItemsSize
 
     var sections: [Section] = []
-    var items: [Section: [AnyHashable]] = [:]
+    var items: [String: [AnyHashable]] = [:]
     var updatesDisposeBag: [AnyCancellable] = []
     weak var customDelegate: UIScrollViewDelegate?
 
@@ -160,10 +160,11 @@ internal class LazyVGridView: UICollectionView, KeyboardBindable, DiffableCollec
         fatalError("init(coder:) has not been implemented")
     }
 
-    func updateSections(inserted: IndexSet, deleted: IndexSet) {
+    func updateSections(inserted: IndexSet, deleted: IndexSet, common: IndexSet) {
         self.performBatchUpdates {
             self.deleteSections(deleted)
             self.insertSections(inserted)
+            self.reloadSections(common)
         }
     }
 
@@ -193,8 +194,8 @@ extension LazyVGridView: UICollectionViewDelegate, UICollectionViewDataSource, U
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard let section = self.sections[safe: section] else { return 0 }
-        return self.items[section]?.count ?? 0
+        guard let sectionId = self.sections[safe: section]?.id else { return 0 }
+        return self.items[sectionId]?.count ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -205,8 +206,8 @@ extension LazyVGridView: UICollectionViewDelegate, UICollectionViewDataSource, U
         if let cell = cell as? LazyGridCell {
 
             // Items binding
-            if let section = self.sections[safe: indexPath.section],
-               let item = self.items[section]?[indexPath.row] {
+            if let sectionId = self.sections[safe: indexPath.section]?.id,
+               let item = self.items[sectionId]?[indexPath.row] {
                 if item.hashValue != cell.itemHash {
                     let view = self.sections[indexPath.section].content(item)
                     let accessibility = view?.allAccessibilityModifiers ?? []

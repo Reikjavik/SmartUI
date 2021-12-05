@@ -126,7 +126,7 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
     let rowAnimation: Binding<UITableView.RowAnimation>?
 
     var sections: [Section] = []
-    var items: [Section: [AnyHashable]] = [:]
+    var items: [String: [AnyHashable]] = [:]
 
     var updatesDisposeBag: [AnyCancellable] = []
     weak var customDelegate: UIScrollViewDelegate?
@@ -169,11 +169,12 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
         self.reload(sections: sections.value ?? [])
     }
 
-    func updateSections(inserted: IndexSet, deleted: IndexSet) {
+    func updateSections(inserted: IndexSet, deleted: IndexSet, common: IndexSet) {
         let rowAnimation = self.rowAnimation?.value ?? .automatic
         self.beginUpdates()
         self.deleteSections(deleted, with: rowAnimation)
         self.insertSections(inserted, with: rowAnimation)
+        self.reloadSections(common, with: rowAnimation)
         self.endUpdates()
     }
 
@@ -183,6 +184,7 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
         self.deleteRows(at: deleted, with: rowAnimation)
         self.insertRows(at: inserted, with: rowAnimation)
         self.endUpdates()
+
     }
 
     required init?(coder: NSCoder) {
@@ -194,8 +196,8 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let section = self.sections[safe: section] else { return 0 }
-        return self.items[section]?.count ?? 0
+        guard let sectionId = self.sections[safe: section]?.id else { return 0 }
+        return self.items[sectionId]?.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -206,8 +208,8 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
 
         if let cell = cell as? ListTableViewCell {
 
-            if let section = self.sections[safe: indexPath.section],
-               let item = self.items[section]?[safe: indexPath.row] {
+            if let sectionId = self.sections[safe: indexPath.section]?.id,
+               let item = self.items[sectionId]?[safe: indexPath.row] {
                 if item.hashValue != cell.itemHash {
                     let view = self.sections[indexPath.section].content(item)
                     let selectionStyle = view?.modifiers.compactMap { $0 as? SelectionStyle }.last

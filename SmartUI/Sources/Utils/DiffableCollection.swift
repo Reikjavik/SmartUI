@@ -24,11 +24,13 @@ import UIKit
 
 protocol DiffableCollection: UIView {
 
+    typealias SectionID = String
+
     var sections: [Section] { get set }
-    var items: [Section: [AnyHashable]] { get set }
+    var items: [SectionID: [AnyHashable]] { get set }
     var updatesDisposeBag: [AnyCancellable] { get set }
 
-    func updateSections(inserted: IndexSet, deleted: IndexSet)
+    func updateSections(inserted: IndexSet, deleted: IndexSet, common: IndexSet)
     func updateItems(inserted: [IndexPath], deleted: [IndexPath])
     func reloadData()
 }
@@ -40,24 +42,30 @@ extension DiffableCollection {
         if uniqueSections.count != sections.count {
             print("⚠️ SmartUI: There are duplicates in the sections array provided for collection update. Be careful, this may cause problems. Only unique Sections will be displayed.")
         }
+
         let diff = Diff(self.sections, uniqueSections)
-        guard diff.hasUpdates else { return }
-        let isVisible = self.window != nil
-        diff.deleted.forEach {
-            self.items[$0.1] = nil
-        }
+        self.items = [:]
         self.sections = uniqueSections
+        self.sections.forEach {
+            self.items[$0.id] = $0.items.value
+        }
+
+        let isVisible = self.window != nil
+
         if isVisible {
             let deleted: [Int] = diff.deleted.map { $0.0 }
             let inserted: [Int] = diff.inserted.map { $0.0 }
-            self.updateSections(inserted: IndexSet(inserted), deleted: IndexSet(deleted))
+            let common: [Int] = diff.common.map { $0.0 }
+            self.updateSections(
+                inserted: IndexSet(inserted),
+                deleted: IndexSet(deleted),
+                common: IndexSet(common)
+            )
         } else {
             self.reloadData()
         }
+
         self.bindForSectionsUpdates()
-        self.sections.forEach {
-            self.updateRows(items: $0.items.value ?? [], in: $0)
-        }
     }
 
     private func bindForSectionsUpdates() {
@@ -65,15 +73,17 @@ extension DiffableCollection {
         self.updatesDisposeBag = []
         self.sections.forEach({ section in
             section.items.bind({ [weak section, weak self] newItems in
-                guard let section = section else { return }
-                self?.updateRows(items: newItems, in: section)
+                guard let section = section,
+                      let index = self?.sections.firstIndex(of: section) else { return }
+                let old = self?.items[section.id] ?? []
+                self?.items[section.id] = newItems
+                self?.updateRows(old: old, new: newItems, in: index)
             }).store(in: &self.updatesDisposeBag)
         })
     }
 
-    private func updateRows(items: [AnyHashable], in section: Section) {
-        let updates = self.calculateUpdates(old: self.items[section] ?? [], new: items)
-        self.items[section] = items
+    private func updateRows(old: [AnyHashable], new: [AnyHashable], in section: Int) {
+        let updates = self.calculateUpdates(old: old, new: new, in: section)
         guard updates.hasUpdates else { return }
         let isVisible = self.window != nil
         if isVisible {
@@ -83,7 +93,7 @@ extension DiffableCollection {
         }
     }
 
-    private func calculateUpdates(old: [AnyHashable], new: [AnyHashable], in section: Int = 0) -> TableUpdate {
+    private func calculateUpdates(old: [AnyHashable], new: [AnyHashable], in section: Int) -> TableUpdate {
         let diff = Diff(old, new)
         let inserted = diff.inserted.map { IndexPath(row: $0.0, section: section) }
         let deleted = diff.deleted.map { IndexPath(row: $0.0, section: section) }
