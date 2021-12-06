@@ -171,18 +171,20 @@ internal class ListTableView: UITableView, UITableViewDelegate, UITableViewDataS
 
     func updateSections(inserted: IndexSet, deleted: IndexSet, common: IndexSet) {
         let rowAnimation = self.rowAnimation?.value ?? .automatic
-        self.beginUpdates()
         self.deleteSections(deleted, with: rowAnimation)
         self.insertSections(inserted, with: rowAnimation)
         self.reloadSections(common, with: rowAnimation)
-        self.endUpdates()
     }
 
     func updateItems(inserted: [IndexPath], deleted: [IndexPath]) {
         let rowAnimation = self.rowAnimation?.value ?? .automatic
-        self.beginUpdates()
         self.deleteRows(at: deleted, with: rowAnimation)
         self.insertRows(at: inserted, with: rowAnimation)
+    }
+
+    func performUpdates(_ updates: () -> Void) {
+        self.beginUpdates()
+        updates()
         self.endUpdates()
     }
 

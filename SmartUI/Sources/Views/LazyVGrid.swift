@@ -161,18 +161,18 @@ internal class LazyVGridView: UICollectionView, KeyboardBindable, DiffableCollec
     }
 
     func updateSections(inserted: IndexSet, deleted: IndexSet, common: IndexSet) {
-        self.performBatchUpdates {
-            self.deleteSections(deleted)
-            self.insertSections(inserted)
-            self.reloadSections(common)
-        }
+        self.deleteSections(deleted)
+        self.insertSections(inserted)
+        self.reloadSections(common)
     }
 
     func updateItems(inserted: [IndexPath], deleted: [IndexPath]) {
-        self.performBatchUpdates {
-            self.deleteItems(at: deleted)
-            self.insertItems(at: inserted)
-        }
+        self.deleteItems(at: deleted)
+        self.insertItems(at: inserted)
+    }
+
+    func performUpdates(_ updates: () -> Void) {
+        self.performBatchUpdates(updates, completion: nil)
     }
 }
 

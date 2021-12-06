@@ -32,6 +32,7 @@ protocol DiffableCollection: UIView {
 
     func updateSections(inserted: IndexSet, deleted: IndexSet, common: IndexSet)
     func updateItems(inserted: [IndexPath], deleted: [IndexPath])
+    func performUpdates(_ updates: () -> Void)
     func reloadData()
 }
 
@@ -59,16 +60,20 @@ extension DiffableCollection {
                 let deleted: [Int] = diff.deleted.map { $0.0 }
                 let inserted: [Int] = diff.inserted.map { $0.0 }
                 let common: [Int] = diff.common.map { $0.0 }
-                self.updateSections(
-                    inserted: IndexSet(inserted),
-                    deleted: IndexSet(deleted),
-                    common: IndexSet(common)
-                )
+                self.performUpdates {
+                    self.updateSections(
+                        inserted: IndexSet(inserted),
+                        deleted: IndexSet(deleted),
+                        common: IndexSet(common)
+                    )
+                }
             } else {
-                self.sections.enumerated().forEach {
-                    let old = oldItems[$0.element.id] ?? []
-                    let new = $0.element.items.value ?? []
-                    self.updateRows(old: old, new: new, in: $0.offset)
+                self.performUpdates {
+                    self.sections.enumerated().forEach {
+                        let old = oldItems[$0.element.id] ?? []
+                        let new = $0.element.items.value ?? []
+                        self.updateRows(old: old, new: new, in: $0.offset)
+                    }
                 }
             }
         } else {
@@ -87,7 +92,9 @@ extension DiffableCollection {
                       let index = self?.sections.firstIndex(of: section) else { return }
                 let old = self?.items[section.id] ?? []
                 self?.items[section.id] = newItems
-                self?.updateRows(old: old, new: newItems, in: index)
+                self?.performUpdates {
+                    self?.updateRows(old: old, new: newItems, in: index)
+                }
             }).store(in: &self.updatesDisposeBag)
         })
     }
