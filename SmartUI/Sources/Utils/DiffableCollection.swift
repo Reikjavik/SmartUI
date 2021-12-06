@@ -27,7 +27,7 @@ protocol DiffableCollection: UIView {
     typealias SectionID = String
 
     var sections: [Section] { get set }
-    var items: [SectionID: [AnyHashable]] { get set }
+    var items: [SectionID: [Identifiable]] { get set }
     var updatesDisposeBag: [AnyCancellable] { get set }
 
     func updateSections(inserted: IndexSet, deleted: IndexSet, common: IndexSet)
@@ -43,6 +43,8 @@ extension DiffableCollection {
             print("⚠️ SmartUI: There are duplicates in the sections array provided for collection update. Be careful, this may cause problems. Only unique Sections will be displayed.")
         }
 
+        let oldItems = self.items
+
         let diff = Diff(self.sections, uniqueSections)
         self.items = [:]
         self.sections = uniqueSections
@@ -53,14 +55,22 @@ extension DiffableCollection {
         let isVisible = self.window != nil
 
         if isVisible {
-            let deleted: [Int] = diff.deleted.map { $0.0 }
-            let inserted: [Int] = diff.inserted.map { $0.0 }
-            let common: [Int] = diff.common.map { $0.0 }
-            self.updateSections(
-                inserted: IndexSet(inserted),
-                deleted: IndexSet(deleted),
-                common: IndexSet(common)
-            )
+            if diff.hasUpdates {
+                let deleted: [Int] = diff.deleted.map { $0.0 }
+                let inserted: [Int] = diff.inserted.map { $0.0 }
+                let common: [Int] = diff.common.map { $0.0 }
+                self.updateSections(
+                    inserted: IndexSet(inserted),
+                    deleted: IndexSet(deleted),
+                    common: IndexSet(common)
+                )
+            } else {
+                self.sections.enumerated().forEach {
+                    let old = oldItems[$0.element.id] ?? []
+                    let new = $0.element.items.value ?? []
+                    self.updateRows(old: old, new: new, in: $0.offset)
+                }
+            }
         } else {
             self.reloadData()
         }
@@ -82,7 +92,7 @@ extension DiffableCollection {
         })
     }
 
-    private func updateRows(old: [AnyHashable], new: [AnyHashable], in section: Int) {
+    private func updateRows(old: [Identifiable], new: [Identifiable], in section: Int) {
         let updates = self.calculateUpdates(old: old, new: new, in: section)
         guard updates.hasUpdates else { return }
         let isVisible = self.window != nil
@@ -93,8 +103,10 @@ extension DiffableCollection {
         }
     }
 
-    private func calculateUpdates(old: [AnyHashable], new: [AnyHashable], in section: Int) -> TableUpdate {
-        let diff = Diff(old, new)
+    private func calculateUpdates(old: [Identifiable], new: [Identifiable], in section: Int) -> TableUpdate {
+        let newIds = new.map { EID(id: $0.id) }
+        let oldIds = old.map { EID(id: $0.id) }
+        let diff = Diff(oldIds, newIds)
         let inserted = diff.inserted.map { IndexPath(row: $0.0, section: section) }
         let deleted = diff.deleted.map { IndexPath(row: $0.0, section: section) }
         return TableUpdate(deleted: deleted, inserted: inserted)

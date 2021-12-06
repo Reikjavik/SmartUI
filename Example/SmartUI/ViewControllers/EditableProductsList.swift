@@ -11,25 +11,21 @@ import SmartUI
 
 class EditableProductsList: UIViewController {
 
-    enum DataSource: Hashable {
+    enum DataSource: Identifiable {
 
         case form
         case product(Product)
 
-        func hash(into hasher: inout Hasher) {
+        var id: String {
             switch self {
             case .form:
-                hasher.combine("form")
+                return "form"
             case .product(let product):
-                hasher.combine(product)
+                return product.id
             }
         }
     }
-
-    deinit {
-        print("vc deinit")
-    }
-
+    
     let datasource: Publisher<[DataSource]> = .create([.form, .product(.apple)])
 
     let name: Publisher<String> = .create("")
@@ -111,6 +107,7 @@ class EditableProductsList: UIViewController {
         let emojis = ["🥑", "🥨", "🧀", "🍳", "🍕", "🥘", "🍟"]
         var datasource = self.datasource.value ?? []
         let product = Product(
+            id: UUID().uuidString,
             emojiIcon: emojis.randomElement()!,
             title: self.name.value ?? "",
             description: self.info.value ?? "",

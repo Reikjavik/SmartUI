@@ -14,10 +14,17 @@ extension Array where Element: Hashable {
     }
 }
 
+extension Array where Element: Identifiable {
+
+    func distinct() -> [Element] {
+        self.distinct(where: { all, item in all.contains(where: { $0.id == item.id }) })
+    }
+}
+
 extension Array {
 
-    func distinct(where condition: ([Element], Element) -> Bool) -> [Element] {
-        return self.reduce([], { condition($0, $1) ? $0 : $0 + [$1] })
+    func distinct(where isDuplicate: ([Element], Element) -> Bool) -> [Element] {
+        return self.reduce([], { isDuplicate($0, $1) ? $0 : $0 + [$1] })
     }
 
     subscript (safe index: Int) -> Element? {

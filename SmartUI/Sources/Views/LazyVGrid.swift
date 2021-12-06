@@ -36,7 +36,7 @@ public class LazyVGrid: View {
     private let selection: ActionWith<IndexPath>?
     private let sectionsBinding: Binding<[Section]>
 
-    public init<Item: Hashable>(_ data: Binding<[Item]>, alignment: HorizontalAlignment = .center, spacing: CGFloat = UIView.defaultSpacing, itemsSize: LazyItemsSize = .auto, selection: ((Item) -> Void)? = nil, content: @escaping (Item) -> View) {
+    public init<Item: Identifiable>(_ data: Binding<[Item]>, alignment: HorizontalAlignment = .center, spacing: CGFloat = UIView.defaultSpacing, itemsSize: LazyItemsSize = .auto, selection: ((Item) -> Void)? = nil, content: @escaping (Item) -> View) {
         let selectionAction = ActionWith<Item>(selection)
         let section = Section(data: data, content: content)
         self.itemsSize = itemsSize
@@ -97,7 +97,7 @@ internal class LazyVGridView: UICollectionView, KeyboardBindable, DiffableCollec
     let itemsSize: LazyItemsSize
 
     var sections: [Section] = []
-    var items: [String: [AnyHashable]] = [:]
+    var items: [String: [Identifiable]] = [:]
     var updatesDisposeBag: [AnyCancellable] = []
     weak var customDelegate: UIScrollViewDelegate?
 
@@ -208,13 +208,13 @@ extension LazyVGridView: UICollectionViewDelegate, UICollectionViewDataSource, U
             // Items binding
             if let sectionId = self.sections[safe: indexPath.section]?.id,
                let item = self.items[sectionId]?[indexPath.row] {
-                if item.hashValue != cell.itemHash {
+                if item.id != cell.itemId {
                     let view = self.sections[indexPath.section].content(item)
                     let accessibility = view?.allAccessibilityModifiers ?? []
                     self.applyAccessibility(cell: cell, modifiers: accessibility)
                     cell.configure(view: view)
                 }
-                cell.itemHash = item.hashValue
+                cell.itemId = item.id
             }
         }
 
@@ -329,7 +329,7 @@ internal class LazyGridCell: UICollectionViewCell {
     static let reuseIdentifier = String(describing: LazyGridCell.self)
     private var isHeightCalculated: Bool = false
 
-    var itemHash: Int?
+    var itemId: String?
     func configure(view: View?) {
         self.isHeightCalculated = false
         self.removeAllSubviews()
